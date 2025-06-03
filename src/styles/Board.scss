@@ -1,0 +1,27 @@
+.board {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+
+    background-image: url("https://www.chess.com/boards/green/150.png");
+    background-size: cover;
+
+    .piece {
+        position: absolute;
+        width: 12.5%;
+        height: 12.5%;
+        background-size: cover;
+        z-index: 10;
+    }
+
+    .highlight {
+        position: absolute;
+        width: 12.5%;
+        height: 12.5%;
+        background-color: #ffff3375;
+    }
+}
