@@ -10,18 +10,35 @@
     background-image: url("https://www.chess.com/boards/green/150.png");
     background-size: cover;
 
-    .piece {
+    div {
         position: absolute;
         width: 12.5%;
         height: 12.5%;
+    }
+
+    .piece {
         background-size: cover;
         z-index: 10;
+        transition: left 0.1s ease, bottom 0.1s ease;
     }
 
     .highlight {
-        position: absolute;
-        width: 12.5%;
-        height: 12.5%;
         background-color: #ffff3375;
+    }
+
+    .hint {
+        padding: 4.2%;
+        box-sizing: border-box;
+        background-clip: content-box;
+        background-color: #00000024;
+        border-radius: 50%;
+    }
+
+    .capture-hint {
+        padding: 4.2%;
+        box-sizing: border-box;
+        background-clip: content-box;
+        border: 7.2px solid #00000024;
+        border-radius: 50%;
     }
 }

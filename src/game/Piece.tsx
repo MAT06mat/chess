@@ -1,6 +1,8 @@
 interface piece {
     type: string;
-    position: { x: number; y: number };
+    x: number;
+    y: number;
+    id: number;
 }
 
 interface PieceProps {
@@ -11,8 +13,8 @@ interface PieceProps {
 function Piece({ piece, setSelectedPiece }: PieceProps) {
     const style = {
         backgroundImage: `url("https://www.chess.com/chess-themes/pieces/neo/150/${piece.type}.png")`,
-        left: `${(piece.position.x - 1) * 12.5}%`,
-        bottom: `${(piece.position.y - 1) * 12.5}%`,
+        left: `${piece.x * 12.5}%`,
+        bottom: `${piece.y * 12.5}%`,
     };
 
     function handleClick() {
