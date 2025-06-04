@@ -144,6 +144,13 @@ function Board() {
                         return (
                             <BoardInfo
                                 className={hint.type || "hint"}
+                                borderWidth={
+                                    boardRef.current?.clientWidth
+                                        ? boardRef.current?.clientWidth *
+                                              0.011 +
+                                          "px"
+                                        : undefined
+                                }
                                 key={index}
                                 x={hint.x + selectedPiece.x}
                                 y={hint.y + selectedPiece.y}

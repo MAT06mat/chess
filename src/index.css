@@ -23,6 +23,8 @@ body {
   min-height: 100vh;
   color: rgba(255, 255, 255, 0.87);
   background-color: #312e2b;
+  width: 100svw;
+  height: 100svh;
 }
 
 h1 {

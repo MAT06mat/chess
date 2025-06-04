@@ -1,4 +1,5 @@
 import Board from "./Board";
+import "../styles/Game.scss";
 
 function Game() {
     return (
