@@ -3,6 +3,7 @@ interface piece {
     x: number;
     y: number;
     id: number;
+    hasMoved?: boolean;
 }
 
 interface PieceProps {

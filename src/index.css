@@ -14,7 +14,6 @@ a {
   text-decoration: inherit;
 }
 
-
 body {
   margin: 0;
   display: flex;
@@ -24,7 +23,7 @@ body {
   color: rgba(255, 255, 255, 0.87);
   background-color: #312e2b;
   width: 100svw;
-  height: 100svh;
+  height: 100dvh;
 }
 
 h1 {

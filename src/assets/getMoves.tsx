@@ -1,20 +1,21 @@
-interface hint {
+interface move {
     x: number;
     y: number;
     group: number;
     type?: string;
+    special?: "enPassant" | "castling" | "promotion";
 }
 
-interface hintsProps {
-    p: hint[];
-    k: hint[];
-    r: hint[];
-    b: hint[];
-    q: hint[];
-    n: hint[];
+interface movesProps {
+    p: move[];
+    k: move[];
+    r: move[];
+    b: move[];
+    q: move[];
+    n: move[];
 }
 
-const hints: hintsProps = {
+const moves: movesProps = {
     p: [
         { x: 0, y: -1, group: 0 },
         { x: 0, y: -2, group: 0 },
@@ -27,7 +28,9 @@ const hints: hintsProps = {
     ],
     k: [
         { x: 1, y: 0, group: 0 },
+        { x: 2, y: 0, group: 0 },
         { x: -1, y: 0, group: 1 },
+        { x: -2, y: 0, group: 1 },
         { x: 0, y: 1, group: 2 },
         { x: 0, y: -1, group: 3 },
         { x: 1, y: 1, group: 4 },
@@ -165,24 +168,24 @@ const hints: hintsProps = {
     ],
 };
 
-function getHints(pieceType: string): hint[] {
+function getMoves(pieceType: string): move[] {
     switch (pieceType) {
         case "p":
-            return hints.p;
+            return moves.p;
         case "k":
-            return hints.k;
+            return moves.k;
         case "r":
-            return hints.r;
+            return moves.r;
         case "b":
-            return hints.b;
+            return moves.b;
         case "q":
-            return hints.q;
+            return moves.q;
         case "n":
-            return hints.n;
+            return moves.n;
         default:
             return [];
     }
 }
 
-export default getHints;
-export type { hint };
+export default getMoves;
+export type { move };

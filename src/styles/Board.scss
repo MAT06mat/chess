@@ -1,6 +1,5 @@
 .board {
-    width: 100%;
-    max-width: 600px;
+    width: min(100%, 80vh);
     aspect-ratio: 1 / 1;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -39,5 +38,11 @@
         background-clip: content-box;
         border: 5px solid #00000024;
         border-radius: 50%;
+    }
+}
+
+@media screen and (max-width: 80vh) {
+    .board {
+        border-radius: 0;
     }
 }

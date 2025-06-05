@@ -3,8 +3,8 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  width: 100svw;
-  height: 100svh;
+  width: 100%;
+  height: 100%;
 }
 
 .footer {

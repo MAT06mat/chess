@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/board.scss";
 import Piece, { piece } from "./Piece";
-import getHints, { hint } from "../assets/getHints";
-import playSound from "./Sounds";
+import { move } from "../assets/getMoves";
 import DefaultBoard from "../assets/DefaultBoard";
-import isPosInBoard from "../assets/isPosInBoard";
 import BoardInfo from "./BoardInfo";
+import getValidMoves from "../assets/getValidMoves";
+import doMove from "../assets/doMove";
 
 function Board() {
     const boardRef = useRef<HTMLDivElement>(null);
     const [pieces, setPieces] = useState<piece[]>([]);
-    const [hints, setHints] = useState<hint[]>([]);
+    const [validMoves, setValidMoves] = useState<move[]>([]);
     const [selectedPiece, setSelectedPiece] = useState<piece | null>(null);
 
     useEffect(() => {
@@ -18,68 +18,7 @@ function Board() {
     }, []);
 
     useEffect(() => {
-        if (selectedPiece) {
-            const groupBlocked: number[] =
-                selectedPiece.type[1] === "p"
-                    ? selectedPiece.type[0] === "w"
-                        ? [0, 1, 2]
-                        : [3, 4, 5]
-                    : [];
-
-            setHints(
-                getHints(selectedPiece.type[1]).filter((Hint) => {
-                    const x = Hint.x + selectedPiece.x;
-                    const y = Hint.y + selectedPiece.y;
-
-                    const isOccupiedSameColor = pieces.some(
-                        (piece) =>
-                            piece.x === x &&
-                            piece.y === y &&
-                            (piece.type[0] === selectedPiece.type[0] ||
-                                (selectedPiece.type[1] === "p" && Hint.x === 0))
-                    );
-                    const isOccupiedOtherColor = pieces.some(
-                        (piece) =>
-                            piece.x === x &&
-                            piece.y === y &&
-                            piece.type[0] !== selectedPiece.type[0]
-                    );
-
-                    Hint.type = undefined;
-
-                    if (selectedPiece.type[1] === "p") {
-                        if (Hint.x !== 0 && !isOccupiedOtherColor) {
-                            return false;
-                        }
-
-                        if (
-                            (Hint.y === 2 && selectedPiece.y !== 1) ||
-                            (Hint.y === -2 && selectedPiece.y !== 6)
-                        ) {
-                            return false;
-                        }
-                    }
-
-                    if (groupBlocked.includes(Hint.group)) {
-                        return false;
-                    }
-
-                    if (isOccupiedOtherColor || isOccupiedSameColor) {
-                        groupBlocked.push(Hint.group);
-                        if (isOccupiedSameColor) {
-                            return false;
-                        } else if (isOccupiedOtherColor) {
-                            Hint.type = "capture-hint";
-                            return true;
-                        }
-                    }
-
-                    return isPosInBoard(x, y);
-                })
-            );
-        } else {
-            setHints([]);
-        }
+        setValidMoves(getValidMoves(selectedPiece, pieces));
     }, [selectedPiece, pieces]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
@@ -94,37 +33,14 @@ function Board() {
 
             // If a piece is selected, move it to the clicked position
             if (selectedPiece) {
-                if (!isPosInBoard(x, y)) {
-                    return;
-                }
-
-                const isValidMove = hints.some(
-                    (hint) =>
-                        hint.x === x - selectedPiece.x &&
-                        hint.y === y - selectedPiece.y
+                const validMove = validMoves.find(
+                    (move) =>
+                        move.x === x - selectedPiece.x &&
+                        move.y === y - selectedPiece.y
                 );
 
-                if (isValidMove) {
-                    const newPieces = pieces.filter((piece) => {
-                        return !(piece.x === x && piece.y === y);
-                    });
-
-                    if (newPieces.length === pieces.length) {
-                        playSound("move-self");
-                    } else {
-                        playSound("capture");
-                    }
-
-                    // Update the piece's position
-                    setPieces(
-                        newPieces.map((piece) => {
-                            if (piece === selectedPiece && isValidMove) {
-                                piece.x = x;
-                                piece.y = y;
-                            }
-                            return piece;
-                        })
-                    );
+                if (validMove) {
+                    setPieces(doMove(validMove, selectedPiece, pieces));
                 }
                 setSelectedPiece(null);
             }
@@ -140,7 +56,7 @@ function Board() {
                         x={selectedPiece.x}
                         y={selectedPiece.y}
                     />
-                    {hints.map((hint, index) => {
+                    {validMoves.map((hint, index) => {
                         return (
                             <BoardInfo
                                 className={hint.type || "hint"}
