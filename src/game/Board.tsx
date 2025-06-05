@@ -1,35 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/board.scss";
 import Piece, { piece } from "./Piece";
-import { move } from "../assets/getMoves";
+import { completeMove, move } from "../assets/getMoves";
 import DefaultBoard from "../assets/DefaultBoard";
 import BoardInfo from "./BoardInfo";
 import getValidMoves from "../assets/getValidMoves";
 import doMove from "../assets/doMove";
+import getSquarePos from "../assets/getSquarePos";
 
 function Board() {
     const boardRef = useRef<HTMLDivElement>(null);
     const [pieces, setPieces] = useState<piece[]>([]);
     const [validMoves, setValidMoves] = useState<move[]>([]);
     const [selectedPiece, setSelectedPiece] = useState<piece | null>(null);
+    const [lastMove, setLastMove] = useState<completeMove | null>(null);
 
     useEffect(() => {
         setPieces(DefaultBoard);
     }, []);
 
     useEffect(() => {
-        setValidMoves(getValidMoves(selectedPiece, pieces));
-    }, [selectedPiece, pieces]);
+        setValidMoves(getValidMoves(selectedPiece, pieces, lastMove));
+    }, [selectedPiece, pieces, lastMove]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         const board = boardRef.current;
         if (board) {
-            const offsetX = board.getBoundingClientRect().left + window.scrollX;
-            const offsetY = board.getBoundingClientRect().top + window.scrollY;
-            const relX = event.clientX - offsetX;
-            const relY = event.clientY - offsetY;
-            const x = Math.floor(relX / (board.clientWidth / 8));
-            const y = Math.floor(8 - relY / (board.clientHeight / 8));
+            const { x, y } = getSquarePos(event, board);
 
             // If a piece is selected, move it to the clicked position
             if (selectedPiece) {
@@ -40,6 +37,13 @@ function Board() {
                 );
 
                 if (validMove) {
+                    setLastMove({
+                        fromX: selectedPiece.x,
+                        fromY: selectedPiece.y,
+                        toX: x,
+                        toY: y,
+                        piece: selectedPiece,
+                    });
                     setPieces(doMove(validMove, selectedPiece, pieces));
                 }
                 setSelectedPiece(null);
@@ -49,13 +53,32 @@ function Board() {
 
     return (
         <div className="board" ref={boardRef} onClick={handleClick}>
-            {selectedPiece ? (
+            {lastMove ? (
                 <>
                     <BoardInfo
                         className="highlight"
-                        x={selectedPiece.x}
-                        y={selectedPiece.y}
+                        x={lastMove.toX}
+                        y={lastMove.toY}
                     />
+                    <BoardInfo
+                        className="highlight"
+                        x={lastMove.fromX}
+                        y={lastMove.fromY}
+                    />
+                </>
+            ) : null}
+            {selectedPiece ? (
+                <>
+                    {lastMove ? (
+                        lastMove.toX === selectedPiece.x &&
+                        lastMove.toY === selectedPiece.y ? null : (
+                            <BoardInfo
+                                className="highlight"
+                                x={selectedPiece.x}
+                                y={selectedPiece.y}
+                            />
+                        )
+                    ) : null}
                     {validMoves.map((hint, index) => {
                         return (
                             <BoardInfo

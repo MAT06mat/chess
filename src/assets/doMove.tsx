@@ -21,7 +21,7 @@ function doMove(
     const x = selectedPiece.x + validMove.x;
     const y = selectedPiece.y + validMove.y;
 
-    const newPieces = pieces.filter((piece) => {
+    let newPieces = pieces.filter((piece) => {
         return !(piece.x === x && piece.y === y);
     });
 
@@ -36,11 +36,11 @@ function doMove(
             piece.x = x;
             piece.y = y;
             piece.hasMoved = true;
-
-            doSpecialMove(validMove, piece, newPieces);
         }
         return piece;
     });
+
+    newPieces = doSpecialMove(validMove, selectedPiece, newPieces);
 
     return newPieces;
 }

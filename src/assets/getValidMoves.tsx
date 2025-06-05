@@ -1,8 +1,12 @@
 import { piece } from "../game/Piece";
-import getMoves from "./getMoves";
+import getMoves, { completeMove } from "./getMoves";
 import isPosInBoard from "./isPosInBoard";
 
-function getValidMoves(selectedPiece: piece | null, pieces: piece[]) {
+function getValidMoves(
+    selectedPiece: piece | null,
+    pieces: piece[],
+    lastMove: completeMove | null
+) {
     if (!selectedPiece) {
         return [];
     }
@@ -33,16 +37,25 @@ function getValidMoves(selectedPiece: piece | null, pieces: piece[]) {
         );
 
         Move.type = undefined;
+        Move.special = undefined;
 
         if (selectedPiece.type[1] === "p") {
-            if (Move.x !== 0 && !isOccupiedOtherColor) {
+            if (
+                lastMove &&
+                Math.abs(lastMove.fromY - y) === 1 &&
+                Math.abs(lastMove.toY - y) === 1 &&
+                lastMove.fromX === x &&
+                lastMove.piece.type[1] === "p"
+            ) {
+                Move.special = "enPassant";
+                Move.type = "capture-hint";
+            }
+
+            if (Move.x !== 0 && !isOccupiedOtherColor && !Move.special) {
                 return false;
             }
 
-            if (
-                (Move.y === 2 && selectedPiece.y !== 1) ||
-                (Move.y === -2 && selectedPiece.y !== 6)
-            ) {
+            if (selectedPiece.hasMoved && (Move.y === 2 || Move.y === -2)) {
                 return false;
             }
         }

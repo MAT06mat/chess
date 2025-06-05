@@ -1,9 +1,19 @@
+import { piece } from "../game/Piece";
+
 interface move {
     x: number;
     y: number;
     group: number;
     type?: string;
     special?: "enPassant" | "castling" | "promotion";
+}
+
+interface completeMove {
+    fromX: number;
+    fromY: number;
+    toX: number;
+    toY: number;
+    piece: piece;
 }
 
 interface movesProps {
@@ -169,23 +179,8 @@ const moves: movesProps = {
 };
 
 function getMoves(pieceType: string): move[] {
-    switch (pieceType) {
-        case "p":
-            return moves.p;
-        case "k":
-            return moves.k;
-        case "r":
-            return moves.r;
-        case "b":
-            return moves.b;
-        case "q":
-            return moves.q;
-        case "n":
-            return moves.n;
-        default:
-            return [];
-    }
+    return moves[pieceType as keyof movesProps] || [];
 }
 
 export default getMoves;
-export type { move };
+export type { move, completeMove };
