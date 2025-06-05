@@ -7,6 +7,7 @@ import BoardInfo from "./BoardInfo";
 import getValidMoves from "../assets/getValidMoves";
 import doMove from "../assets/doMove";
 import getSquarePos from "../assets/getSquarePos";
+import PromotionBox from "./PromotionBox";
 
 function Board() {
     const boardRef = useRef<HTMLDivElement>(null);
@@ -14,10 +15,26 @@ function Board() {
     const [validMoves, setValidMoves] = useState<move[]>([]);
     const [selectedPiece, setSelectedPiece] = useState<piece | null>(null);
     const [lastMove, setLastMove] = useState<completeMove | null>(null);
+    const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
+    const [nextMove, setNextMove] = useState<completeMove | null>(null);
 
     useEffect(() => {
         setPieces(DefaultBoard);
     }, []);
+
+    useEffect(() => {
+        if (!promotionBoxVisible && nextMove) {
+            setLastMove(nextMove);
+            const validMove: move = {
+                x: nextMove.toX - nextMove.fromX,
+                y: nextMove.toY - nextMove.fromY,
+                group: 999,
+                special: "promotion",
+            };
+            setPieces(doMove(validMove, nextMove.piece, pieces));
+            setNextMove(null);
+        }
+    }, [promotionBoxVisible, nextMove, pieces]);
 
     useEffect(() => {
         setValidMoves(getValidMoves(selectedPiece, pieces, lastMove));
@@ -37,14 +54,21 @@ function Board() {
                 );
 
                 if (validMove) {
-                    setLastMove({
+                    const move = {
                         fromX: selectedPiece.x,
                         fromY: selectedPiece.y,
                         toX: x,
                         toY: y,
                         piece: selectedPiece,
-                    });
-                    setPieces(doMove(validMove, selectedPiece, pieces));
+                    };
+
+                    if (validMove.special === "promotion") {
+                        setPromotionBoxVisible(true);
+                        setNextMove(move);
+                    } else {
+                        setLastMove(move);
+                        setPieces(doMove(validMove, selectedPiece, pieces));
+                    }
                 }
                 setSelectedPiece(null);
             }
@@ -105,6 +129,16 @@ function Board() {
                     setSelectedPiece={setSelectedPiece}
                 />
             ))}
+            {promotionBoxVisible ? (
+                <PromotionBox
+                    x={nextMove ? nextMove.toX : 0}
+                    y={nextMove ? nextMove.toY : 0}
+                    setPromotionBoxVisible={setPromotionBoxVisible}
+                    setPieces={setPieces}
+                    setNextMove={setNextMove}
+                    nextMove={nextMove}
+                />
+            ) : null}
         </div>
     );
 }

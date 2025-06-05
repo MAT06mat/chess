@@ -45,7 +45,8 @@ function getValidMoves(
                 Math.abs(lastMove.fromY - y) === 1 &&
                 Math.abs(lastMove.toY - y) === 1 &&
                 lastMove.fromX === x &&
-                lastMove.piece.type[1] === "p"
+                lastMove.piece.type[1] === "p" &&
+                lastMove.piece.type[0] !== selectedPiece.type[0]
             ) {
                 Move.special = "enPassant";
                 Move.type = "capture-hint";
@@ -57,6 +58,13 @@ function getValidMoves(
 
             if (selectedPiece.hasMoved && (Move.y === 2 || Move.y === -2)) {
                 return false;
+            }
+
+            if (
+                (selectedPiece.y === 6 && selectedPiece.type[0] === "w") ||
+                (selectedPiece.y === 1 && selectedPiece.type[0] === "b")
+            ) {
+                Move.special = "promotion";
             }
         }
 

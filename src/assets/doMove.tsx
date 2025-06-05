@@ -25,10 +25,12 @@ function doMove(
         return !(piece.x === x && piece.y === y);
     });
 
-    if (newPieces.length === pieces.length) {
-        playSound("move-self");
-    } else {
-        playSound("capture");
+    if (validMove.special !== "promotion") {
+        if (newPieces.length === pieces.length) {
+            playSound("move-self");
+        } else {
+            playSound("capture");
+        }
     }
 
     newPieces.map((piece) => {
