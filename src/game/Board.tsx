@@ -41,6 +41,12 @@ function Board() {
     }, [selectedPiece, pieces, lastMove]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+        if (promotionBoxVisible && event.target === boardRef.current) {
+            setNextMove(null);
+            setPromotionBoxVisible(false);
+            return;
+        }
+
         const board = boardRef.current;
         if (board) {
             const { x, y } = getSquarePos(event, board);

@@ -19,10 +19,7 @@ function PromotionBox({
     setNextMove,
     nextMove,
 }: PromotionProps) {
-    const style = {
-        left: `${x * 12.5}%`,
-        bottom: `${y * 12.5}%`,
-    };
+    if (!nextMove) return;
 
     function handleClose() {
         setPromotionBoxVisible(false);
@@ -52,12 +49,26 @@ function PromotionBox({
         setPromotionBoxVisible(false);
     }
 
+    const color = nextMove.piece.type[0];
+
+    const style = {
+        left: `${x * 12.5}%`,
+        bottom: `${color === "w" ? y * 12.5 : y * 12.5 + 44}%`,
+    };
+
+    const piecesToDisplay = ["q", "r", "n", "b"];
+
     return (
         <div className="promotion-box" style={style}>
-            <div className="promotion-piece wq" onClick={handleClick} />
-            <div className="promotion-piece wr" onClick={handleClick} />
-            <div className="promotion-piece wn" onClick={handleClick} />
-            <div className="promotion-piece wb" onClick={handleClick} />
+            {piecesToDisplay.map((p) => {
+                return (
+                    <div
+                        key={p}
+                        className={"promotion-piece " + color + p}
+                        onClick={handleClick}
+                    />
+                );
+            })}
             <div className="close-button" onClick={handleClose}>
                 <svg
                     width="800px"
