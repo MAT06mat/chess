@@ -1,0 +1,16 @@
+.board-panel {
+    width: min(100%, 350px);
+    height: min(100%, 80vh);
+    border-radius: 4px;
+    padding: 1rem;
+    box-sizing: border-box;
+    color: #ffffffd9;
+    background-color: #00000026;
+}
+
+@media screen and (max-width: 768px) {
+    .board-panel {
+        width: 100%;
+        border-radius: 0;
+    }
+}

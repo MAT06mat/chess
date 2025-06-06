@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import "../styles/board.scss";
 import Piece, { piece } from "./Piece";
 import { completeMove, move } from "../assets/getMoves";
 import DefaultBoard from "../assets/DefaultBoard";
@@ -8,6 +7,7 @@ import getValidMoves from "../assets/getValidMoves";
 import doMove from "../assets/doMove";
 import getSquarePos from "../assets/getSquarePos";
 import PromotionBox from "./PromotionBox";
+import "../styles/Board.scss";
 
 function Board() {
     const boardRef = useRef<HTMLDivElement>(null);
