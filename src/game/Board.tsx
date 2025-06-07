@@ -1,47 +1,71 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Piece, { piece } from "./Piece";
 import { completeMove, move } from "../assets/getMoves";
-import DefaultBoard from "../assets/DefaultBoard";
 import BoardInfo from "./BoardInfo";
 import getValidMoves from "../assets/getValidMoves";
 import doMove from "../assets/doMove";
 import getSquarePos from "../assets/getSquarePos";
 import PromotionBox from "./PromotionBox";
 import "../styles/Board.scss";
+import { boardPosition } from "../assets/defaultBoard";
 
-function Board() {
+interface BoardProps {
+    movesHistory: boardPosition[];
+    setMovesHistory: React.Dispatch<React.SetStateAction<boardPosition[]>>;
+}
+
+function Board({ movesHistory, setMovesHistory }: BoardProps) {
     const boardRef = useRef<HTMLDivElement>(null);
-    const [pieces, setPieces] = useState<piece[]>([]);
+    const promotionCloseRef = useRef<HTMLDivElement>(null);
     const [validMoves, setValidMoves] = useState<move[]>([]);
     const [selectedPiece, setSelectedPiece] = useState<piece | null>(null);
-    const [lastMove, setLastMove] = useState<completeMove | null>(null);
     const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
     const [nextMove, setNextMove] = useState<completeMove | null>(null);
 
-    useEffect(() => {
-        setPieces(DefaultBoard);
-    }, []);
+    const pieces = movesHistory[movesHistory.length - 1].pieces;
+    const lastMove = movesHistory[movesHistory.length - 1].lastMove;
+
+    const addToMovesHistory = useCallback(
+        (lastMove: completeMove, pieces: piece[]) => {
+            setMovesHistory([
+                ...movesHistory,
+                { lastMove: lastMove, pieces: pieces },
+            ]);
+        },
+        [movesHistory, setMovesHistory]
+    );
 
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
-            setLastMove(nextMove);
             const validMove: move = {
                 x: nextMove.toX - nextMove.fromX,
                 y: nextMove.toY - nextMove.fromY,
                 group: 999,
                 special: "promotion",
             };
-            setPieces(doMove(validMove, nextMove.piece, pieces));
+
+            const newPieces = pieces.map((piece) =>
+                piece.id === nextMove.toPiece?.id ? nextMove.toPiece : piece
+            );
+
+            addToMovesHistory(
+                nextMove,
+                doMove(
+                    validMove,
+                    nextMove.toPiece ? nextMove.toPiece : nextMove.piece,
+                    newPieces
+                )
+            );
             setNextMove(null);
         }
-    }, [promotionBoxVisible, nextMove, pieces]);
+    }, [promotionBoxVisible, nextMove, pieces, addToMovesHistory]);
 
     useEffect(() => {
         setValidMoves(getValidMoves(selectedPiece, pieces, lastMove));
     }, [selectedPiece, pieces, lastMove]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
-        if (promotionBoxVisible && event.target === boardRef.current) {
+        if (promotionBoxVisible && event.target === promotionCloseRef.current) {
             setNextMove(null);
             setPromotionBoxVisible(false);
             return;
@@ -72,8 +96,10 @@ function Board() {
                         setPromotionBoxVisible(true);
                         setNextMove(move);
                     } else {
-                        setLastMove(move);
-                        setPieces(doMove(validMove, selectedPiece, pieces));
+                        addToMovesHistory(
+                            move,
+                            doMove(validMove, selectedPiece, pieces)
+                        );
                     }
                 }
                 setSelectedPiece(null);
@@ -136,14 +162,19 @@ function Board() {
                 />
             ))}
             {promotionBoxVisible ? (
-                <PromotionBox
-                    x={nextMove ? nextMove.toX : 0}
-                    y={nextMove ? nextMove.toY : 0}
-                    setPromotionBoxVisible={setPromotionBoxVisible}
-                    setPieces={setPieces}
-                    setNextMove={setNextMove}
-                    nextMove={nextMove}
-                />
+                <>
+                    <PromotionBox
+                        x={nextMove?.toX}
+                        y={nextMove?.toY}
+                        setPromotionBoxVisible={setPromotionBoxVisible}
+                        setNextMove={setNextMove}
+                        nextMove={nextMove}
+                    />
+                    <div
+                        ref={promotionCloseRef}
+                        className="promotion-box-close"
+                    />
+                </>
             ) : null}
         </div>
     );

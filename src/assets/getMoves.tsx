@@ -14,6 +14,7 @@ interface completeMove {
     toX: number;
     toY: number;
     piece: piece;
+    toPiece?: piece;
 }
 
 interface movesProps {

@@ -1,6 +1,12 @@
 import { piece } from "../game/Piece";
+import { completeMove } from "./getMoves";
 
-const DefaultBoard: piece[] = [
+interface boardPosition {
+    pieces: piece[];
+    lastMove: completeMove | null;
+}
+
+const defaultBoard: piece[] = [
     { type: "wn", x: 6, y: 0, id: 0 },
     { type: "wn", x: 1, y: 0, id: 1 },
     { type: "wb", x: 2, y: 0, id: 2 },
@@ -35,4 +41,5 @@ const DefaultBoard: piece[] = [
     { type: "bp", x: 7, y: 6, id: 31 },
 ];
 
-export default DefaultBoard;
+export default defaultBoard;
+export type { boardPosition };

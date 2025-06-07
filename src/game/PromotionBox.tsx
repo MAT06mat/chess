@@ -1,21 +1,18 @@
 import { completeMove } from "../assets/getMoves";
 import { piece } from "./Piece";
-import playSound from "./Sounds";
 
 interface PromotionProps {
-    x: number;
-    y: number;
+    x?: number;
+    y?: number;
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setNextMove: React.Dispatch<React.SetStateAction<completeMove | null>>;
-    setPieces: React.Dispatch<React.SetStateAction<piece[]>>;
     nextMove: completeMove | null;
 }
 
 function PromotionBox({
-    x,
-    y,
+    x = 7,
+    y = 7,
     setPromotionBoxVisible,
-    setPieces,
     setNextMove,
     nextMove,
 }: PromotionProps) {
@@ -36,16 +33,12 @@ function PromotionBox({
             id: nextMove.piece.id,
             hasMoved: true,
         };
-        setPieces((pieces) =>
-            pieces.map((piece) => (piece.id === newPiece.id ? newPiece : piece))
-        );
         setNextMove((move) => {
             if (move) {
-                move.piece = newPiece;
+                move.toPiece = newPiece;
             }
             return move;
         });
-        playSound("promote");
         setPromotionBoxVisible(false);
     }
 

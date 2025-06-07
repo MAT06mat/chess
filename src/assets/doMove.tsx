@@ -25,12 +25,14 @@ function doMove(
         return !(piece.x === x && piece.y === y);
     });
 
-    if (validMove.special !== "promotion") {
-        if (newPieces.length === pieces.length) {
-            playSound("move-self");
-        } else {
-            playSound("capture");
-        }
+    if (validMove.type) {
+        playSound("capture");
+    } else if (validMove.special === "promotion") {
+        playSound("promote");
+    } else if (validMove.special === "castling") {
+        playSound("castle");
+    } else {
+        playSound("move-self");
     }
 
     newPieces.map((piece) => {
