@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { boardPosition } from "../assets/defaultBoard";
+import { boardPosition } from "../assets/DefaultBoard";
 
 type GameContextType = {
     movesHistory: boardPosition[];
