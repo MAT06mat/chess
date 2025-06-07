@@ -1,7 +1,7 @@
 import { useContext, useRef } from "react";
 import "../styles/BoardPanel.scss";
 import { GameContext } from "./GameContext";
-import defaultBoard from "../assets/defaultBoard";
+import defaultBoard from "../assets/DefaultBoard";
 
 interface pNI {
     p: string;
