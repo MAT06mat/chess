@@ -5,7 +5,6 @@ import { move } from "./getMoves";
  * Handles special moves like castling for a piece based on the valid move provided.
  * If the move is castling, it moves the rook to the appropriate position.
  * If the move is en passant, it removes the captured pawn.
- * TODO: Extend this function to handle pawn promotion.
  *
  * @param {move} validMove - The valid move object containing x and y offsets.
  * @param {piece} piece - The piece being moved.
@@ -35,17 +34,20 @@ function doSpecialMove(
         }
     } else if (validMove.special === "enPassant") {
         // Remove the captured pawn
-        pieces = pieces.filter(
-            (p) =>
-                !(
-                    p.type[1] === "p" &&
-                    p.y === piece.y - validMove.y &&
-                    p.x === piece.x
-                )
-        );
-    }
+        pieces = pieces.filter((p) => {
+            const a = !(
+                p.type[1] === "p" &&
+                p.y === piece.y &&
+                p.x === piece.x + validMove.x
+            );
 
-    // TODO: Handle other special moves like promotion, etc.
+            if (p.type == "bp") {
+                console.log(p.x, p.y);
+            }
+
+            return a;
+        });
+    }
 
     return pieces;
 }

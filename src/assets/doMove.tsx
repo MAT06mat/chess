@@ -21,7 +21,7 @@ function doMove(
     const x = selectedPiece.x + validMove.x;
     const y = selectedPiece.y + validMove.y;
 
-    let newPieces = pieces.filter((piece) => {
+    let newPieces = structuredClone(pieces).filter((piece) => {
         return !(piece.x === x && piece.y === y);
     });
 
@@ -36,7 +36,7 @@ function doMove(
     }
 
     newPieces.map((piece) => {
-        if (piece === selectedPiece) {
+        if (piece.id === selectedPiece.id) {
             piece.x = x;
             piece.y = y;
             piece.hasMoved = true;

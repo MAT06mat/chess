@@ -7,14 +7,16 @@ import doMove from "../assets/doMove";
 import getSquarePos from "../assets/getSquarePos";
 import PromotionBox from "./PromotionBox";
 import "../styles/Board.scss";
-import { boardPosition } from "../assets/defaultBoard";
+import { useContext } from "react";
+import { GameContext } from "./GameContext";
 
-interface BoardProps {
-    movesHistory: boardPosition[];
-    setMovesHistory: React.Dispatch<React.SetStateAction<boardPosition[]>>;
-}
+function Board() {
+    const game = useContext(GameContext);
+    if (!game) {
+        throw new Error("Board must be used within a GameContext.Provider");
+    }
+    const { movesHistory, setMovesHistory, actualMove, setActualMove } = game;
 
-function Board({ movesHistory, setMovesHistory }: BoardProps) {
     const boardRef = useRef<HTMLDivElement>(null);
     const promotionCloseRef = useRef<HTMLDivElement>(null);
     const [validMoves, setValidMoves] = useState<move[]>([]);
@@ -22,17 +24,21 @@ function Board({ movesHistory, setMovesHistory }: BoardProps) {
     const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
     const [nextMove, setNextMove] = useState<completeMove | null>(null);
 
-    const pieces = movesHistory[movesHistory.length - 1].pieces;
-    const lastMove = movesHistory[movesHistory.length - 1].lastMove;
+    const pieces = movesHistory[actualMove].pieces;
+    const lastMove = movesHistory[actualMove].lastMove;
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
             setMovesHistory([
-                ...movesHistory,
-                { lastMove: lastMove, pieces: pieces },
+                ...movesHistory.slice(0, actualMove + 1),
+                {
+                    lastMove: lastMove,
+                    pieces: pieces,
+                },
             ]);
+            setActualMove((prev) => prev + 1);
         },
-        [movesHistory, setMovesHistory]
+        [movesHistory, setMovesHistory, actualMove, setActualMove]
     );
 
     useEffect(() => {
@@ -44,7 +50,7 @@ function Board({ movesHistory, setMovesHistory }: BoardProps) {
                 special: "promotion",
             };
 
-            const newPieces = pieces.map((piece) =>
+            const newPieces = structuredClone(pieces).map((piece) =>
                 piece.id === nextMove.toPiece?.id ? nextMove.toPiece : piece
             );
 
@@ -163,16 +169,16 @@ function Board({ movesHistory, setMovesHistory }: BoardProps) {
             ))}
             {promotionBoxVisible ? (
                 <>
+                    <div
+                        ref={promotionCloseRef}
+                        className="promotion-box-close"
+                    />
                     <PromotionBox
                         x={nextMove?.toX}
                         y={nextMove?.toY}
                         setPromotionBoxVisible={setPromotionBoxVisible}
                         setNextMove={setNextMove}
                         nextMove={nextMove}
-                    />
-                    <div
-                        ref={promotionCloseRef}
-                        className="promotion-box-close"
                     />
                 </>
             ) : null}

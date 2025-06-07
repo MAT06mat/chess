@@ -3,23 +3,23 @@ import BoardPanel from "./BoardPanel";
 import "../styles/Game.scss";
 import { useState } from "react";
 import defaultBoard, { boardPosition } from "../assets/defaultBoard";
+import { GameContext } from "./GameContext";
 
 function Game() {
     const [movesHistory, setMovesHistory] = useState<boardPosition[]>([
-        { pieces: defaultBoard, lastMove: null },
+        { pieces: structuredClone(defaultBoard), lastMove: null },
     ]);
+    const [actualMove, setActualMove] = useState(0);
 
     return (
-        <div className="game">
-            <Board
-                movesHistory={movesHistory}
-                setMovesHistory={setMovesHistory}
-            />
-            <BoardPanel
-                movesHistory={movesHistory}
-                setMovesHistory={setMovesHistory}
-            />
-        </div>
+        <GameContext.Provider
+            value={{ movesHistory, setMovesHistory, actualMove, setActualMove }}
+        >
+            <div className="game">
+                <Board />
+                <BoardPanel />
+            </div>
+        </GameContext.Provider>
     );
 }
 
