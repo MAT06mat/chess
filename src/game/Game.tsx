@@ -2,7 +2,7 @@ import Board from "./Board";
 import BoardPanel from "./BoardPanel";
 import "../styles/Game.scss";
 import { GameContext } from "./GameContext";
-import defaultBoard, { boardPosition } from "../assets/defaultBoard";
+import defaultBoard, { boardPosition } from "../assets/DefaultBoard";
 import { usePersistedState } from "../assets/usePersistedSate";
 
 function Game() {
