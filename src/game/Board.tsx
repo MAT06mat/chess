@@ -7,7 +7,7 @@ import doMove from "../assets/doMove";
 import getSquarePos from "../assets/getSquarePos";
 import PromotionBox from "./PromotionBox";
 import "../styles/Board.scss";
-import { boardPosition } from "../assets/defaultBoard";
+import { boardPosition } from "../assets/DefaultBoard";
 
 interface BoardProps {
     movesHistory: boardPosition[];
