@@ -1,5 +1,5 @@
+import { boardPosition } from "../assets/DefaultBoard";
 import { useContext, useRef } from "react";
-import defaultBoard from "../assets/defaultBoard";
 import "../styles/BoardPanel.scss";
 import { GameContext } from "./GameContext";
 

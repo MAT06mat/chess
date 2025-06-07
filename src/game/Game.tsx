@@ -2,7 +2,7 @@ import Board from "./Board";
 import BoardPanel from "./BoardPanel";
 import "../styles/Game.scss";
 import { useState } from "react";
-import defaultBoard, { boardPosition } from "../assets/defaultBoard";
+import defaultBoard, { boardPosition } from "../assets/DefaultBoard";
 import { GameContext } from "./GameContext";
 
 function Game() {
