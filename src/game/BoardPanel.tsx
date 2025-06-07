@@ -1,4 +1,4 @@
-import { boardPosition } from "../assets/defaultBoard";
+import { boardPosition } from "../assets/DefaultBoard";
 import "../styles/BoardPanel.scss";
 
 interface BoardPanelProps {
