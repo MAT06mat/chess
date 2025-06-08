@@ -6,6 +6,7 @@ type GameContextType = {
     setMovesHistory: React.Dispatch<React.SetStateAction<boardPosition[]>>;
     actualMove: number;
     setActualMove: React.Dispatch<React.SetStateAction<number>>;
+    title: string;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

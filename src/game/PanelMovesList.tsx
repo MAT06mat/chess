@@ -13,16 +13,20 @@ function PanelMovesList({ chessMoves }: Props) {
             "BoardPanel must be used within a GameContext.Provider"
         );
     }
-    const { setActualMove, actualMove } = game;
+    const { setActualMove, actualMove, movesHistory } = game;
 
     const panelMovesListRef = useRef<HTMLDivElement>(null);
-    setTimeout(() =>
-        panelMovesListRef.current?.scrollTo({
-            left: 0,
-            top: panelMovesListRef.current.scrollHeight,
-            behavior: "smooth",
-        })
-    );
+    const selectedMoveRef = useRef<HTMLDivElement>(null);
+
+    if (actualMove === movesHistory.length - 1) {
+        setTimeout(() =>
+            panelMovesListRef.current?.scrollTo({
+                left: 0,
+                top: panelMovesListRef.current.scrollHeight,
+                behavior: "smooth",
+            })
+        );
+    }
 
     return (
         <div className="panel-moves-list" ref={panelMovesListRef}>
@@ -33,6 +37,7 @@ function PanelMovesList({ chessMoves }: Props) {
                     <div key={index} className={"move-list-row" + lightRow}>
                         <div className="number">{index + 1}.</div>
                         <div
+                            ref={selectedMoveRef}
                             className={"move-notation" + selected}
                             onClick={() => setActualMove(index + 1)}
                         >

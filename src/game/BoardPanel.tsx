@@ -4,6 +4,7 @@ import { GameContext } from "../context/GameContext";
 import defaultBoard from "../assets/defaultBoard";
 import getChessNotation from "../utils/getChessNotation";
 import PanelMovesList from "./PanelMovesList";
+import Title from "./Title";
 
 function BoardPanel() {
     const game = useContext(GameContext);
@@ -39,7 +40,7 @@ function BoardPanel() {
     return (
         <div className="board-panel">
             <div className="board-panel-header">
-                <div className="title">Sandbox</div>
+                <Title onlyComputerScreen />
             </div>
             <div className="board-panel-content">
                 <PanelMovesList chessMoves={chessMoves} />

@@ -7,6 +7,7 @@ import boardPosition from "../types/boardPosition";
 import defaultBoard from "../assets/defaultBoard";
 import { useEffect } from "react";
 import playSound from "../utils/playSound";
+import Title from "./Title";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -14,6 +15,7 @@ function Game() {
         [{ pieces: structuredClone(defaultBoard), lastMove: null }]
     );
     const [actualMove, setActualMove] = usePersistedState("actualMove", 0);
+    const title = "Chess Sandbox";
 
     useEffect(() => {
         const lastMove = movesHistory[actualMove].lastMove;
@@ -31,9 +33,16 @@ function Game() {
 
     return (
         <GameContext.Provider
-            value={{ movesHistory, setMovesHistory, actualMove, setActualMove }}
+            value={{
+                movesHistory,
+                setMovesHistory,
+                actualMove,
+                setActualMove,
+                title,
+            }}
         >
             <div className="game">
+                <Title onlyMobileScreen />
                 <Board />
                 <BoardPanel />
             </div>
