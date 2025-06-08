@@ -1,19 +1,13 @@
-import { useContext } from "react";
-import "../styles/BoardPanel.scss";
-import { GameContext } from "../context/GameContext";
 import defaultBoard from "../assets/defaultBoard";
 import getChessNotation from "../utils/getChessNotation";
 import PanelMovesList from "./PanelMovesList";
 import Title from "./Title";
+import useGameContext from "../hooks/useGameContext";
+import "../styles/BoardPanel.scss";
 
 function BoardPanel() {
-    const game = useContext(GameContext);
-    if (!game) {
-        throw new Error(
-            "BoardPanel must be used within a GameContext.Provider"
-        );
-    }
-    const { movesHistory, setMovesHistory, actualMove, setActualMove } = game;
+    const { movesHistory, setMovesHistory, actualMove, setActualMove } =
+        useGameContext();
 
     function resetChessBoard() {
         setMovesHistory([

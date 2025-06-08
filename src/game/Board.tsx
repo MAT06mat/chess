@@ -5,18 +5,14 @@ import getValidMoves from "../utils/getValidMoves";
 import doMove from "../utils/doMove";
 import getSquarePos from "../utils/getSquarePos";
 import PromotionBox from "./PromotionBox";
-import "../styles/Board.scss";
-import { useContext } from "react";
-import { GameContext } from "../context/GameContext";
 import { completeMove, move } from "../types";
 import BoardCoordinates from "../assets/svg/BoardCoordinates";
+import useGameContext from "../hooks/useGameContext";
+import "../styles/Board.scss";
 
 function Board() {
-    const game = useContext(GameContext);
-    if (!game) {
-        throw new Error("Board must be used within a GameContext.Provider");
-    }
-    const { movesHistory, setMovesHistory, actualMove, setActualMove } = game;
+    const { movesHistory, setMovesHistory, actualMove, setActualMove } =
+        useGameContext();
 
     const boardRef = useRef<HTMLDivElement>(null);
     const promotionCloseRef = useRef<HTMLDivElement>(null);

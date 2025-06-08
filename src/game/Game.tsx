@@ -1,6 +1,5 @@
 import Board from "./Board";
 import BoardPanel from "./BoardPanel";
-import "../styles/Game.scss";
 import { GameContext } from "../context/GameContext";
 import { usePersistedState } from "../hooks/usePersistedSate";
 import boardPosition from "../types/boardPosition";
@@ -8,6 +7,7 @@ import defaultBoard from "../assets/defaultBoard";
 import { useEffect } from "react";
 import playSound from "../utils/playSound";
 import Title from "./Title";
+import "../styles/Game.scss";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(

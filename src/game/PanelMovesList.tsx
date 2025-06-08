@@ -1,19 +1,13 @@
-import { useContext, useRef } from "react";
+import useGameContext from "../hooks/useGameContext";
+import { useRef } from "react";
 import "../styles/PanelMovesList.scss";
-import { GameContext } from "../context/GameContext";
 
 interface Props {
     chessMoves: string[];
 }
 
 function PanelMovesList({ chessMoves }: Props) {
-    const game = useContext(GameContext);
-    if (!game) {
-        throw new Error(
-            "BoardPanel must be used within a GameContext.Provider"
-        );
-    }
-    const { setActualMove, actualMove, movesHistory } = game;
+    const { setActualMove, actualMove, movesHistory } = useGameContext();
 
     const panelMovesListRef = useRef<HTMLDivElement>(null);
     const selectedMoveRef = useRef<HTMLDivElement>(null);

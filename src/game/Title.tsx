@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { GameContext } from "../context/GameContext";
+import useGameContext from "../hooks/useGameContext";
 
 interface Props {
     onlyComputerScreen?: boolean;
@@ -7,11 +6,7 @@ interface Props {
 }
 
 function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
-    const game = useContext(GameContext);
-    if (!game) {
-        throw new Error("Board must be used within a GameContext.Provider");
-    }
-    const { title } = game;
+    const { title } = useGameContext();
 
     const className = onlyComputerScreen
         ? " computer-screen"
