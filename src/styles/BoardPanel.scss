@@ -1,5 +1,5 @@
 .board-panel {
-    width: min(100%, 350px);
+    width: min(100%, 300px);
     height: min(100%, 80vh);
     border-radius: 4px;
     box-sizing: border-box;
@@ -29,18 +29,12 @@
         flex: 1 1 0;
         width: 100%;
         min-height: 0;
-        overflow-y: auto;
-        box-sizing: border-box;
-        padding: 1rem;
-
-        scrollbar-color: #00000050 #00000000;
-        scrollbar-width: thin;
     }
 
     .board-panel-footer {
         background-color: #00000026;
         width: 100%;
-        height: 6rem;
+        height: 5.5rem;
         box-sizing: border-box;
         border-radius: 0 0 4px 4px;
         padding: 1.2rem;

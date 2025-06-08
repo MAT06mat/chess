@@ -1,4 +1,3 @@
-import playSound from "./playSound";
 import { move } from "../types";
 import piece from "../types/piece";
 import doSpecialMove from "./doSpecialMove";
@@ -24,16 +23,6 @@ function doMove(
     let newPieces = structuredClone(pieces).filter((piece) => {
         return !(piece.x === x && piece.y === y);
     });
-
-    if (validMove.type) {
-        playSound("capture");
-    } else if (validMove.special === "promotion") {
-        playSound("promote");
-    } else if (validMove.special === "castling") {
-        playSound("castle");
-    } else {
-        playSound("move-self");
-    }
 
     newPieces.map((piece) => {
         if (piece.id === selectedPiece.id) {

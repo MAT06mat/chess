@@ -1,26 +1,9 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import "../styles/BoardPanel.scss";
 import { GameContext } from "../context/GameContext";
 import defaultBoard from "../assets/defaultBoard";
-
-interface pNI {
-    p: string;
-    n: string;
-    b: string;
-    q: string;
-    k: string;
-}
-
-const pN = {
-    p: "",
-    r: "R",
-    n: "N",
-    b: "B",
-    q: "Q",
-    k: "K",
-};
-
-const cN = "abcdefgh";
+import getChessNotation from "../utils/getChessNotation";
+import PanelMovesList from "./PanelMovesList";
 
 function BoardPanel() {
     const game = useContext(GameContext);
@@ -31,8 +14,6 @@ function BoardPanel() {
     }
     const { movesHistory, setMovesHistory, actualMove, setActualMove } = game;
 
-    const panelContentRef = useRef<HTMLDivElement>(null);
-
     function resetChessBoard() {
         setMovesHistory([
             { pieces: structuredClone(defaultBoard), lastMove: null },
@@ -41,41 +22,27 @@ function BoardPanel() {
     }
 
     function undoChessBoard() {
-        console.log(actualMove - 1);
         setActualMove((prev) => prev - 1);
     }
 
     function redoChessBoard() {
-        console.log(actualMove + 1);
         setActualMove((prev) => prev + 1);
     }
 
     const chessMoves = movesHistory.map((moveHistory) => {
         if (!moveHistory.lastMove) return "";
-
-        const p = moveHistory.lastMove?.piece.type[1];
-        const x = moveHistory.lastMove?.toX;
-        const y = moveHistory.lastMove?.toY;
-
-        return pN[p as keyof pNI] + cN[x ? x : 0] + (y + 1);
+        return getChessNotation(moveHistory.lastMove);
     });
+
+    chessMoves.shift();
 
     return (
         <div className="board-panel">
             <div className="board-panel-header">
                 <div className="title">Sandbox</div>
             </div>
-            <div className="board-panel-content" ref={panelContentRef}>
-                {chessMoves.map((m, i) => {
-                    setTimeout(() =>
-                        panelContentRef.current?.scrollTo({
-                            left: 0,
-                            top: panelContentRef.current.scrollHeight,
-                            behavior: "smooth",
-                        })
-                    );
-                    return <div key={i}>{m}</div>;
-                })}
+            <div className="board-panel-content">
+                <PanelMovesList chessMoves={chessMoves} />
             </div>
             <div className="board-panel-footer">
                 <button

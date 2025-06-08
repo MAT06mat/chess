@@ -50,7 +50,7 @@ function getValidMoves(
                 lastMove.piece.type[0] !== selectedPiece.type[0]
             ) {
                 Move.special = "enPassant";
-                Move.type = "capture-hint";
+                Move.type = "capture";
             }
 
             if (Move.x !== 0 && !isOccupiedOtherColor && !Move.special) {
@@ -118,7 +118,7 @@ function getValidMoves(
             if (isOccupiedSameColor) {
                 return false;
             } else if (isOccupiedOtherColor) {
-                Move.type = "capture-hint";
+                Move.type = "capture";
                 return true;
             }
         }

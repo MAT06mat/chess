@@ -1,14 +1,17 @@
 import piece from "./piece";
 
-interface move {
-    x: number;
-    y: number;
-    group: number;
-    type?: string;
+interface type {
+    type?: "capture";
     special?: "enPassant" | "castling" | "promotion";
 }
 
-interface completeMove {
+interface move extends type {
+    x: number;
+    y: number;
+    group: number;
+}
+
+interface completeMove extends type {
     fromX: number;
     fromY: number;
     toX: number;

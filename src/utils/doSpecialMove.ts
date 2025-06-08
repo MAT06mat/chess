@@ -34,19 +34,14 @@ function doSpecialMove(
         }
     } else if (validMove.special === "enPassant") {
         // Remove the captured pawn
-        pieces = pieces.filter((p) => {
-            const a = !(
-                p.type[1] === "p" &&
-                p.y === piece.y &&
-                p.x === piece.x + validMove.x
-            );
-
-            if (p.type == "bp") {
-                console.log(p.x, p.y);
-            }
-
-            return a;
-        });
+        pieces = pieces.filter(
+            (p) =>
+                !(
+                    p.type[1] === "p" &&
+                    p.y === piece.y &&
+                    p.x === piece.x + validMove.x
+                )
+        );
     }
 
     return pieces;

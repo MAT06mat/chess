@@ -1,0 +1,51 @@
+.panel-moves-list {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-color: #00000050 #00000000;
+    scrollbar-width: thin;
+
+    .move-list-row {
+        font-size: smaller;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 15px 0 15px;
+        width: 100%;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+
+        text-align: left;
+
+        &.light-row {
+            background-color: #ffffff05;
+        }
+
+        div {
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .number {
+            color: #ffffff80;
+        }
+
+        .move-notation {
+            font-weight: 600;
+            width: max-content;
+            padding: 0 4px;
+            border-bottom: solid 3px transparent;
+            cursor: pointer;
+
+            &.selected {
+                background-color: #ffffff24;
+                border-bottom: solid 3px #ffffff1a;
+                border-radius: 2px;
+                font-weight: 700;
+                color: #fff;
+                cursor: default;
+            }
+        }
+    }
+}
