@@ -1,9 +1,10 @@
 import Board from "./Board";
 import BoardPanel from "./BoardPanel";
 import "../styles/Game.scss";
-import { GameContext } from "./GameContext";
-import defaultBoard, { boardPosition } from "../assets/DefaultBoard";
-import { usePersistedState } from "../assets/usePersistedSate";
+import { GameContext } from "../context/GameContext";
+import { usePersistedState } from "../hooks/usePersistedSate";
+import boardPosition from "../types/boardPosition";
+import defaultBoard from "../assets/defaultBoard";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(

@@ -1,21 +1,4 @@
-import { piece } from "../game/Piece";
-
-interface move {
-    x: number;
-    y: number;
-    group: number;
-    type?: string;
-    special?: "enPassant" | "castling" | "promotion";
-}
-
-interface completeMove {
-    fromX: number;
-    fromY: number;
-    toX: number;
-    toY: number;
-    piece: piece;
-    toPiece?: piece;
-}
+import { move } from "../types";
 
 interface movesProps {
     p: move[];
@@ -184,4 +167,3 @@ function getMoves(pieceType: string): move[] {
 }
 
 export default getMoves;
-export type { move, completeMove };

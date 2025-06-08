@@ -1,4 +1,4 @@
-import { completeMove } from "../assets/getMoves";
+import { completeMove } from "../types";
 import { piece } from "./Piece";
 
 interface PromotionProps {

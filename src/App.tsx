@@ -1,4 +1,4 @@
-import "./App.css";
+import "./styles/App.scss";
 import Game from "./game/Game";
 
 function App() {

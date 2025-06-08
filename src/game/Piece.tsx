@@ -1,10 +1,4 @@
-interface piece {
-    type: string;
-    x: number;
-    y: number;
-    id: number;
-    hasMoved?: boolean;
-}
+import piece from "../types/piece";
 
 interface PieceProps {
     piece: piece;

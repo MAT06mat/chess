@@ -1,7 +1,7 @@
-import { piece } from "../game/Piece";
-import playSound from "../game/Sounds";
+import playSound from "./playSound";
+import { move } from "../types";
+import piece from "../types/piece";
 import doSpecialMove from "./doSpecialMove";
-import { move } from "./getMoves";
 
 /**
  * Moves a piece to a new position based on the valid move provided.

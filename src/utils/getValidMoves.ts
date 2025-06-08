@@ -1,5 +1,6 @@
-import { piece } from "../game/Piece";
-import getMoves, { completeMove } from "./getMoves";
+import { completeMove } from "../types";
+import piece from "../types/piece";
+import getMoves from "./getMoves";
 import isPosInBoard from "./isPosInBoard";
 
 function getValidMoves(

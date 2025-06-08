@@ -1,5 +1,5 @@
-import { piece } from "../game/Piece";
-import { move } from "./getMoves";
+import { move } from "../types";
+import piece from "../types/piece";
 
 /**
  * Handles special moves like castling for a piece based on the valid move provided.
