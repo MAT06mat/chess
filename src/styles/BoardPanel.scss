@@ -19,6 +19,13 @@
         flex: 1 1 0;
         width: 100%;
         min-height: 0;
+        display: flex;
+        flex-direction: column;
+        border-top: 0.05rem solid #ffffff1a;
+
+        & > * {
+            border-bottom: 0.05rem solid #ffffff1a;
+        }
     }
 
     .board-panel-footer {

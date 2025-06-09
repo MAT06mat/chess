@@ -2,6 +2,19 @@ import useGameContext from "../hooks/useGameContext";
 import { useRef } from "react";
 import "../styles/PanelMovesList.scss";
 
+function createPairMoves(arr: string[]) {
+    const result: { m: string | null; i: number }[][] = [];
+    for (let i = 0; i < arr.length; i += 2) {
+        const first = arr[i];
+        const second = arr[i + 1] !== undefined ? arr[i + 1] : null;
+        result.push([
+            { m: first, i: i + 1 },
+            { m: second, i: i + 2 },
+        ]);
+    }
+    return result;
+}
+
 interface Props {
     chessMoves: string[];
 }
@@ -22,21 +35,33 @@ function PanelMovesList({ chessMoves }: Props) {
         );
     }
 
+    const movesList = createPairMoves(chessMoves);
+
     return (
         <div className="panel-moves-list" ref={panelMovesListRef}>
-            {chessMoves.map((move, index) => {
+            {movesList.map((moves, index) => {
                 const lightRow = index % 2 === 1 ? " light-row" : "";
-                const selected = index + 1 === actualMove ? " selected" : "";
+                const selected1 = moves[0].i === actualMove ? " selected" : "";
+                const selected2 = moves[1].i === actualMove ? " selected" : "";
                 return (
                     <div key={index} className={"move-list-row" + lightRow}>
                         <div className="number">{index + 1}.</div>
                         <div
                             ref={selectedMoveRef}
-                            className={"move-notation" + selected}
-                            onClick={() => setActualMove(index + 1)}
+                            className={"move-notation" + selected1}
+                            onClick={() => setActualMove(moves[0].i)}
                         >
-                            {move}
+                            {moves[0].m}
                         </div>
+                        {moves[1].m ? (
+                            <div
+                                ref={selectedMoveRef}
+                                className={"move-notation" + selected2}
+                                onClick={() => setActualMove(moves[1].i)}
+                            >
+                                {moves[1].m}
+                            </div>
+                        ) : null}
                     </div>
                 );
             })}

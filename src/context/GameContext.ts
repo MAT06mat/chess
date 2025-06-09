@@ -7,6 +7,7 @@ type GameContextType = {
     actualMove: number;
     setActualMove: React.Dispatch<React.SetStateAction<number>>;
     title: string;
+    colorToPlay: "w" | "b";
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

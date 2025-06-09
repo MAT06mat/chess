@@ -4,10 +4,16 @@ import PanelMovesList from "./PanelMovesList";
 import Title from "./Title";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/BoardPanel.scss";
+import ColorToPlayBox from "./ColorToPlayBox";
 
 function BoardPanel() {
-    const { movesHistory, setMovesHistory, actualMove, setActualMove } =
-        useGameContext();
+    const {
+        movesHistory,
+        setMovesHistory,
+        actualMove,
+        setActualMove,
+        colorToPlay,
+    } = useGameContext();
 
     function resetChessBoard() {
         setMovesHistory([
@@ -37,6 +43,7 @@ function BoardPanel() {
                 <Title onlyComputerScreen />
             </div>
             <div className="board-panel-content">
+                <ColorToPlayBox colorToPlay={colorToPlay} />
                 <PanelMovesList chessMoves={chessMoves} />
             </div>
             <div className="board-panel-footer">

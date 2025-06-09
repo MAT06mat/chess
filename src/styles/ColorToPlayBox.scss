@@ -1,0 +1,29 @@
+.color-to-play-box {
+    padding: 1rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+
+    p {
+        margin: 0.5rem;
+        font-weight: 600;
+    }
+
+    .color {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 3px;
+        margin-right: 0.5rem;
+
+        &.w {
+            background-color: #fff;
+            border: 2px solid #dad8d6;
+        }
+
+        &.b {
+            background-color: #312e2b;
+            border: 2px solid #8b8987;
+        }
+    }
+}

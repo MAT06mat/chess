@@ -11,8 +11,13 @@ import useGameContext from "../hooks/useGameContext";
 import "../styles/Board.scss";
 
 function Board() {
-    const { movesHistory, setMovesHistory, actualMove, setActualMove } =
-        useGameContext();
+    const {
+        movesHistory,
+        setMovesHistory,
+        actualMove,
+        setActualMove,
+        colorToPlay,
+    } = useGameContext();
 
     const boardRef = useRef<HTMLDivElement>(null);
     const promotionCloseRef = useRef<HTMLDivElement>(null);
@@ -23,6 +28,11 @@ function Board() {
 
     const pieces = movesHistory[actualMove].pieces;
     const lastMove = movesHistory[actualMove].lastMove;
+
+    // Remove the selected piece on board reset
+    useEffect(() => {
+        setSelectedPiece(null);
+    }, [setSelectedPiece, pieces]);
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
@@ -112,6 +122,12 @@ function Board() {
         }
     }
 
+    function handlePieceClick(piece: piece) {
+        if (piece.type[0] === colorToPlay) {
+            setSelectedPiece(piece);
+        }
+    }
+
     return (
         <div className="board" ref={boardRef} onClick={handleClick}>
             <BoardCoordinates />
@@ -166,7 +182,7 @@ function Board() {
                 <Piece
                     key={piece.id}
                     piece={piece}
-                    setSelectedPiece={setSelectedPiece}
+                    onPieceClick={handlePieceClick}
                 />
             ))}
             {promotionBoxVisible ? (

@@ -17,6 +17,12 @@ function Game() {
     const [actualMove, setActualMove] = usePersistedState("actualMove", 0);
     const title = "Chess Sandbox";
 
+    const colorToPlay = movesHistory[actualMove].lastMove
+        ? movesHistory[actualMove].lastMove.piece.type[0] === "w"
+            ? "b"
+            : "w"
+        : "w";
+
     useEffect(() => {
         const lastMove = movesHistory[actualMove].lastMove;
 
@@ -39,6 +45,7 @@ function Game() {
                 actualMove,
                 setActualMove,
                 title,
+                colorToPlay,
             }}
         >
             <div className="game">

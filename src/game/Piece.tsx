@@ -2,17 +2,17 @@ import piece from "../types/piece";
 
 interface PieceProps {
     piece: piece;
-    setSelectedPiece: React.Dispatch<React.SetStateAction<piece | null>>;
+    onPieceClick: (piece: piece) => void;
 }
 
-function Piece({ piece, setSelectedPiece }: PieceProps) {
+function Piece({ piece, onPieceClick }: PieceProps) {
     const style = {
         left: `${piece.x * 12.5}%`,
         bottom: `${piece.y * 12.5}%`,
     };
 
     function handleClick() {
-        setSelectedPiece(piece);
+        onPieceClick(piece);
     }
 
     return (
