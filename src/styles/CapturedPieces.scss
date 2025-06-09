@@ -1,0 +1,369 @@
+.captured-pieces-div {
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    align-items: start;
+    justify-content: center;
+    padding-left: 0.5rem;
+
+    .captured-pieces {
+        height: 1.4rem;
+        display: inline-block;
+
+        span {
+            background-image: url("https://www.chess.com/bundles/web/images/sprites/captured-pieces.png");
+            background-repeat: no-repeat;
+            background-size: 34.15rem 30.55rem;
+            margin-left: 0.2rem;
+            display: inline-block;
+        }
+
+        .captured-piece-score {
+            background-image: none;
+            background-color: transparent;
+            color: #ffffff80;
+            font-size: small;
+            vertical-align: text-top;
+            margin-left: 0.4rem;
+            font-weight: 600;
+        }
+
+        .captured-pieces-b-p,
+        .captured-pieces-w-p {
+            height: 0.85rem;
+            width: 0.65rem;
+        }
+
+        .captured-pieces-b-p {
+            background-position: 0 -29.7rem;
+        }
+
+        .captured-pieces-w-p {
+            background-position: -18rem -29.7rem;
+        }
+
+        .captured-pieces-b-2-p,
+        .captured-pieces-w-2-p {
+            height: 0.85rem;
+            width: 1rem;
+        }
+
+        .captured-pieces-b-2-p {
+            background-position: 0 -28.45rem;
+        }
+
+        .captured-pieces-w-2-p {
+            background-position: -18rem -28.45rem;
+        }
+
+        .captured-pieces-b-3-p,
+        .captured-pieces-w-3-p {
+            height: 0.85rem;
+            width: 1.35rem;
+        }
+
+        .captured-pieces-b-3-p {
+            background-position: 0 -27.2rem;
+        }
+
+        .captured-pieces-w-3-p {
+            background-position: -18rem -27.2rem;
+        }
+
+        .captured-pieces-b-4-p,
+        .captured-pieces-w-4-p {
+            height: 0.85rem;
+            width: 1.7rem;
+        }
+
+        .captured-pieces-b-4-p {
+            background-position: 0 -25.95rem;
+        }
+
+        .captured-pieces-w-4-p {
+            background-position: -18rem -25.95rem;
+        }
+
+        .captured-pieces-b-5-p,
+        .captured-pieces-w-5-p {
+            height: 0.85rem;
+            width: 2.05rem;
+        }
+
+        .captured-pieces-b-5-p {
+            background-position: 0 -24.7rem;
+        }
+
+        .captured-pieces-w-5-p {
+            background-position: -18rem -24.7rem;
+        }
+
+        .captured-pieces-b-6-p,
+        .captured-pieces-w-6-p {
+            height: 0.85rem;
+            width: 2.4rem;
+        }
+
+        .captured-pieces-b-6-p {
+            background-position: 0 -23.45rem;
+        }
+
+        .captured-pieces-w-6-p {
+            background-position: -18rem -23.45rem;
+        }
+
+        .captured-pieces-b-7-p,
+        .captured-pieces-w-7-p {
+            height: 0.85rem;
+            width: 2.75rem;
+        }
+
+        .captured-pieces-b-7-p {
+            background-position: 0 -22.2rem;
+        }
+
+        .captured-pieces-w-7-p {
+            background-position: -18rem -22.2rem;
+        }
+
+        .captured-pieces-b-8-p,
+        .captured-pieces-w-8-p {
+            height: 0.85rem;
+            width: 3.1rem;
+        }
+
+        .captured-pieces-b-8-p {
+            background-position: 0 -20.95rem;
+        }
+
+        .captured-pieces-w-8-p {
+            background-position: -18rem -20.95rem;
+        }
+
+        .captured-pieces-b-b,
+        .captured-pieces-w-b {
+            height: 0.9rem;
+            width: 0.75rem;
+        }
+
+        .captured-pieces-b-b {
+            background-position: -3.35rem -22.15rem;
+        }
+
+        .captured-pieces-w-b {
+            background-position: -21.35rem -22.15rem;
+        }
+
+        .captured-pieces-b-2-b,
+        .captured-pieces-w-2-b {
+            height: 0.95rem;
+            width: 1.15rem;
+        }
+
+        .captured-pieces-b-2-b {
+            background-position: -3.35rem -20.85rem;
+        }
+
+        .captured-pieces-w-2-b {
+            background-position: -21.35rem -20.85rem;
+        }
+
+        .captured-pieces-b-n,
+        .captured-pieces-w-n {
+            height: 0.95rem;
+            width: 0.8rem;
+        }
+
+        .captured-pieces-b-n {
+            background-position: -4.75rem -22.1rem;
+        }
+
+        .captured-pieces-w-n {
+            background-position: -22.7rem -22.1rem;
+        }
+
+        .captured-pieces-b-2-n,
+        .captured-pieces-w-2-n {
+            height: 0.95rem;
+            width: 1.15rem;
+        }
+
+        .captured-pieces-b-2-n {
+            background-position: -4.75rem -20.85rem;
+        }
+
+        .captured-pieces-w-2-n {
+            background-position: -22.7rem -20.85rem;
+        }
+
+        .captured-pieces-b-r,
+        .captured-pieces-w-r {
+            height: 0.85rem;
+            width: 0.75rem;
+        }
+
+        .captured-pieces-b-r {
+            background-position: -6rem -22.2rem;
+        }
+
+        .captured-pieces-w-r {
+            background-position: -24rem -22.2rem;
+        }
+
+        .captured-pieces-b-2-r,
+        .captured-pieces-w-2-r {
+            height: 0.85rem;
+            width: 1.15rem;
+        }
+
+        .captured-pieces-b-2-r {
+            background-position: -6rem -20.95rem;
+        }
+
+        .captured-pieces-w-2-r {
+            background-position: -24rem -20.95rem;
+        }
+
+        .captured-pieces-b-q,
+        .captured-pieces-w-q {
+            height: 0.95rem;
+            width: 0.9rem;
+        }
+
+        .captured-pieces-b-q {
+            background-position: -7.25rem -20.85rem;
+        }
+
+        .captured-pieces-w-q {
+            background-position: -25.2rem -20.85rem;
+        }
+
+        @media (-webkit-min-device-pixel-ratio: 2),
+            all and (min-resolution: 192dpi),
+            all and (min-resolution: 2dppx) {
+            .captured-pieces-cpiece {
+                background-size: 17.1rem 15.3rem;
+            }
+
+            .captured-pieces-b-p {
+                background-position: 0 -8.8rem;
+            }
+
+            .captured-pieces-w-p {
+                background-position: -9rem -8.8rem;
+            }
+
+            .captured-pieces-b-2-p {
+                background-position: 0 -7.55rem;
+            }
+
+            .captured-pieces-w-2-p {
+                background-position: -9rem -7.55rem;
+            }
+
+            .captured-pieces-b-3-p {
+                background-position: 0 -6.3rem;
+            }
+
+            .captured-pieces-w-3-p {
+                background-position: -9rem -6.3rem;
+            }
+
+            .captured-pieces-b-4-p {
+                background-position: 0 -5.05rem;
+            }
+
+            .captured-pieces-w-4-p {
+                background-position: -9rem -5.05rem;
+            }
+
+            .captured-pieces-b-5-p {
+                background-position: 0 -3.8rem;
+            }
+
+            .captured-pieces-w-5-p {
+                background-position: -9rem -3.8rem;
+            }
+
+            .captured-pieces-b-6-p {
+                background-position: 0 -2.55rem;
+            }
+
+            .captured-pieces-w-6-p {
+                background-position: -9rem -2.55rem;
+            }
+
+            .captured-pieces-b-7-p {
+                background-position: 0 -1.3rem;
+            }
+
+            .captured-pieces-w-7-p {
+                background-position: -9rem -1.3rem;
+            }
+
+            .captured-pieces-b-8-p {
+                background-position: 0 -0.05rem;
+            }
+
+            .captured-pieces-w-8-p {
+                background-position: -9rem -0.05rem;
+            }
+
+            .captured-pieces-b-b {
+                background-position: -3.35rem -1.25rem;
+            }
+
+            .captured-pieces-w-b {
+                background-position: -12.35rem -1.25rem;
+            }
+
+            .captured-pieces-b-2-b {
+                background-position: -3.35rem 0.05rem;
+            }
+
+            .captured-pieces-w-2-b {
+                background-position: -12.35rem 0.05rem;
+            }
+
+            .captured-pieces-b-n {
+                background-position: -4.75rem -1.2rem;
+            }
+
+            .captured-pieces-w-n {
+                background-position: -13.75rem -1.2rem;
+            }
+
+            .captured-pieces-b-2-n {
+                background-position: -4.75rem 0.05rem;
+            }
+
+            .captured-pieces-w-2-n {
+                background-position: -13.75rem 0.05rem;
+            }
+
+            .captured-pieces-b-r {
+                background-position: -6.05rem -1.3rem;
+            }
+
+            .captured-pieces-w-r {
+                background-position: -15.05rem -1.3rem;
+            }
+
+            .captured-pieces-b-2-r {
+                background-position: -6rem -0.05rem;
+            }
+
+            .captured-pieces-w-2-r {
+                background-position: -15rem -0.05rem;
+            }
+
+            .captured-pieces-b-q {
+                background-position: -7.25rem 0.05rem;
+            }
+
+            .captured-pieces-w-q {
+                background-position: -16.25rem 0.05rem;
+            }
+        }
+    }
+}

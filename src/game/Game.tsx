@@ -17,8 +17,9 @@ function Game() {
     const [actualMove, setActualMove] = usePersistedState("actualMove", 0);
     const title = "Chess Sandbox";
 
-    const colorToPlay = movesHistory[actualMove].lastMove
-        ? movesHistory[actualMove].lastMove.piece.type[0] === "w"
+    const lastBoard = movesHistory[movesHistory.length - 1];
+    const colorToPlay = lastBoard.lastMove
+        ? lastBoard.lastMove.piece.type[0] === "w"
             ? "b"
             : "w"
         : "w";

@@ -5,6 +5,7 @@ import Title from "./Title";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/BoardPanel.scss";
 import ColorToPlayBox from "./ColorToPlayBox";
+import CapturedPieces from "./CapturedPieces";
 
 function BoardPanel() {
     const {
@@ -44,6 +45,7 @@ function BoardPanel() {
             </div>
             <div className="board-panel-content">
                 <ColorToPlayBox colorToPlay={colorToPlay} />
+                <CapturedPieces />
                 <PanelMovesList chessMoves={chessMoves} />
             </div>
             <div className="board-panel-footer">
