@@ -123,9 +123,10 @@ function Board() {
     }
 
     function handlePieceClick(piece: piece) {
-        if (piece.type[0] === colorToPlay) {
-            setSelectedPiece(piece);
+        if (piece.type[0] !== colorToPlay) {
+            return;
         }
+        setSelectedPiece(piece);
     }
 
     return (
