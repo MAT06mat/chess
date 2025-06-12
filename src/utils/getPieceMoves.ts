@@ -162,8 +162,8 @@ const moves: movesProps = {
     ],
 };
 
-function getMoves(pieceType: string): move[] {
-    return moves[pieceType as keyof movesProps] || [];
+function getPieceMoves(pieceType: string): move[] {
+    return structuredClone(moves[pieceType as keyof movesProps] || []);
 }
 
-export default getMoves;
+export default getPieceMoves;

@@ -31,7 +31,8 @@ function getChessNotation(move: completeMove) {
     const p = move.piece.type[1];
     const x = move.toX;
     const y = move.toY + 1;
-    const capture = move.type ? "x" : "";
+    const capture = move.capture ? "x" : "";
+    const check = move.checkMate ? "#" : move.check ? "+" : "";
 
     let pcol = "";
     if (p === "p" && capture === "x") {
@@ -48,7 +49,7 @@ function getChessNotation(move: completeMove) {
         return "0-0-0";
     }
 
-    return getPiece(p) + pcol + capture + getCol(x) + y + special;
+    return getPiece(p) + pcol + capture + getCol(x) + y + check + special;
 }
 
 export default getChessNotation;

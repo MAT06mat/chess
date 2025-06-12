@@ -1,7 +1,9 @@
 import piece from "./piece";
 
 interface type {
-    type?: "capture";
+    capture?: boolean;
+    check?: boolean;
+    checkMate?: boolean;
     special?: "enPassant" | "castling" | "promotion";
 }
 

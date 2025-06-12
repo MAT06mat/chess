@@ -20,7 +20,8 @@ interface Props {
 }
 
 function PanelMovesList({ chessMoves }: Props) {
-    const { setActualMove, actualMove, movesHistory } = useGameContext();
+    const { setActualMove, actualMove, movesHistory, colorWinner } =
+        useGameContext();
 
     const panelMovesListRef = useRef<HTMLDivElement>(null);
     const selectedMoveRef = useRef<HTMLDivElement>(null);
@@ -65,6 +66,15 @@ function PanelMovesList({ chessMoves }: Props) {
                     </div>
                 );
             })}
+            {colorWinner ? (
+                <div className="game-winner">
+                    {colorWinner === "w"
+                        ? "1-0"
+                        : colorWinner === "b"
+                        ? "0-1"
+                        : "½–½"}
+                </div>
+            ) : null}
         </div>
     );
 }

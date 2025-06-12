@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Piece, { piece } from "./Piece";
 import BoardInfo from "./BoardInfo";
-import getValidMoves from "../utils/getValidMoves";
 import doMove from "../utils/doMove";
 import getSquarePos from "../utils/getSquarePos";
 import PromotionBox from "./PromotionBox";
@@ -9,6 +8,8 @@ import { completeMove, move } from "../types";
 import BoardCoordinates from "../assets/svg/BoardCoordinates";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/Board.scss";
+import getValidMoves from "../utils/getValidMoves";
+import isCheck from "../utils/isCheck";
 
 function Board() {
     const {
@@ -17,11 +18,14 @@ function Board() {
         actualMove,
         setActualMove,
         colorToPlay,
+        colorWinner,
+        setColorWinner,
     } = useGameContext();
 
     const boardRef = useRef<HTMLDivElement>(null);
     const promotionCloseRef = useRef<HTMLDivElement>(null);
-    const [validMoves, setValidMoves] = useState<move[]>([]);
+    const [validMoves, setValidMoves] = useState(new Map());
+    const [displayMoves, setDisplayMoves] = useState<move[]>([]);
     const [selectedPiece, setSelectedPiece] = useState<piece | null>(null);
     const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
     const [nextMove, setNextMove] = useState<completeMove | null>(null);
@@ -36,6 +40,8 @@ function Board() {
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
+            setColorWinner(null);
+            lastMove.check = isCheck(colorToPlay === "w" ? "b" : "w", pieces);
             setMovesHistory([
                 ...movesHistory.slice(0, actualMove + 1),
                 {
@@ -45,14 +51,40 @@ function Board() {
             ]);
             setActualMove((prev) => prev + 1);
         },
-        [movesHistory, setMovesHistory, actualMove, setActualMove]
+        [
+            movesHistory,
+            setMovesHistory,
+            actualMove,
+            setActualMove,
+            colorToPlay,
+            setColorWinner,
+        ]
     );
+
+    useEffect(() => {
+        const [map, numberOfMove] = getValidMoves(
+            colorToPlay,
+            pieces,
+            lastMove
+        );
+        setValidMoves(map);
+        if (numberOfMove === 0) {
+            if (lastMove?.check) {
+                setColorWinner(colorToPlay === "w" ? "b" : "w");
+                lastMove.checkMate = true;
+            } else {
+                setColorWinner("s");
+            }
+        }
+    }, [colorToPlay, lastMove, pieces, setColorWinner, colorWinner]);
 
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
             const validMove: move = {
                 x: nextMove.toX - nextMove.fromX,
                 y: nextMove.toY - nextMove.fromY,
+                capture: nextMove.capture,
+                check: nextMove.check,
                 group: 999,
                 special: "promotion",
             };
@@ -74,8 +106,12 @@ function Board() {
     }, [promotionBoxVisible, nextMove, pieces, addToMovesHistory]);
 
     useEffect(() => {
-        setValidMoves(getValidMoves(selectedPiece, pieces, lastMove));
-    }, [selectedPiece, pieces, lastMove]);
+        if (!selectedPiece) {
+            setDisplayMoves([]);
+            return;
+        }
+        setDisplayMoves(validMoves.get(selectedPiece.id));
+    }, [selectedPiece, validMoves, colorWinner]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         if (promotionBoxVisible && event.target === promotionCloseRef.current) {
@@ -90,19 +126,20 @@ function Board() {
 
             // If a piece is selected, move it to the clicked position
             if (selectedPiece) {
-                const validMove = validMoves.find(
+                const validMove = displayMoves.find(
                     (move) =>
                         move.x === x - selectedPiece.x &&
                         move.y === y - selectedPiece.y
                 );
 
                 if (validMove) {
-                    const move = {
+                    const move: completeMove = {
                         fromX: selectedPiece.x,
                         fromY: selectedPiece.y,
                         toX: x,
                         toY: y,
-                        type: validMove.type,
+                        capture: validMove.capture,
+                        check: validMove.check,
                         special: validMove.special,
                         piece: selectedPiece,
                     };
@@ -123,7 +160,10 @@ function Board() {
     }
 
     function handlePieceClick(piece: piece) {
-        if (piece.type[0] !== colorToPlay) {
+        if (
+            piece.type[0] !== colorToPlay ||
+            (colorWinner && actualMove === movesHistory.length - 1)
+        ) {
             return;
         }
         setSelectedPiece(piece);
@@ -158,11 +198,11 @@ function Board() {
                             />
                         )
                     ) : null}
-                    {validMoves.map((hint, index) => {
+                    {displayMoves.map((move, index) => {
                         return (
                             <BoardInfo
                                 className={
-                                    hint.type ? hint.type + "-hint" : "hint"
+                                    move.capture ? "capture-hint" : "hint"
                                 }
                                 borderWidth={
                                     boardRef.current?.clientWidth
@@ -172,8 +212,8 @@ function Board() {
                                         : undefined
                                 }
                                 key={index}
-                                x={hint.x + selectedPiece.x}
-                                y={hint.y + selectedPiece.y}
+                                x={move.x + selectedPiece.x}
+                                y={move.y + selectedPiece.y}
                             />
                         );
                     })}

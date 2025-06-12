@@ -4,18 +4,20 @@
     scrollbar-color: #00000050 #00000000;
     scrollbar-width: thin;
 
-    .move-list-row {
+    & > div {
         font-size: smaller;
         height: 30px;
         line-height: 30px;
         padding: 0 15px 0 15px;
         width: 100%;
         box-sizing: border-box;
+        text-align: left;
+    }
+
+    .move-list-row {
         display: grid;
         grid-template-columns: 3rem 1fr 1fr;
         align-items: center;
-
-        text-align: left;
 
         &.light-row {
             background-color: #ffffff05;
@@ -47,5 +49,10 @@
                 cursor: default;
             }
         }
+    }
+
+    .game-winner {
+        color: #ffffff80;
+        font-weight: 600;
     }
 }

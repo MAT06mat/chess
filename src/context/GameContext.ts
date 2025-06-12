@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 import boardPosition from "../types/boardPosition";
 
 type GameContextType = {
@@ -8,6 +8,10 @@ type GameContextType = {
     setActualMove: React.Dispatch<React.SetStateAction<number>>;
     title: string;
     colorToPlay: "w" | "b";
+    colorWinner: "w" | "b" | "s" | null;
+    setColorWinner: React.Dispatch<
+        React.SetStateAction<"w" | "b" | "s" | null>
+    >;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

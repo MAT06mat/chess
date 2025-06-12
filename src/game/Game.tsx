@@ -4,7 +4,7 @@ import { GameContext } from "../context/GameContext";
 import { usePersistedState } from "../hooks/usePersistedSate";
 import boardPosition from "../types/boardPosition";
 import defaultBoard from "../assets/defaultBoard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import playSound from "../utils/playSound";
 import Title from "./Title";
 import "../styles/Game.scss";
@@ -15,6 +15,9 @@ function Game() {
         [{ pieces: structuredClone(defaultBoard), lastMove: null }]
     );
     const [actualMove, setActualMove] = usePersistedState("actualMove", 0);
+    const [colorWinner, setColorWinner] = useState<"w" | "b" | "s" | null>(
+        null
+    );
     const title = "Chess Sandbox";
 
     const colorToPlay = movesHistory[actualMove].lastMove
@@ -25,8 +28,9 @@ function Game() {
 
     useEffect(() => {
         const lastMove = movesHistory[actualMove].lastMove;
-
-        if (lastMove?.type) {
+        if (lastMove?.check) {
+            playSound("move-check");
+        } else if (lastMove?.capture) {
             playSound("capture");
         } else if (lastMove?.special === "promotion") {
             playSound("promote");
@@ -46,6 +50,8 @@ function Game() {
                 setActualMove,
                 title,
                 colorToPlay,
+                colorWinner,
+                setColorWinner,
             }}
         >
             <div className="game">
