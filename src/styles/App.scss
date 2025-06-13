@@ -31,6 +31,39 @@
     display: none;
 }
 
+.grey-button {
+    background-color: #ffffff1a;
+    border: 0;
+    border-radius: 0.5rem;
+    fill: #ffffffb8;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffffd9;
+
+    &.light-grey {
+        background-color: #ffffff15;
+    }
+
+    &:hover {
+        background-color: #ffffff24;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        &:hover {
+            background-color: #ffffff1a;
+            &.light-grey {
+                background-color: #ffffff15;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 768px) {
     .computer-screen {
         display: none !important;

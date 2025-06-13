@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import playSound from "../utils/playSound";
 import Title from "./Title";
 import "../styles/Game.scss";
+import WinnerPopup from "./WinnerPopup";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -58,6 +59,7 @@ function Game() {
                 <Title onlyMobileScreen />
                 <Board />
                 <BoardPanel />
+                <WinnerPopup />
             </div>
         </GameContext.Provider>
     );

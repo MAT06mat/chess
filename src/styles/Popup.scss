@@ -1,0 +1,20 @@
+.close-popup-button {
+    position: absolute;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #00000060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .popup {
+        background-color: #312e2b;
+        position: relative;
+        border-radius: 16px;
+        z-index: 11;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.65);
+    }
+}

@@ -1,0 +1,27 @@
+.winner-popup {
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem;
+
+    .winner-popup-title {
+        padding: 1rem;
+        font-size: x-large;
+        font-weight: 600;
+        background-color: #ffffff15;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .winner-popup-buttons {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        gap: 1rem;
+
+        button {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #ffffffb0;
+        }
+    }
+}

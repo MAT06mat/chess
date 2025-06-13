@@ -14,6 +14,7 @@ function BoardPanel() {
         actualMove,
         setActualMove,
         colorToPlay,
+        setColorWinner,
     } = useGameContext();
 
     function resetChessBoard() {
@@ -21,6 +22,7 @@ function BoardPanel() {
             { pieces: structuredClone(defaultBoard), lastMove: null },
         ]);
         setActualMove(0);
+        setColorWinner(null);
     }
 
     function undoChessBoard() {
@@ -50,6 +52,7 @@ function BoardPanel() {
             </div>
             <div className="board-panel-footer">
                 <button
+                    className="grey-button"
                     onClick={resetChessBoard}
                     disabled={movesHistory.length === 1}
                 >
@@ -67,7 +70,11 @@ function BoardPanel() {
                         ></path>
                     </svg>
                 </button>
-                <button onClick={undoChessBoard} disabled={actualMove <= 0}>
+                <button
+                    className="grey-button"
+                    onClick={undoChessBoard}
+                    disabled={actualMove <= 0}
+                >
                     <svg
                         viewBox="0 0 32 32"
                         height="28.75"
@@ -83,6 +90,7 @@ function BoardPanel() {
                     </svg>
                 </button>
                 <button
+                    className="grey-button"
                     onClick={redoChessBoard}
                     disabled={actualMove >= movesHistory.length - 1}
                 >
