@@ -8,7 +8,7 @@
     background-image: url("https://www.chess.com/boards/green/150.png");
     background-size: cover;
 
-    div {
+    .in-board {
         position: absolute;
         width: 12.5%;
         height: 12.5%;
@@ -95,6 +95,7 @@
 
     .promotion-box-close {
         z-index: 2;
+        position: absolute;
         width: 100%;
         height: 100%;
         top: 0;

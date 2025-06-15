@@ -9,6 +9,10 @@ function WinnerPopup() {
         useGameContext();
     const [visible, setVisible] = useState(true);
 
+    if (colorWinner === null && !visible) {
+        setVisible(true);
+    }
+
     function handleClick() {
         setVisible(false);
     }

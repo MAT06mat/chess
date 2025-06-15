@@ -24,7 +24,7 @@ function PromotionBox({
     }
 
     function handleClick(event: React.MouseEvent) {
-        const pieceType = event.currentTarget.className.split(" ")[1];
+        const pieceType = event.currentTarget.className.split(" ")[2];
         if (!nextMove) return;
         const newPiece: piece = {
             type: pieceType,
@@ -52,17 +52,17 @@ function PromotionBox({
     const piecesToDisplay = ["q", "r", "n", "b"];
 
     return (
-        <div className="promotion-box" style={style}>
+        <div className="promotion-box in-board" style={style}>
             {piecesToDisplay.map((p) => {
                 return (
                     <div
                         key={p}
-                        className={"promotion-piece " + color + p}
+                        className={"promotion-piece in-board " + color + p}
                         onClick={handleClick}
                     />
                 );
             })}
-            <div className="close-button" onClick={handleClose}>
+            <div className="close-button in-board" onClick={handleClose}>
                 <svg
                     width="800px"
                     height="800px"

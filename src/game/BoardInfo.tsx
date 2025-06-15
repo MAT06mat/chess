@@ -14,7 +14,7 @@ function BoardInfo({ x, y, className, borderWidth }: BoardInfoProps) {
         borderWidth: borderWidth,
     };
 
-    return <div className={className} style={style} />;
+    return <div className={"in-board " + className} style={style} />;
 }
 
 export default BoardInfo;

@@ -17,7 +17,7 @@ function Piece({ piece, onPieceClick }: PieceProps) {
 
     return (
         <div
-            className={"piece " + piece.type}
+            className={"piece in-board " + piece.type}
             style={style}
             onClick={handleClick}
         />

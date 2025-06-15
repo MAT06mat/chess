@@ -10,6 +10,7 @@ import useGameContext from "../hooks/useGameContext";
 import "../styles/Board.scss";
 import getValidMoves from "../utils/getValidMoves";
 import isCheck from "../utils/isCheck";
+import WinnerPopup from "./WinnerPopup";
 
 function Board() {
     const {
@@ -40,7 +41,6 @@ function Board() {
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
-            setColorWinner(null);
             lastMove.check = isCheck(colorToPlay === "w" ? "b" : "w", pieces);
             setMovesHistory([
                 ...movesHistory.slice(0, actualMove + 1),
@@ -50,6 +50,7 @@ function Board() {
                 },
             ]);
             setActualMove((prev) => prev + 1);
+            setColorWinner(null);
         },
         [
             movesHistory,
@@ -241,6 +242,7 @@ function Board() {
                     />
                 </>
             ) : null}
+            <WinnerPopup />
         </div>
     );
 }

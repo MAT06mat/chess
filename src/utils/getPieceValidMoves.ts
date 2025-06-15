@@ -71,7 +71,8 @@ function getPieceValidMoves(
 
             if (Math.abs(move.y) === 2 && selectedPiece.hasMoved) return false;
 
-            if ((isWhite && targetY === 0) || (!isWhite && targetY === 7)) {
+            // Promotion
+            if ((isWhite && targetY === 7) || (!isWhite && targetY === 0)) {
                 move.special = "promotion";
             }
         }
