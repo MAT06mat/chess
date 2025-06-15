@@ -1,4 +1,4 @@
-import defaultBoard from "../assets/defaultBoard";
+import useDefaultBoard from "../hooks/useDefaultBoard";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/CapturedPieces.scss";
 import { piece } from "./Piece";
@@ -15,7 +15,10 @@ function countPieces(pieces: piece[]) {
     return piecesNumber;
 }
 
-function countCapturedPieces(pieces: Map<string, number>) {
+function countCapturedPieces(
+    pieces: Map<string, number>,
+    defaultBoard: piece[]
+) {
     const capturedPieces: [string, number][] = [];
     const defaultBoardPieces = countPieces(defaultBoard);
     defaultBoardPieces.forEach((value, key) => {
@@ -107,7 +110,10 @@ function CapturedPieces() {
     const { movesHistory } = useGameContext();
     const actualBoard = movesHistory[movesHistory.length - 1].pieces;
     const piecesNumber = countPieces(actualBoard);
-    const capturedPiecesNumber = countCapturedPieces(piecesNumber);
+    const capturedPiecesNumber = countCapturedPieces(
+        piecesNumber,
+        useDefaultBoard()
+    );
     const [whiteScore, blackScore] = getScores(piecesNumber);
 
     return (

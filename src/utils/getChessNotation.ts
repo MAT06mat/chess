@@ -40,16 +40,17 @@ function getChessNotation(move: completeMove) {
     }
 
     let special = "";
+    let pro = "";
     if (move.special === "enPassant") {
         special = " e.p.";
     } else if (move.special === "promotion" && move.toPiece) {
-        special = "=" + getPiece(move.toPiece.type[1]);
+        pro = "=" + getPiece(move.toPiece.type[1]);
     } else if (move.special === "castling") {
         if (x === 6) return "0-0";
         return "0-0-0";
     }
 
-    return getPiece(p) + pcol + capture + getCol(x) + y + check + special;
+    return getPiece(p) + pcol + capture + getCol(x) + y + pro + check + special;
 }
 
 export default getChessNotation;

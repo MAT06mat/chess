@@ -7,7 +7,8 @@ import isCheck from "./isCheck";
 function getValidMoves(
     colorToPlay: "w" | "b",
     pieces: piece[],
-    lastMove: completeMove | null
+    lastMove: completeMove | null,
+    invertedColor: boolean
 ): [Map<number, move[]>, number] {
     let numberOfMove = 0;
     const map = new Map();
@@ -15,7 +16,12 @@ function getValidMoves(
         (piece) => piece.type[0] === colorToPlay
     );
     piecesToPlay.forEach((piece) => {
-        const validMoves = getPieceValidMoves(piece, pieces, lastMove);
+        const validMoves = getPieceValidMoves(
+            piece,
+            pieces,
+            lastMove,
+            invertedColor
+        );
         const validMovesWithNoCheck = validMoves.filter(
             (move) => !isCheck(colorToPlay, doMove(move, piece, pieces))
         );

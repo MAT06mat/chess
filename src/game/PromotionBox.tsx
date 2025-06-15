@@ -1,3 +1,4 @@
+import useGameContext from "../hooks/useGameContext";
 import { completeMove } from "../types";
 import { piece } from "./Piece";
 
@@ -16,6 +17,8 @@ function PromotionBox({
     setNextMove,
     nextMove,
 }: PromotionProps) {
+    const { invertedColor } = useGameContext();
+
     if (!nextMove) return;
 
     function handleClose() {
@@ -46,7 +49,9 @@ function PromotionBox({
 
     const style = {
         left: `${x * 12.5}%`,
-        bottom: `${color === "w" ? y * 12.5 : y * 12.5 + 44}%`,
+        bottom: `${
+            color === (invertedColor ? "b" : "w") ? y * 12.5 : y * 12.5 + 44
+        }%`,
     };
 
     const piecesToDisplay = ["q", "r", "n", "b"];

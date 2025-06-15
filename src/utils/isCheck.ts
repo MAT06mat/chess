@@ -2,7 +2,7 @@ import piece from "../types/piece";
 import getPieceValidMoves from "./getPieceValidMoves";
 
 function isCheck(
-    color: "w" | "b",
+    color: string,
     pieces: piece[],
     relativeX?: number[]
 ): boolean {

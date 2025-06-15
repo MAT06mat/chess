@@ -2,11 +2,12 @@ import { useState } from "react";
 import Popup from "./Popup";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/WinnerPopup.scss";
-import defaultBoard from "../assets/defaultBoard";
+import useDefaultBoard from "../hooks/useDefaultBoard";
 
 function WinnerPopup() {
     const { colorWinner, setMovesHistory, setActualMove, setColorWinner } =
         useGameContext();
+    const defaultBoard = useDefaultBoard();
     const [visible, setVisible] = useState(true);
 
     if (colorWinner === null && !visible) {
@@ -18,9 +19,7 @@ function WinnerPopup() {
     }
 
     function rematch() {
-        setMovesHistory([
-            { pieces: structuredClone(defaultBoard), lastMove: null },
-        ]);
+        setMovesHistory([{ pieces: defaultBoard, lastMove: null }]);
         setActualMove(0);
         setColorWinner(null);
         setVisible(false);

@@ -1,4 +1,3 @@
-import defaultBoard from "../assets/defaultBoard";
 import getChessNotation from "../utils/getChessNotation";
 import PanelMovesList from "./PanelMovesList";
 import Title from "./Title";
@@ -6,6 +5,7 @@ import useGameContext from "../hooks/useGameContext";
 import "../styles/BoardPanel.scss";
 import ColorToPlayBox from "./ColorToPlayBox";
 import CapturedPieces from "./CapturedPieces";
+import useDefaultBoard from "../hooks/useDefaultBoard";
 
 function BoardPanel() {
     const {
@@ -17,10 +17,10 @@ function BoardPanel() {
         setColorWinner,
     } = useGameContext();
 
+    const defaultBoard = useDefaultBoard();
+
     function resetChessBoard() {
-        setMovesHistory([
-            { pieces: structuredClone(defaultBoard), lastMove: null },
-        ]);
+        setMovesHistory([{ pieces: defaultBoard, lastMove: null }]);
         setActualMove(0);
         setColorWinner(null);
     }

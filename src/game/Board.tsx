@@ -11,6 +11,7 @@ import "../styles/Board.scss";
 import getValidMoves from "../utils/getValidMoves";
 import isCheck from "../utils/isCheck";
 import WinnerPopup from "./WinnerPopup";
+import invertColor from "../utils/invertColor";
 
 function Board() {
     const {
@@ -21,6 +22,7 @@ function Board() {
         colorToPlay,
         colorWinner,
         setColorWinner,
+        invertedColor,
     } = useGameContext();
 
     const boardRef = useRef<HTMLDivElement>(null);
@@ -41,7 +43,7 @@ function Board() {
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
-            lastMove.check = isCheck(colorToPlay === "w" ? "b" : "w", pieces);
+            lastMove.check = isCheck(invertColor(colorToPlay), pieces);
             setMovesHistory([
                 ...movesHistory.slice(0, actualMove + 1),
                 {
@@ -66,18 +68,26 @@ function Board() {
         const [map, numberOfMove] = getValidMoves(
             colorToPlay,
             pieces,
-            lastMove
+            lastMove,
+            invertedColor
         );
         setValidMoves(map);
         if (numberOfMove === 0) {
             if (lastMove?.check) {
-                setColorWinner(colorToPlay === "w" ? "b" : "w");
+                setColorWinner(invertColor(colorToPlay));
                 lastMove.checkMate = true;
             } else {
                 setColorWinner("s");
             }
         }
-    }, [colorToPlay, lastMove, pieces, setColorWinner, colorWinner]);
+    }, [
+        colorToPlay,
+        lastMove,
+        pieces,
+        setColorWinner,
+        colorWinner,
+        invertedColor,
+    ]);
 
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
@@ -189,16 +199,11 @@ function Board() {
             ) : null}
             {selectedPiece ? (
                 <>
-                    {lastMove ? (
-                        lastMove.toX === selectedPiece.x &&
-                        lastMove.toY === selectedPiece.y ? null : (
-                            <BoardInfo
-                                className="highlight"
-                                x={selectedPiece.x}
-                                y={selectedPiece.y}
-                            />
-                        )
-                    ) : null}
+                    <BoardInfo
+                        className="highlight"
+                        x={selectedPiece.x}
+                        y={selectedPiece.y}
+                    />
                     {displayMoves.map((move, index) => {
                         return (
                             <BoardInfo

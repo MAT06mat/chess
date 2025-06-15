@@ -19,6 +19,7 @@ function Game() {
         null
     );
     const title = "Chess Sandbox";
+    const invertedColor = false;
 
     const colorToPlay = movesHistory[actualMove].lastMove
         ? movesHistory[actualMove].lastMove.piece.type[0] === "w"
@@ -52,6 +53,7 @@ function Game() {
                 colorToPlay,
                 colorWinner,
                 setColorWinner,
+                invertedColor,
             }}
         >
             <div className="game">
