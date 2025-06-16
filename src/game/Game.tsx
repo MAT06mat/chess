@@ -18,8 +18,11 @@ function Game() {
     const [colorWinner, setColorWinner] = useState<"w" | "b" | "s" | null>(
         null
     );
+    const [invertedColor, setInvertedColor] = usePersistedState(
+        "invertedColor",
+        false
+    );
     const title = "Chess Sandbox";
-    const invertedColor = false;
 
     const colorToPlay = movesHistory[actualMove].lastMove
         ? movesHistory[actualMove].lastMove.piece.type[0] === "w"
@@ -54,6 +57,7 @@ function Game() {
                 colorWinner,
                 setColorWinner,
                 invertedColor,
+                setInvertedColor,
             }}
         >
             <div className="game">

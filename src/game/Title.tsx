@@ -1,4 +1,6 @@
+import useDefaultBoard from "../hooks/useDefaultBoard";
 import useGameContext from "../hooks/useGameContext";
+import "../styles/Title.scss";
 
 interface Props {
     onlyComputerScreen?: boolean;
@@ -6,7 +8,13 @@ interface Props {
 }
 
 function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
-    const { title } = useGameContext();
+    const {
+        title,
+        movesHistory,
+        invertedColor,
+        setInvertedColor,
+        setMovesHistory,
+    } = useGameContext();
 
     const className = onlyComputerScreen
         ? " computer-screen"
@@ -14,7 +22,25 @@ function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
         ? " mobile-screen"
         : "";
 
-    return <div className={"title" + className}>{title}</div>;
+    const showColorIcon = movesHistory.length <= 1;
+    const defaultBoard = useDefaultBoard(true);
+
+    function onColorClick() {
+        setInvertedColor((prev) => !prev);
+        setMovesHistory([{ pieces: defaultBoard, lastMove: null }]);
+    }
+
+    return (
+        <div className={"game-title" + className}>
+            {showColorIcon ? (
+                <div
+                    className={"color-icon " + (invertedColor ? "b" : "")}
+                    onClick={onColorClick}
+                />
+            ) : null}
+            {title}
+        </div>
+    );
 }
 
 export default Title;

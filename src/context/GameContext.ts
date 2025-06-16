@@ -13,6 +13,7 @@ type GameContextType = {
         React.SetStateAction<"w" | "b" | "s" | null>
     >;
     invertedColor: boolean;
+    setInvertedColor: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);
