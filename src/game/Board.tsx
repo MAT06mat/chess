@@ -43,7 +43,11 @@ function Board() {
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
-            lastMove.check = isCheck(invertColor(colorToPlay), pieces);
+            lastMove.check = isCheck(
+                invertColor(colorToPlay),
+                pieces,
+                invertedColor
+            );
             setMovesHistory([
                 ...movesHistory.slice(0, actualMove + 1),
                 {
@@ -61,6 +65,7 @@ function Board() {
             setActualMove,
             colorToPlay,
             setColorWinner,
+            invertedColor,
         ]
     );
 

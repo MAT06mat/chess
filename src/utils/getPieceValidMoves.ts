@@ -109,7 +109,12 @@ function getPieceValidMoves(
 
             if (
                 !noCheck &&
-                isCheck(selectedPiece.type[0], pieces, intermediateSquares)
+                isCheck(
+                    selectedPiece.type[0],
+                    pieces,
+                    invertedColor,
+                    intermediateSquares
+                )
             ) {
                 return false;
             }

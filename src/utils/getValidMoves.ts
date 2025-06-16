@@ -23,7 +23,12 @@ function getValidMoves(
             invertedColor
         );
         const validMovesWithNoCheck = validMoves.filter(
-            (move) => !isCheck(colorToPlay, doMove(move, piece, pieces))
+            (move) =>
+                !isCheck(
+                    colorToPlay,
+                    doMove(move, piece, pieces),
+                    invertedColor
+                )
         );
         numberOfMove += validMovesWithNoCheck.length;
         map.set(piece.id, validMovesWithNoCheck);
