@@ -17,14 +17,12 @@ const piecesNotation = {
     k: "K",
 };
 
-const columnsNotation = "abcdefgh";
-
 function getPiece(p: string) {
     return piecesNotation[p as keyof piecesNotationInterface];
 }
 
 function getCol(n: number) {
-    return columnsNotation[n ? n : 0];
+    return String.fromCharCode(97 + n);
 }
 
 function getChessNotation(move: completeMove) {
