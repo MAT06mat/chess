@@ -44,8 +44,8 @@ function getChessNotation(move: completeMove) {
     } else if (move.special === "promotion" && move.toPiece) {
         pro = "=" + getPiece(move.toPiece.type[1]);
     } else if (move.special === "castling") {
-        if (x === 6) return "0-0";
-        return "0-0-0";
+        if (x === 6) return "0-0" + check;
+        return "0-0-0" + check;
     }
 
     return getPiece(p) + pcol + capture + getCol(x) + y + pro + check + special;
