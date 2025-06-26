@@ -1,5 +1,5 @@
-import { move } from "../types";
-import piece from "../types/piece";
+import { move } from "../../types";
+import piece from "../../types/piece";
 import doSpecialMove from "./doSpecialMove";
 
 /**

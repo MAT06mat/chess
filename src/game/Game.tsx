@@ -3,16 +3,16 @@ import BoardPanel from "./BoardPanel";
 import { GameContext } from "../context/GameContext";
 import { usePersistedState } from "../hooks/usePersistedSate";
 import boardPosition from "../types/boardPosition";
-import defaultBoard from "../assets/defaultBoard";
 import { useEffect, useState } from "react";
 import playSound from "../utils/playSound";
 import Title from "./Title";
 import "../styles/Game.scss";
+import getDefaultBoard from "../utils/getDefaultBoard";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
         "movesHistory",
-        [{ pieces: structuredClone(defaultBoard), lastMove: null }]
+        [getDefaultBoard()]
     );
     const [actualMove, setActualMove] = usePersistedState("actualMove", 0);
     const [colorWinner, setColorWinner] = useState<"w" | "b" | "s" | null>(

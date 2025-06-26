@@ -1,4 +1,4 @@
-import useDefaultBoard from "../hooks/useDefaultBoard";
+import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/Title.scss";
 
@@ -8,13 +8,8 @@ interface Props {
 }
 
 function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
-    const {
-        title,
-        movesHistory,
-        invertedColor,
-        setInvertedColor,
-        setMovesHistory,
-    } = useGameContext();
+    const { title, movesHistory, invertedColor, setInvertedColor } =
+        useGameContext();
 
     const className = onlyComputerScreen
         ? " computer-screen"
@@ -23,11 +18,12 @@ function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
         : "";
 
     const showColorIcon = movesHistory.length <= 1;
-    const defaultBoard = useDefaultBoard(true);
+
+    const resetChessBoard = useCallbackResetChessBoard();
 
     function onColorClick() {
         setInvertedColor((prev) => !prev);
-        setMovesHistory([{ pieces: defaultBoard, lastMove: null }]);
+        resetChessBoard();
     }
 
     return (

@@ -1,6 +1,6 @@
-import useDefaultBoard from "../hooks/useDefaultBoard";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/CapturedPieces.scss";
+import getDefaultPieces from "../utils/getDefaultPieces";
 import { piece } from "./Piece";
 
 function countPieces(pieces: piece[]) {
@@ -112,7 +112,7 @@ function CapturedPieces() {
     const piecesNumber = countPieces(actualBoard);
     const capturedPiecesNumber = countCapturedPieces(
         piecesNumber,
-        useDefaultBoard()
+        getDefaultPieces()
     );
     const [whiteScore, blackScore] = getScores(piecesNumber);
 

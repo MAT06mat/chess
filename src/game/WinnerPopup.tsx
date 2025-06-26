@@ -2,13 +2,12 @@ import { useState } from "react";
 import Popup from "./Popup";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/WinnerPopup.scss";
-import useDefaultBoard from "../hooks/useDefaultBoard";
+import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
 
 function WinnerPopup() {
-    const { colorWinner, setMovesHistory, setActualMove, setColorWinner } =
-        useGameContext();
-    const defaultBoard = useDefaultBoard();
+    const { colorWinner } = useGameContext();
     const [visible, setVisible] = useState(true);
+    const resetChessBoard = useCallbackResetChessBoard();
 
     if (colorWinner === null && !visible) {
         setVisible(true);
@@ -19,9 +18,7 @@ function WinnerPopup() {
     }
 
     function rematch() {
-        setMovesHistory([{ pieces: defaultBoard, lastMove: null }]);
-        setActualMove(0);
-        setColorWinner(null);
+        resetChessBoard();
         setVisible(false);
     }
 

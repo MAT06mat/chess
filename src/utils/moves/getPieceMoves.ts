@@ -1,4 +1,4 @@
-import { move } from "../types";
+import { move } from "../../types";
 
 interface movesProps {
     p: move[];

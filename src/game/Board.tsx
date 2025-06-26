@@ -1,24 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Piece, { piece } from "./Piece";
 import BoardInfo from "./BoardInfo";
-import doMove from "../utils/doMove";
 import getSquarePos from "../utils/getSquarePos";
 import PromotionBox from "./PromotionBox";
 import { completeMove, move } from "../types";
 import BoardCoordinates from "../assets/svg/BoardCoordinates";
 import useGameContext from "../hooks/useGameContext";
 import "../styles/Board.scss";
-import getValidMoves from "../utils/getValidMoves";
-import isCheck from "../utils/isCheck";
+import getValidMoves from "../utils/moves/getValidMoves";
 import WinnerPopup from "./WinnerPopup";
 import invertColor from "../utils/invertColor";
+import useCallbackRegisterMove from "../hooks/useCallbackRegisterMove";
 
 function Board() {
     const {
         movesHistory,
-        setMovesHistory,
         actualMove,
-        setActualMove,
         colorToPlay,
         colorWinner,
         setColorWinner,
@@ -41,28 +38,7 @@ function Board() {
         setSelectedPiece(null);
     }, [setSelectedPiece, pieces]);
 
-    const addToMovesHistory = useCallback(
-        (lastMove: completeMove, pieces: piece[]) => {
-            lastMove.check = isCheck(invertColor(colorToPlay), pieces);
-            setMovesHistory([
-                ...movesHistory.slice(0, actualMove + 1),
-                {
-                    lastMove: lastMove,
-                    pieces: pieces,
-                },
-            ]);
-            setActualMove((prev) => prev + 1);
-            setColorWinner(null);
-        },
-        [
-            movesHistory,
-            setMovesHistory,
-            actualMove,
-            setActualMove,
-            colorToPlay,
-            setColorWinner,
-        ]
-    );
+    const registerMove = useCallbackRegisterMove();
 
     useEffect(() => {
         const [map, numberOfMove] = getValidMoves(
@@ -90,30 +66,13 @@ function Board() {
 
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
-            const validMove: move = {
-                x: nextMove.toX - nextMove.fromX,
-                y: nextMove.toY - nextMove.fromY,
-                capture: nextMove.capture,
-                check: nextMove.check,
-                group: 999,
-                special: "promotion",
-            };
-
             const newPieces = structuredClone(pieces).map((piece) =>
                 piece.id === nextMove.toPiece?.id ? nextMove.toPiece : piece
             );
-
-            addToMovesHistory(
-                nextMove,
-                doMove(
-                    validMove,
-                    nextMove.toPiece ? nextMove.toPiece : nextMove.piece,
-                    newPieces
-                )
-            );
+            registerMove(nextMove, newPieces);
             setNextMove(null);
         }
-    }, [promotionBoxVisible, nextMove, pieces, addToMovesHistory]);
+    }, [promotionBoxVisible, nextMove, pieces, registerMove]);
 
     useEffect(() => {
         if (!selectedPiece) {
@@ -158,10 +117,7 @@ function Board() {
                         setPromotionBoxVisible(true);
                         setNextMove(move);
                     } else {
-                        addToMovesHistory(
-                            move,
-                            doMove(validMove, selectedPiece, pieces)
-                        );
+                        registerMove(move, pieces);
                     }
                 }
                 setSelectedPiece(null);

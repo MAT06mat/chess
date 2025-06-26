@@ -5,25 +5,13 @@ import useGameContext from "../hooks/useGameContext";
 import "../styles/BoardPanel.scss";
 import ColorToPlayBox from "./ColorToPlayBox";
 import CapturedPieces from "./CapturedPieces";
-import useDefaultBoard from "../hooks/useDefaultBoard";
+import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
 
 function BoardPanel() {
-    const {
-        movesHistory,
-        setMovesHistory,
-        actualMove,
-        setActualMove,
-        colorToPlay,
-        setColorWinner,
-    } = useGameContext();
+    const { movesHistory, actualMove, setActualMove, colorToPlay } =
+        useGameContext();
 
-    const defaultBoard = useDefaultBoard();
-
-    function resetChessBoard() {
-        setMovesHistory([{ pieces: defaultBoard, lastMove: null }]);
-        setActualMove(0);
-        setColorWinner(null);
-    }
+    const resetChessBoard = useCallbackResetChessBoard();
 
     function undoChessBoard() {
         setActualMove((prev) => prev - 1);

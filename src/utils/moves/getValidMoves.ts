@@ -1,8 +1,8 @@
-import { completeMove, move } from "../types";
-import piece from "../types/piece";
+import { completeMove, move } from "../../types";
+import piece from "../../types/piece";
 import doMove from "./doMove";
 import getPieceValidMoves from "./getPieceValidMoves";
-import isCheck from "./isCheck";
+import isCheck from "../isCheck";
 
 function getValidMoves(
     colorToPlay: "w" | "b",

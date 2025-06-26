@@ -1,5 +1,5 @@
 import piece from "../types/piece";
-import getPieceValidMoves from "./getPieceValidMoves";
+import getPieceValidMoves from "./moves/getPieceValidMoves";
 
 function isCheck(
     color: string,
