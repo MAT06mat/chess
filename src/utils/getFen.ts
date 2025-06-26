@@ -73,7 +73,8 @@ function getFen(
 
     fen += rights || "-";
 
-    const lastMove = movesHistory[actualMove].lastMove;
+    // API DON'T SUPPORT THAT -> idk
+    /*const lastMove = movesHistory[actualMove].lastMove;
     if (
         lastMove &&
         lastMove.piece.type[1] === "p" &&
@@ -88,7 +89,9 @@ function getFen(
         }
     } else {
         fen += " -";
-    }
+    }*/
+
+    fen += " -";
 
     let halfMoveClock = 0;
     let stopClock = false;

@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import playSound from "../utils/playSound";
 import Title from "./Title";
 import "../styles/Game.scss";
-import getFen from "../utils/getFen";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -30,8 +29,6 @@ function Game() {
             ? "b"
             : "w"
         : "w";
-
-    console.log(getFen(movesHistory, invertedColor, colorToPlay, actualMove));
 
     useEffect(() => {
         const lastMove = movesHistory[actualMove].lastMove;

@@ -47,12 +47,23 @@ function PromotionBox({
 
     const color = nextMove.piece.type[0];
 
-    const style = {
-        left: `${x * 12.5}%`,
-        bottom: `${
-            color === (invertedColor ? "b" : "w") ? y * 12.5 : y * 12.5 + 44
-        }%`,
-    };
+    const style = invertedColor
+        ? {
+              left: `${(7 - x) * 12.5}%`,
+              bottom: `${
+                  color === (invertedColor ? "b" : "w")
+                      ? (7 - y) * 12.5
+                      : (7 - y) * 12.5 + 44
+              }%`,
+          }
+        : {
+              left: `${x * 12.5}%`,
+              bottom: `${
+                  color === (invertedColor ? "b" : "w")
+                      ? y * 12.5
+                      : y * 12.5 + 44
+              }%`,
+          };
 
     const piecesToDisplay = ["q", "r", "n", "b"];
 

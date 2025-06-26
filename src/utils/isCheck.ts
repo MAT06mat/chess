@@ -4,7 +4,6 @@ import getPieceValidMoves from "./getPieceValidMoves";
 function isCheck(
     color: string,
     pieces: piece[],
-    invertedColor: boolean,
     relativeX?: number[]
 ): boolean {
     const king = pieces.find((piece) => piece.type === color + "k");
@@ -27,7 +26,6 @@ function isCheck(
                 piece,
                 pieces,
                 null,
-                invertedColor,
                 true
             ).filter((move) => move.capture);
 

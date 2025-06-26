@@ -8,15 +8,13 @@ function getPieceValidMoves(
     selectedPiece: piece | null,
     pieces: piece[],
     lastMove: completeMove | null,
-    invertedColor: boolean,
     noCheck?: boolean
 ) {
     if (!selectedPiece) {
         return [];
     }
 
-    const white = invertedColor ? "b" : "w";
-    const isWhite = selectedPiece.type[0] === white;
+    const isWhite = selectedPiece.type[0] === "w";
     const isPawn = selectedPiece.type[1] === "p";
     const isKing = selectedPiece.type[1] === "k";
 
@@ -109,12 +107,7 @@ function getPieceValidMoves(
 
             if (
                 !noCheck &&
-                isCheck(
-                    selectedPiece.type[0],
-                    pieces,
-                    invertedColor,
-                    intermediateSquares
-                )
+                isCheck(selectedPiece.type[0], pieces, intermediateSquares)
             ) {
                 return false;
             }

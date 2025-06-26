@@ -18,14 +18,18 @@
         user-select: none;
         display: block;
 
-        .coordinate-light {
-            fill: #739552;
-            font-weight: 600;
-        }
+        text {
+            font-size: 2.8px;
 
-        .coordinate-dark {
-            fill: #ebecd0;
-            font-weight: 600;
+            &.coordinate-light {
+                fill: #739552;
+                font-weight: 600;
+            }
+
+            &.coordinate-dark {
+                fill: #ebecd0;
+                font-weight: 600;
+            }
         }
     }
 

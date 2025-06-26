@@ -43,11 +43,7 @@ function Board() {
 
     const addToMovesHistory = useCallback(
         (lastMove: completeMove, pieces: piece[]) => {
-            lastMove.check = isCheck(
-                invertColor(colorToPlay),
-                pieces,
-                invertedColor
-            );
+            lastMove.check = isCheck(invertColor(colorToPlay), pieces);
             setMovesHistory([
                 ...movesHistory.slice(0, actualMove + 1),
                 {
@@ -65,7 +61,6 @@ function Board() {
             setActualMove,
             colorToPlay,
             setColorWinner,
-            invertedColor,
         ]
     );
 
@@ -73,8 +68,7 @@ function Board() {
         const [map, numberOfMove] = getValidMoves(
             colorToPlay,
             pieces,
-            lastMove,
-            invertedColor
+            lastMove
         );
         setValidMoves(map);
         if (numberOfMove === 0) {
@@ -129,7 +123,7 @@ function Board() {
         setDisplayMoves(validMoves.get(selectedPiece.id));
     }, [selectedPiece, validMoves, colorWinner]);
 
-    function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+    function handleBoardClick(event: React.MouseEvent<HTMLDivElement>) {
         if (promotionBoxVisible && event.target === promotionCloseRef.current) {
             setNextMove(null);
             setPromotionBoxVisible(false);
@@ -138,7 +132,7 @@ function Board() {
 
         const board = boardRef.current;
         if (board) {
-            const { x, y } = getSquarePos(event, board);
+            const { x, y } = getSquarePos(event, board, invertedColor);
 
             // If a piece is selected, move it to the clicked position
             if (selectedPiece) {
@@ -186,7 +180,7 @@ function Board() {
     }
 
     return (
-        <div className="board" ref={boardRef} onClick={handleClick}>
+        <div className="board" ref={boardRef} onClick={handleBoardClick}>
             <BoardCoordinates />
             {lastMove ? (
                 <>
@@ -232,7 +226,7 @@ function Board() {
             ) : null}
             {pieces.map((piece) => (
                 <Piece
-                    key={piece.id}
+                    key={invertedColor ? piece.id + 64 : piece.id}
                     piece={piece}
                     onPieceClick={handlePieceClick}
                 />
