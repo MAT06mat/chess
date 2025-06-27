@@ -32,7 +32,9 @@ function Game() {
 
     useEffect(() => {
         const lastMove = movesHistory[actualMove].lastMove;
-        if (lastMove?.check) {
+        if (lastMove?.checkMate) {
+            playSound("game-end");
+        } else if (lastMove?.check) {
             playSound("move-check");
         } else if (lastMove?.capture) {
             playSound("capture");
@@ -40,8 +42,10 @@ function Game() {
             playSound("promote");
         } else if (lastMove?.special === "castling") {
             playSound("castle");
-        } else {
+        } else if (lastMove) {
             playSound("move-self");
+        } else {
+            playSound("game-start");
         }
     }, [movesHistory, actualMove]);
 

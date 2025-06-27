@@ -5,15 +5,11 @@ import isCheck from "../isCheck";
 import isPosInBoard from "../isPosInBoard";
 
 function getPieceValidMoves(
-    selectedPiece: piece | null,
+    selectedPiece: piece,
     pieces: piece[],
     lastMove: completeMove | null,
     noCheck?: boolean
 ) {
-    if (!selectedPiece) {
-        return [];
-    }
-
     const isWhite = selectedPiece.type[0] === "w";
     const isPawn = selectedPiece.type[1] === "p";
     const isKing = selectedPiece.type[1] === "k";

@@ -56,14 +56,7 @@ function Board() {
                 setColorWinner("s");
             }
         }
-    }, [
-        colorToPlay,
-        lastMove,
-        pieces,
-        setColorWinner,
-        colorWinner,
-        invertedColor,
-    ]);
+    }, [colorToPlay, lastMove, pieces, setColorWinner]);
 
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
@@ -81,7 +74,7 @@ function Board() {
             return;
         }
         setDisplayMoves(validMoves.get(selectedPiece.id));
-    }, [selectedPiece, validMoves, colorWinner]);
+    }, [selectedPiece, validMoves]);
 
     function handleBoardClick(event: React.MouseEvent<HTMLDivElement>) {
         if (promotionBoxVisible && event.target === promotionCloseRef.current) {
