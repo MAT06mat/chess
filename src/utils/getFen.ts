@@ -2,7 +2,6 @@ import boardPosition from "../types/boardPosition";
 
 function getFen(
     movesHistory: boardPosition[],
-    invertedColor: boolean,
     colorToPlay: "w" | "b",
     actualMove: number
 ): string {
@@ -34,10 +33,6 @@ function getFen(
         if (row > 0) {
             fen += "/";
         }
-    }
-
-    if (invertedColor) {
-        fen = fen.split("/").reverse().join("/");
     }
 
     fen += ` ${colorToPlay} `;
