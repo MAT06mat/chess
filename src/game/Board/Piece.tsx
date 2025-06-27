@@ -1,5 +1,5 @@
-import useGameContext from "../hooks/useGameContext";
-import piece from "../types/piece";
+import useGameContext from "../../hooks/useGameContext";
+import piece from "../../types/piece";
 
 interface PieceProps {
     piece: piece;

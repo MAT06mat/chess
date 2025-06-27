@@ -1,0 +1,61 @@
+.board-panel.modeSelection {
+    .play-vs-selection {
+        padding: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+
+        .play-vs-button {
+            padding: 0.4rem 2rem;
+            gap: 0.8rem;
+            position: relative;
+
+            svg {
+                width: 2.2rem;
+            }
+
+            &.selected {
+                border-left: 0.5rem solid #81b64c;
+            }
+        }
+    }
+
+    .side-selection {
+        height: 2rem;
+        padding: 1rem;
+        gap: 1rem;
+        display: flex;
+
+        .color-icon {
+            box-sizing: border-box;
+            width: 2rem;
+            aspect-ratio: 1 / 1;
+            background: url("https://www.chess.com/bundles/web/images/play-side/white.svg");
+            background-size: cover;
+            position: relative;
+            cursor: pointer;
+
+            &.random {
+                background: url("https://www.chess.com/bundles/web/images/play-side/random.svg");
+                background-size: cover;
+            }
+
+            &.black {
+                background: url("https://www.chess.com/bundles/web/images/play-side/black.svg");
+                background-size: cover;
+            }
+
+            &.selected::after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: -0.4rem;
+                bottom: -0.4rem;
+                left: -0.4rem;
+                right: -0.4rem;
+                border-radius: 0.5rem;
+                border: 0.2rem solid #81b64c;
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import useGameContext from "../hooks/useGameContext";
 import "../styles/CapturedPieces.scss";
 import getDefaultPieces from "../utils/getDefaultPieces";
-import { piece } from "./Piece";
+import { piece } from "./Board/Piece";
 
 function countPieces(pieces: piece[]) {
     const piecesNumber = new Map();

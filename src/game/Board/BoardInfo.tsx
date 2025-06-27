@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import useGameContext from "../hooks/useGameContext";
+import useGameContext from "../../hooks/useGameContext";
 
 interface BoardInfoProps {
     x: number;

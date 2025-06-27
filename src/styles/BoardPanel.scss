@@ -22,6 +22,9 @@
         display: flex;
         flex-direction: column;
         border-top: 0.05rem solid #ffffff1a;
+        overflow-y: auto;
+        scrollbar-color: #00000050 #00000000;
+        scrollbar-width: thin;
 
         & > * {
             border-bottom: 0.05rem solid #ffffff1a;
@@ -51,27 +54,30 @@
         width: 100%;
         border-radius: 0;
         height: 100%;
-
-        .board-panel-footer {
-            height: 3.5rem;
-            border-radius: 0;
-            padding: 0;
-            gap: 0;
-            background-color: transparent;
-            border-bottom: 0.05rem solid #ffffff1a;
-
-            button {
-                background-color: transparent;
+        &.playingVsFriend,
+        &.playingVsBot,
+        &.playingSandBox {
+            .board-panel-footer {
+                height: 3.5rem;
                 border-radius: 0;
+                padding: 0;
+                gap: 0;
+                background-color: transparent;
+                border-bottom: 0.05rem solid #ffffff1a;
 
-                &:hover {
+                button {
                     background-color: transparent;
-                }
+                    border-radius: 0;
 
-                &:disabled {
-                    opacity: 0.25;
                     &:hover {
                         background-color: transparent;
+                    }
+
+                    &:disabled {
+                        opacity: 0.25;
+                        &:hover {
+                            background-color: transparent;
+                        }
                     }
                 }
             }

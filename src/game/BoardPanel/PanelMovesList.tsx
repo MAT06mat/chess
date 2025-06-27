@@ -1,6 +1,7 @@
-import useGameContext from "../hooks/useGameContext";
+import useGameContext from "../../hooks/useGameContext";
 import { useRef } from "react";
-import "../styles/PanelMovesList.scss";
+import "../../styles/PanelMovesList.scss";
+import getChessNotation from "../../utils/getChessNotation";
 
 function createPairMoves(arr: string[]) {
     const result: { m: string | null; i: number }[][] = [];
@@ -15,13 +16,16 @@ function createPairMoves(arr: string[]) {
     return result;
 }
 
-interface Props {
-    chessMoves: string[];
-}
-
-function PanelMovesList({ chessMoves }: Props) {
+function PanelMovesList() {
     const { setActualMove, actualMove, movesHistory, colorWinner } =
         useGameContext();
+
+    const chessMoves = movesHistory.map((moveHistory) => {
+        if (!moveHistory.lastMove) return "";
+        return getChessNotation(moveHistory.lastMove);
+    });
+
+    chessMoves.shift();
 
     const panelMovesListRef = useRef<HTMLDivElement>(null);
     const selectedMoveRef = useRef<HTMLDivElement>(null);

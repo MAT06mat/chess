@@ -6,12 +6,18 @@ import isCheck from "../isCheck";
 import getCompleteMove from "./getCompleteMove";
 
 function getValidMoves(
-    colorToPlay: "w" | "b",
+    colorToPlay: "w" | "b" | "wb",
     pieces: piece[],
     lastMove: completeMove | null
 ): [Map<number, move[]>, number] {
     let numberOfMove = 0;
     const map = new Map();
+    if (colorToPlay === "wb") {
+        pieces.forEach((piece) => {
+            map.set(piece.id, getPieceValidMoves(piece, pieces, lastMove));
+        });
+        return [map, 999];
+    }
     const piecesToPlay = pieces.filter(
         (piece) => piece.type[0] === colorToPlay
     );

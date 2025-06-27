@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import Piece, { piece } from "./Piece";
 import BoardInfo from "./BoardInfo";
-import getSquarePos from "../utils/getSquarePos";
+import getSquarePos from "../../utils/getSquarePos";
 import PromotionBox from "./PromotionBox";
-import { completeMove, move } from "../types";
-import BoardCoordinates from "../assets/svg/BoardCoordinates";
-import useGameContext from "../hooks/useGameContext";
-import "../styles/Board.scss";
-import getValidMoves from "../utils/moves/getValidMoves";
-import WinnerPopup from "./WinnerPopup";
-import invertColor from "../utils/invertColor";
-import useCallbackRegisterMove from "../hooks/useCallbackRegisterMove";
-import getCompleteMove from "../utils/moves/getCompleteMove";
+import { completeMove, move } from "../../types";
+import BoardCoordinates from "../../assets/svg/BoardCoordinates";
+import useGameContext from "../../hooks/useGameContext";
+import "../../styles/Board.scss";
+import getValidMoves from "../../utils/moves/getValidMoves";
+import WinnerPopup from "../WinnerPopup";
+import invertColor from "../../utils/invertColor";
+import useCallbackRegisterMove from "../../hooks/useCallbackRegisterMove";
+import getCompleteMove from "../../utils/moves/getCompleteMove";
 
 function Board() {
     const {
@@ -21,6 +21,8 @@ function Board() {
         colorWinner,
         setColorWinner,
         invertedColor,
+        gameStatus,
+        setGameStatus,
     } = useGameContext();
 
     const boardRef = useRef<HTMLDivElement>(null);
@@ -34,19 +36,20 @@ function Board() {
     const pieces = movesHistory[actualMove].pieces;
     const lastMove = movesHistory[actualMove].lastMove;
 
-    // Remove the selected piece on board reset
+    // Remove the selected piece on board change
     useEffect(() => {
         setSelectedPiece(null);
     }, [setSelectedPiece, pieces]);
 
     const registerMove = useCallbackRegisterMove();
 
+    // Find validMoves for the turn
     useEffect(() => {
-        const [map, numberOfMove] = getValidMoves(
-            colorToPlay,
-            pieces,
-            lastMove
-        );
+        let color: "w" | "b" | "wb" = colorToPlay;
+        if (gameStatus === "playingSandBox") {
+            color = "wb";
+        }
+        const [map, numberOfMove] = getValidMoves(color, pieces, lastMove);
         setValidMoves(map);
         if (numberOfMove === 0) {
             if (lastMove?.check) {
@@ -55,9 +58,18 @@ function Board() {
             } else {
                 setColorWinner("s");
             }
+            setGameStatus("gameEnd");
         }
-    }, [colorToPlay, lastMove, pieces, setColorWinner]);
+    }, [
+        colorToPlay,
+        lastMove,
+        pieces,
+        setColorWinner,
+        gameStatus,
+        setGameStatus,
+    ]);
 
+    // Pieces promotion
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
             const newPieces = structuredClone(pieces).map((piece) =>
@@ -68,6 +80,7 @@ function Board() {
         }
     }, [promotionBoxVisible, nextMove, pieces, registerMove]);
 
+    // Display validMoves for the selectedPiece
     useEffect(() => {
         if (!selectedPiece) {
             setDisplayMoves([]);
@@ -76,6 +89,7 @@ function Board() {
         setDisplayMoves(validMoves.get(selectedPiece.id));
     }, [selectedPiece, validMoves]);
 
+    // Handle the board click event
     function handleBoardClick(event: React.MouseEvent<HTMLDivElement>) {
         if (promotionBoxVisible && event.target === promotionCloseRef.current) {
             setNextMove(null);
@@ -113,10 +127,14 @@ function Board() {
         }
     }
 
+    // Handle the piece click event
     function handlePieceClick(piece: piece) {
         if (
-            piece.type[0] !== colorToPlay ||
-            (colorWinner && actualMove === movesHistory.length - 1)
+            gameStatus !== "playingSandBox" &&
+            ((gameStatus !== "playingVsBot" &&
+                gameStatus !== "playingVsFriend") ||
+                piece.type[0] !== colorToPlay ||
+                (colorWinner && actualMove === movesHistory.length - 1))
         ) {
             return;
         }

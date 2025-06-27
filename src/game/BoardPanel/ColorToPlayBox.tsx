@@ -1,4 +1,4 @@
-import "../styles/ColorToPlayBox.scss";
+import "../../styles/ColorToPlayBox.scss";
 
 interface Props {
     colorToPlay: "w" | "b";

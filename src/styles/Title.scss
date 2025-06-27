@@ -6,19 +6,4 @@
     box-sizing: border-box;
     padding: 0.5rem;
     position: relative;
-
-    .color-icon {
-        position: absolute;
-        box-sizing: border-box;
-        margin: 0.2rem;
-        height: 1.4rem;
-        aspect-ratio: 1 / 1;
-        background: url("https://www.chess.com/bundles/web/images/play-side/white--sm.svg");
-        background-size: cover;
-
-        &.b {
-            background: url("https://www.chess.com/bundles/web/images/play-side/black--sm.svg");
-            background-size: cover;
-        }
-    }
 }

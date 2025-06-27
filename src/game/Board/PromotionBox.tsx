@@ -1,5 +1,5 @@
-import useGameContext from "../hooks/useGameContext";
-import { completeMove } from "../types";
+import useGameContext from "../../hooks/useGameContext";
+import { completeMove } from "../../types";
 import { piece } from "./Piece";
 
 interface PromotionProps {

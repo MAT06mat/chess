@@ -1,5 +1,5 @@
-import Board from "./Board";
-import BoardPanel from "./BoardPanel";
+import Board from "./Board/Board";
+import BoardPanel from "./BoardPanel/BoardPanel";
 import { GameContext } from "../context/GameContext";
 import { usePersistedState } from "../hooks/usePersistedSate";
 import boardPosition from "../types/boardPosition";
@@ -9,6 +9,7 @@ import Title from "./Title";
 import "../styles/Game.scss";
 import getDefaultBoard from "../utils/getDefaultBoard";
 import invertColor from "../utils/invertColor";
+import { colorWinner, gameStatus, playSide, playVs } from "../types";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -16,14 +17,23 @@ function Game() {
         [getDefaultBoard()]
     );
     const [actualMove, setActualMove] = usePersistedState("actualMove", 0);
-    const [colorWinner, setColorWinner] = useState<"w" | "b" | "s" | null>(
-        null
+    const [gameStatus, setGameStatus] = usePersistedState<gameStatus>(
+        "gameStatus",
+        "modeSelection"
     );
+    const [colorWinner, setColorWinner] = useState<colorWinner>(null);
     const [invertedColor, setInvertedColor] = usePersistedState(
         "invertedColor",
         false
     );
-    const title = "Chess Sandbox";
+
+    const [playSide, setPlaySide] = usePersistedState<playSide>(
+        "playSide",
+        "white"
+    );
+    const [playVs, setPlayVs] = usePersistedState<playVs>("playVs", "friend");
+
+    const title = "Chess " + gameStatus;
     const lastMove = movesHistory[actualMove].lastMove;
     const colorToPlay = invertColor(lastMove?.piece.type[0]);
 
@@ -40,8 +50,6 @@ function Game() {
             playSound("castle");
         } else if (lastMove) {
             playSound("move-self");
-        } else {
-            playSound("game-start");
         }
     }, [lastMove]);
 
@@ -58,6 +66,12 @@ function Game() {
                 setColorWinner,
                 invertedColor,
                 setInvertedColor,
+                gameStatus,
+                setGameStatus,
+                playSide,
+                setPlaySide,
+                playVs,
+                setPlayVs,
             }}
         >
             <div className="game">
