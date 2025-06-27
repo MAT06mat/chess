@@ -10,7 +10,7 @@ interface type {
 interface move extends type {
     x: number;
     y: number;
-    group: number;
+    group?: number;
 }
 
 interface completeMove extends type {

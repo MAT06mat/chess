@@ -11,6 +11,7 @@ import getValidMoves from "../utils/moves/getValidMoves";
 import WinnerPopup from "./WinnerPopup";
 import invertColor from "../utils/invertColor";
 import useCallbackRegisterMove from "../hooks/useCallbackRegisterMove";
+import getCompleteMove from "../utils/moves/getCompleteMove";
 
 function Board() {
     const {
@@ -102,22 +103,16 @@ function Board() {
                 );
 
                 if (validMove) {
-                    const move: completeMove = {
-                        fromX: selectedPiece.x,
-                        fromY: selectedPiece.y,
-                        toX: x,
-                        toY: y,
-                        capture: validMove.capture,
-                        check: validMove.check,
-                        special: validMove.special,
-                        piece: selectedPiece,
-                    };
+                    const completeMove = getCompleteMove(
+                        validMove,
+                        selectedPiece
+                    );
 
-                    if (move.special === "promotion") {
+                    if (completeMove.special === "promotion") {
                         setPromotionBoxVisible(true);
-                        setNextMove(move);
+                        setNextMove(completeMove);
                     } else {
-                        registerMove(move, pieces);
+                        registerMove(completeMove, pieces);
                     }
                 }
                 setSelectedPiece(null);

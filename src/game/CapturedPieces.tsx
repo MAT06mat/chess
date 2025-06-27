@@ -87,7 +87,7 @@ function CapturedPiecesDiv(
     score: number,
     pieces: [string, number][]
 ) {
-    pieces = pieces.filter((p) => p[0][0] == color);
+    pieces = pieces.filter((p) => p[0][0] === color);
     pieces.sort(customSort);
 
     return (

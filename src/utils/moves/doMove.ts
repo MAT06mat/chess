@@ -1,4 +1,4 @@
-import { move } from "../../types";
+import { completeMove } from "../../types";
 import piece from "../../types/piece";
 import doSpecialMove from "./doSpecialMove";
 
@@ -7,33 +7,25 @@ import doSpecialMove from "./doSpecialMove";
  * If the move captures another piece, it removes that piece from the game.
  * If the move is a special move, it handles that as well.
  *
- * @param {move} validMove - The valid move object containing x and y offsets.
- * @param {piece} selectedPiece - The piece being moved.
+ * @param {completeMove} move - The valid move object containing all informations.
  * @param {piece[]} pieces - The current list of pieces on the board.
  * @returns {piece[]} - The updated list of pieces after the move.
  */
-function doMove(
-    validMove: move,
-    selectedPiece: piece,
-    pieces: piece[]
-): piece[] {
-    const x = selectedPiece.x + validMove.x;
-    const y = selectedPiece.y + validMove.y;
-
+function doMove(move: completeMove, pieces: piece[]): piece[] {
     let newPieces = structuredClone(pieces).filter((piece) => {
-        return !(piece.x === x && piece.y === y);
+        return !(piece.x === move.toX && piece.y === move.toY);
     });
 
     newPieces.map((piece) => {
-        if (piece.id === selectedPiece.id) {
-            piece.x = x;
-            piece.y = y;
+        if (piece.id === move.piece.id) {
+            piece.x = move.toX;
+            piece.y = move.toY;
             piece.hasMoved = true;
         }
         return piece;
     });
 
-    newPieces = doSpecialMove(validMove, selectedPiece, newPieces);
+    newPieces = doSpecialMove(move, newPieces);
 
     return newPieces;
 }

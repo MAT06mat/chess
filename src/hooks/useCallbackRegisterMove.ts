@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import useGameContext from "./useGameContext";
 import piece from "../types/piece";
-import { completeMove, move } from "../types";
+import { completeMove } from "../types";
 import isCheck from "../utils/isCheck";
 import invertColor from "../utils/invertColor";
 import doMove from "../utils/moves/doMove";
@@ -19,18 +19,7 @@ function useCallbackRegisterMove() {
     return useCallback(
         (completeMove: completeMove, pieces: piece[]) => {
             // Do the move
-            const move: move = {
-                x: completeMove.toX - completeMove.fromX,
-                y: completeMove.toY - completeMove.fromY,
-                group: -1,
-            };
-            const selectedPiece = pieces.find(
-                (piece) =>
-                    piece.x === completeMove.fromX &&
-                    piece.y === completeMove.fromY
-            );
-            if (!selectedPiece) return;
-            pieces = doMove(move, selectedPiece, pieces);
+            pieces = doMove(completeMove, pieces);
 
             // Add the move to the history
             completeMove.check = isCheck(invertColor(colorToPlay), pieces);

@@ -25,7 +25,7 @@ function getPieceValidMoves(
     const potentialMoves = getPieceMoves(selectedPiece.type[1]);
 
     return potentialMoves.filter((move) => {
-        if (groupBlocked.has(move.group)) {
+        if (move.group !== undefined && groupBlocked.has(move.group)) {
             return false;
         }
 
@@ -44,7 +44,9 @@ function getPieceValidMoves(
 
         // Prevent friendly fire or forward pawn capturing
         if (isSameColor || (isPawn && move.x === 0 && isEnemy)) {
-            groupBlocked.add(move.group);
+            if (move.group !== undefined) {
+                groupBlocked.add(move.group);
+            }
             return false;
         }
 
@@ -116,7 +118,9 @@ function getPieceValidMoves(
         }
 
         if (isEnemy) {
-            groupBlocked.add(move.group);
+            if (move.group !== undefined) {
+                groupBlocked.add(move.group);
+            }
             move.capture = true;
             return true;
         }

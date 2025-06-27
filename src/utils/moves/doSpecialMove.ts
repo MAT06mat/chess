@@ -1,4 +1,4 @@
-import { move } from "../../types";
+import { completeMove } from "../../types";
 import piece from "../../types/piece";
 
 /**
@@ -6,25 +6,21 @@ import piece from "../../types/piece";
  * If the move is castling, it moves the rook to the appropriate position.
  * If the move is en passant, it removes the captured pawn.
  *
- * @param {move} validMove - The valid move object containing x and y offsets.
- * @param {piece} piece - The piece being moved.
+ * @param {completeMove} move - The valid move object containing all informations.
  * @param {piece[]} pieces - The current list of pieces on the board.
  * @returns {piece[]} - This function does not return anything, it modifies the pieces array directly.
  */
-function doSpecialMove(
-    validMove: move,
-    piece: piece,
-    pieces: piece[]
-): piece[] {
-    if (validMove.special === "castling" && piece.type[1] === "k") {
-        const rookX = validMove.x === 2 ? 7 : validMove.x === -2 ? 0 : null;
-        const newRookX = validMove.x === 2 ? 5 : validMove.x === -2 ? 3 : null;
+function doSpecialMove(move: completeMove, pieces: piece[]): piece[] {
+    const x = move.toX - move.fromX;
+    if (move.special === "castling" && move.piece.type[1] === "k") {
+        const rookX = x === 2 ? 7 : x === -2 ? 0 : null;
+        const newRookX = x === 2 ? 5 : x === -2 ? 3 : null;
         if (rookX !== null && newRookX !== null) {
             // Move the rook
             const rook = pieces.find(
                 (p) =>
                     p.type[1] === "r" &&
-                    p.type[0] === piece.type[0] &&
+                    p.type[0] === move.piece.type[0] &&
                     p.x === rookX
             );
             if (rook) {
@@ -32,14 +28,14 @@ function doSpecialMove(
                 rook.hasMoved = true;
             }
         }
-    } else if (validMove.special === "enPassant") {
+    } else if (move.special === "enPassant") {
         // Remove the captured pawn
         pieces = pieces.filter(
             (p) =>
                 !(
                     p.type[1] === "p" &&
-                    p.y === piece.y &&
-                    p.x === piece.x + validMove.x
+                    p.y === move.piece.y &&
+                    p.x === move.piece.x + x
                 )
         );
     }
