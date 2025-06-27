@@ -8,6 +8,7 @@ import playSound from "../utils/playSound";
 import Title from "./Title";
 import "../styles/Game.scss";
 import getDefaultBoard from "../utils/getDefaultBoard";
+import invertColor from "../utils/invertColor";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -23,15 +24,10 @@ function Game() {
         false
     );
     const title = "Chess Sandbox";
-
-    const colorToPlay = movesHistory[actualMove].lastMove
-        ? movesHistory[actualMove].lastMove.piece.type[0] === "w"
-            ? "b"
-            : "w"
-        : "w";
+    const lastMove = movesHistory[actualMove].lastMove;
+    const colorToPlay = invertColor(lastMove?.piece.type[0]);
 
     useEffect(() => {
-        const lastMove = movesHistory[actualMove].lastMove;
         if (lastMove?.checkMate) {
             playSound("game-end");
         } else if (lastMove?.check) {
@@ -47,7 +43,7 @@ function Game() {
         } else {
             playSound("game-start");
         }
-    }, [movesHistory, actualMove]);
+    }, [lastMove]);
 
     return (
         <GameContext.Provider

@@ -1,4 +1,4 @@
-function invertColor(color: string): "w" | "b" {
+function invertColor(color: string | undefined): "w" | "b" {
     return color === "w" ? "b" : "w";
 }
 
