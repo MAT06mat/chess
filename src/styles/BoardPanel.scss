@@ -29,6 +29,20 @@
         & > * {
             border-bottom: 0.05rem solid #ffffff1a;
         }
+
+        .game-controlers {
+            display: flex;
+            padding: 0.8rem;
+            margin-left: auto;
+            width: 30%;
+            border: none;
+
+            button {
+                width: 100%;
+                background: transparent;
+                padding: 0;
+            }
+        }
     }
 
     .board-panel-footer {

@@ -5,6 +5,7 @@ import ArrowTriangleSwooshLeft from "../../../assets/svg/ArrowTriangleSwooshLeft
 import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import useGameContext from "../../../hooks/useGameContext";
+import playSound from "../../../utils/playSound";
 import GreyButton from "../../Components/GreyButton";
 
 interface Props {
@@ -22,6 +23,7 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
         actualMove,
         setActualMove,
         invertedColor,
+        gameStatus,
         setGameStatus,
     } = useGameContext();
 
@@ -29,6 +31,7 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
 
     function resignGame() {
         resetChessBoard();
+        playSound("game-end");
         setGameStatus("modeSelection");
     }
 
@@ -37,7 +40,8 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
         let removeNumber = 1;
         if (
             lastMove?.piece.type[0] === (invertedColor ? "w" : "b") &&
-            movesHistory.length !== 2
+            movesHistory.length !== 2 &&
+            gameStatus === "playingVsBot"
         ) {
             removeNumber = 2;
         }

@@ -3,6 +3,7 @@
     overflow-y: auto;
     scrollbar-color: #00000050 #00000000;
     scrollbar-width: thin;
+    border-bottom: none !important;
 
     & > div {
         font-size: smaller;

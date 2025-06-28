@@ -3,7 +3,6 @@ import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import useGameContext from "../../../hooks/useGameContext";
 import CapturedPieces from "../../Components/CapturedPieces";
 import PanelMovesList from "../Components/PanelMovesList";
-import "../../../styles/GameEndPanel.scss";
 import GreyButton from "../../Components/GreyButton";
 import BoardActions from "../Components/BaordActions";
 
@@ -22,7 +21,7 @@ function GameEndPanel() {
             <div className="board-panel-content">
                 <CapturedPieces />
                 <PanelMovesList />
-                <div className="game-control">
+                <div className="game-controlers">
                     <BoardActions undo redo />
                 </div>
             </div>
