@@ -8,7 +8,7 @@ function PlaySandBoxPanel() {
                 <CapturedPieces />
             </div>
             <div className="board-panel-footer">
-                <BoardActions />
+                <BoardActions reset undo redo />
             </div>
         </>
     );

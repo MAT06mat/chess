@@ -10,7 +10,7 @@ function PlayVsBotPanel() {
                 <PanelMovesList />
             </div>
             <div className="board-panel-footer">
-                <BoardActions />
+                <BoardActions resign cancel />
             </div>
         </>
     );

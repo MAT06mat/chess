@@ -1,13 +1,18 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    className?: string;
     text?: string;
     light?: boolean;
     children?: ReactNode;
 }
 
-function GreyButton({ className, text, light, children, ...props }: Props) {
+function GreyButton({
+    className = "",
+    text,
+    light,
+    children,
+    ...props
+}: Props) {
     return (
         <button
             className={

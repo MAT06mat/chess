@@ -1,11 +1,11 @@
-function ArrowSpinUndo() {
+function ArrowSpinReset() {
     return (
         <svg
             viewBox="0 0 32 32"
             height="28.75"
             width="28.75"
             aria-hidden="true"
-            data-glyph="arrow-spin-undo"
+            data-glyph="arrow-spin-reset"
             xmlns="http://www.w3.org/2000/svg"
         >
             <path
@@ -16,4 +16,4 @@ function ArrowSpinUndo() {
     );
 }
 
-export default ArrowSpinUndo;
+export default ArrowSpinReset;
