@@ -1,59 +1,115 @@
-.panel-moves-list {
+.panel-moves-list-wrapper {
     height: 100%;
     overflow-y: auto;
-    scrollbar-color: #00000050 #00000000;
-    scrollbar-width: thin;
     border-bottom: none !important;
 
-    & > div {
-        font-size: smaller;
-        height: 30px;
-        line-height: 30px;
-        padding: 0 15px 0 15px;
-        width: 100%;
-        box-sizing: border-box;
-        text-align: left;
-    }
+    .panel-moves-list {
+        height: calc(100% - 3.4rem);
+        overflow-y: auto;
+        scrollbar-color: #00000050 #00000000;
+        scrollbar-width: thin;
 
-    .move-list-row {
-        display: grid;
-        grid-template-columns: 3rem 1fr 1fr;
-        align-items: center;
-
-        &.light-row {
-            background-color: #ffffff05;
+        & > div {
+            font-size: smaller;
+            height: 30px;
+            line-height: 30px;
+            padding: 0 15px 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
         }
 
-        div {
-            display: inline-block;
-            height: 24px;
-            line-height: 24px;
-        }
+        .move-list-row {
+            display: grid;
+            grid-template-columns: 3rem 1fr 1fr;
+            align-items: center;
 
-        .number {
-            color: #ffffff80;
-        }
+            &.light-row {
+                background-color: #ffffff05;
+            }
 
-        .move-notation {
-            font-weight: 600;
-            width: max-content;
-            padding: 0 4px;
-            border-bottom: solid 3px transparent;
-            cursor: pointer;
+            div {
+                display: inline-block;
+                height: 24px;
+                line-height: 24px;
+            }
 
-            &.selected {
-                background-color: #ffffff24;
-                border-bottom: solid 3px #ffffff1a;
-                border-radius: 2px;
-                font-weight: 700;
-                color: #fff;
-                cursor: default;
+            .number {
+                color: #ffffff80;
+            }
+
+            .move-notation {
+                font-weight: 600;
+                width: max-content;
+                padding: 0 4px;
+                border-bottom: solid 3px transparent;
+                cursor: pointer;
+
+                &.selected {
+                    background-color: #ffffff24;
+                    border-bottom: solid 3px #ffffff1a;
+                    border-radius: 2px;
+                    font-weight: 700;
+                    color: #fff;
+                    cursor: default;
+                }
             }
         }
+
+        .game-winner {
+            color: #ffffff80;
+            font-weight: 600;
+        }
     }
 
-    .game-winner {
-        color: #ffffff80;
-        font-weight: 600;
+    .game-controlers {
+        display: flex;
+        margin-left: auto;
+        height: 3.4rem;
+        margin-right: 0.8rem;
+        box-sizing: border-box;
+        width: 30%;
+        border-bottom: none !important;
+
+        button {
+            width: 100%;
+            background: transparent !important;
+            padding: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .panel-moves-list-wrapper {
+        position: relative;
+        border-bottom: 0.05rem solid #ffffff1a !important;
+
+        .panel-moves-list {
+            height: 100%;
+            overflow-y: none;
+            overflow-x: auto;
+            scrollbar-width: none;
+            display: flex;
+            align-items: center;
+
+            .move-list-row.light-row {
+                background-color: transparent;
+            }
+
+            & > div {
+                font-size: medium;
+                width: min-content;
+            }
+
+            .move-list-row {
+                grid-template-columns: 1fr 1fr 1fr;
+                padding: 0 1rem;
+                gap: 0.2rem;
+
+                div:last-child {
+                    margin-left: 0.8rem;
+                }
+            }
+        }
     }
 }

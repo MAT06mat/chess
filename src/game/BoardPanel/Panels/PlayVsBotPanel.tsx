@@ -8,9 +8,6 @@ function PlayVsBotPanel() {
             <div className="board-panel-content">
                 <CapturedPieces />
                 <PanelMovesList />
-                <div className="game-controlers">
-                    <BoardActions undo redo />
-                </div>
             </div>
             <div className="board-panel-footer">
                 <BoardActions resign cancel />

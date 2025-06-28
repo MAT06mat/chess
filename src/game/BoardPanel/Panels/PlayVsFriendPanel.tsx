@@ -13,9 +13,6 @@ function PlayVsFriendPanel() {
                 <ColorToPlayBox colorToPlay={colorToPlay} />
                 <CapturedPieces />
                 <PanelMovesList />
-                <div className="game-controlers">
-                    <BoardActions undo redo />
-                </div>
             </div>
             <div className="board-panel-footer">
                 <BoardActions resign cancel />
