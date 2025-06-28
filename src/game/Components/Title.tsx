@@ -1,6 +1,6 @@
-import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
-import useGameContext from "../hooks/useGameContext";
-import "../styles/Title.scss";
+import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
+import useGameContext from "../../hooks/useGameContext";
+import "../../styles/Title.scss";
 
 interface Props {
     onlyComputerScreen?: boolean;

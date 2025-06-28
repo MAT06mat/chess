@@ -1,5 +1,5 @@
 import { ReactNode, useRef } from "react";
-import "../styles/Popup.scss";
+import "../../styles/Popup.scss";
 
 interface Props {
     children?: ReactNode;

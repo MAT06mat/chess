@@ -1,7 +1,7 @@
-import useGameContext from "../../hooks/useGameContext";
+import useGameContext from "../../../hooks/useGameContext";
 import { useRef } from "react";
-import "../../styles/PanelMovesList.scss";
-import getChessNotation from "../../utils/getChessNotation";
+import "../../../styles/PanelMovesList.scss";
+import getChessNotation from "../../../utils/getChessNotation";
 
 function createPairMoves(arr: string[]) {
     const result: { m: string | null; i: number }[][] = [];

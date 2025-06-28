@@ -5,7 +5,7 @@ import { usePersistedState } from "../hooks/usePersistedSate";
 import boardPosition from "../types/boardPosition";
 import { useEffect, useState } from "react";
 import playSound from "../utils/playSound";
-import Title from "./Title";
+import Title from "./Components/Title";
 import "../styles/Game.scss";
 import getDefaultBoard from "../utils/getDefaultBoard";
 import invertColor from "../utils/invertColor";

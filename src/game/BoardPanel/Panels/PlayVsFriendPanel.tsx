@@ -1,10 +1,10 @@
-import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
-import useGameContext from "../../hooks/useGameContext";
-import CapturedPieces from "../CapturedPieces";
-import ColorToPlayBox from "./ColorToPlayBox";
-import PanelMovesList from "./PanelMovesList";
+import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
+import useGameContext from "../../../hooks/useGameContext";
+import CapturedPieces from "../../Components/CapturedPieces";
+import ColorToPlayBox from "../Components/ColorToPlayBox";
+import PanelMovesList from "../Components/PanelMovesList";
 
-function PlayVsPanel() {
+function PlayVsFriendPanel() {
     const {
         movesHistory,
         actualMove,
@@ -94,4 +94,4 @@ function PlayVsPanel() {
     );
 }
 
-export default PlayVsPanel;
+export default PlayVsFriendPanel;

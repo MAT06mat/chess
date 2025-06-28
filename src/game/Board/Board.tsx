@@ -8,7 +8,7 @@ import BoardCoordinates from "../../assets/svg/BoardCoordinates";
 import useGameContext from "../../hooks/useGameContext";
 import "../../styles/Board.scss";
 import getValidMoves from "../../utils/moves/getValidMoves";
-import WinnerPopup from "../WinnerPopup";
+import WinnerPopup from "../Components/WinnerPopup";
 import invertColor from "../../utils/invertColor";
 import useCallbackRegisterMove from "../../hooks/useCallbackRegisterMove";
 import getCompleteMove from "../../utils/moves/getCompleteMove";

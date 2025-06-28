@@ -1,9 +1,9 @@
-import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
-import useCallbackStartGame from "../../hooks/useCallbackStartGame";
-import useGameContext from "../../hooks/useGameContext";
-import CapturedPieces from "../CapturedPieces";
-import PanelMovesList from "./PanelMovesList";
-import "../../styles/GameEndPanel.scss";
+import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
+import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
+import useGameContext from "../../../hooks/useGameContext";
+import CapturedPieces from "../../Components/CapturedPieces";
+import PanelMovesList from "../Components/PanelMovesList";
+import "../../../styles/GameEndPanel.scss";
 
 function GameEndPanel() {
     const { movesHistory, actualMove, setActualMove, setGameStatus } =

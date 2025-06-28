@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Popup from "./Popup";
-import useGameContext from "../hooks/useGameContext";
-import "../styles/WinnerPopup.scss";
-import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
-import useCallbackStartGame from "../hooks/useCallbackStartGame";
+import useGameContext from "../../hooks/useGameContext";
+import "../../styles/WinnerPopup.scss";
+import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
+import useCallbackStartGame from "../../hooks/useCallbackStartGame";
 
 function WinnerPopup() {
     const { colorWinner, setGameStatus } = useGameContext();

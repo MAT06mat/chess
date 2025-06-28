@@ -1,11 +1,11 @@
-import Bot from "../../assets/svg/Bot";
-import SandBox from "../../assets/svg/SandBox";
-import Friends from "../../assets/svg/Friends";
-import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
-import useGameContext from "../../hooks/useGameContext";
-import "../../styles/ModeSelectionPanel.scss";
-import { playSide } from "../../types";
-import useCallbackStartGame from "../../hooks/useCallbackStartGame";
+import Bot from "../../../assets/svg/Bot";
+import SandBox from "../../../assets/svg/SandBox";
+import Friends from "../../../assets/svg/Friends";
+import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
+import useGameContext from "../../../hooks/useGameContext";
+import "../../../styles/ModeSelectionPanel.scss";
+import { playSide } from "../../../types";
+import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 
 function ModeSelectionPanel() {
     const { setInvertedColor, playSide, setPlaySide, playVs, setPlayVs } =
