@@ -4,6 +4,8 @@ import useGameContext from "../../hooks/useGameContext";
 import "../../styles/WinnerPopup.scss";
 import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../hooks/useCallbackStartGame";
+import GreenButton from "./GreenButton";
+import GreyButton from "./GreyButton";
 
 function WinnerPopup() {
     const { colorWinner, setGameStatus } = useGameContext();
@@ -51,22 +53,10 @@ function WinnerPopup() {
         >
             <div className="winner-popup-title">{title}</div>
             <div className="winner-popup-buttons">
-                <button className="green-button" onClick={rematch}>
-                    Rematch
-                </button>
+                <GreenButton text="Rematch" onClick={rematch} />
                 <div className="rows-split">
-                    <button
-                        className="grey-button light-grey"
-                        onClick={newGame}
-                    >
-                        New game
-                    </button>
-                    <button
-                        className="grey-button light-grey"
-                        onClick={gameReview}
-                    >
-                        Game Review
-                    </button>
+                    <GreyButton text="New game" light onClick={newGame} />
+                    <GreyButton text="Game Review" light onClick={gameReview} />
                 </div>
             </div>
         </Popup>

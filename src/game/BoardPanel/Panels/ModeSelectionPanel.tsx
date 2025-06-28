@@ -6,6 +6,8 @@ import useGameContext from "../../../hooks/useGameContext";
 import "../../../styles/ModeSelectionPanel.scss";
 import { playSide } from "../../../types";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
+import GreenButton from "../../Components/GreenButton";
+import GreyButton from "../../Components/GreyButton";
 
 function ModeSelectionPanel() {
     const { setInvertedColor, playSide, setPlaySide, playVs, setPlayVs } =
@@ -33,35 +35,27 @@ function ModeSelectionPanel() {
         <>
             <div className="board-panel-content">
                 <div className="play-vs-selection">
-                    <div
-                        className={
-                            "play-vs-button grey-button" +
-                            isSelectedVs("friend")
-                        }
+                    <GreyButton
+                        className={"play-vs-button " + isSelectedVs("friend")}
                         onClick={() => setPlayVs("friend")}
+                        text="Play a friend"
                     >
                         <Friends />
-                        <span>Play a friend</span>
-                    </div>
-                    <div
-                        className={
-                            "play-vs-button grey-button" + isSelectedVs("bot")
-                        }
+                    </GreyButton>
+                    <GreyButton
+                        className={"play-vs-button " + isSelectedVs("bot")}
                         onClick={() => setPlayVs("bot")}
+                        text="Play a bot"
                     >
                         <Bot />
-                        <span>Play a bot</span>
-                    </div>
-                    <div
-                        className={
-                            "play-vs-button grey-button" +
-                            isSelectedVs("sandBox")
-                        }
+                    </GreyButton>
+                    <GreyButton
+                        className={"play-vs-button " + isSelectedVs("sandBox")}
                         onClick={() => setPlayVs("sandBox")}
+                        text="SandBox"
                     >
                         <SandBox />
-                        <span>SandBox</span>
-                    </div>
+                    </GreyButton>
                 </div>
                 <div className="side-selection">
                     <div
@@ -81,9 +75,7 @@ function ModeSelectionPanel() {
                 </div>
             </div>
             <div className="board-panel-footer">
-                <button className="green-button" onClick={startGame}>
-                    Play
-                </button>
+                <GreenButton text="Play" onClick={startGame} />
             </div>
         </>
     );
