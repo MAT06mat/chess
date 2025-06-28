@@ -10,10 +10,15 @@ It is built using React and TypeScript, with a focus on creating a clean UI, smo
 
 -   Display of a chessboard
 -   Game history and replay
+-   Move validation
 
 ## Planned Features
 
--   Move validation
+-   Drag pieces
+-   Playing bot
+-   Game review
+-   SandBox fully fonctionnal
+-   Timers
 
 ## Status
 
