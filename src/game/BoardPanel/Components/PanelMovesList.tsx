@@ -1,5 +1,5 @@
 import useGameContext from "../../../hooks/useGameContext";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import "../../../styles/PanelMovesList.scss";
 import getChessNotation from "../../../utils/getChessNotation";
 import BoardActions from "./BaordActions";
@@ -31,20 +31,21 @@ function PanelMovesList() {
     const panelMovesListRef = useRef<HTMLDivElement>(null);
     const selectedMoveRef = useRef<HTMLDivElement>(null);
 
-    if (actualMove === movesHistory.length - 1) {
-        setTimeout(() =>
-            panelMovesListRef.current?.scrollTo({
-                left: 0,
-                top: panelMovesListRef.current.scrollHeight,
-                behavior: "smooth",
-            })
-        );
-    }
+    useEffect(() => {
+        selectedMoveRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+        });
+    }, [actualMove]);
 
     const movesList = createPairMoves(chessMoves);
 
     return (
         <div className="panel-moves-list-wrapper">
+            <div className="game-controler mobile-screen">
+                <BoardActions undo />
+            </div>
             <div className="panel-moves-list" ref={panelMovesListRef}>
                 {movesList.map((moves, index) => {
                     const lightRow = index % 2 === 1 ? " light-row" : "";
@@ -56,7 +57,11 @@ function PanelMovesList() {
                         <div key={index} className={"move-list-row" + lightRow}>
                             <div className="number">{index + 1}.</div>
                             <div
-                                ref={selectedMoveRef}
+                                ref={
+                                    moves[0].i === actualMove
+                                        ? selectedMoveRef
+                                        : null
+                                }
                                 className={"move-notation" + selected1}
                                 onClick={() => setActualMove(moves[0].i)}
                             >
@@ -64,7 +69,11 @@ function PanelMovesList() {
                             </div>
                             {moves[1].m ? (
                                 <div
-                                    ref={selectedMoveRef}
+                                    ref={
+                                        moves[1].i === actualMove
+                                            ? selectedMoveRef
+                                            : null
+                                    }
                                     className={"move-notation" + selected2}
                                     onClick={() => setActualMove(moves[1].i)}
                                 >
@@ -83,6 +92,9 @@ function PanelMovesList() {
                             : "½–½"}
                     </div>
                 ) : null}
+            </div>
+            <div className="game-controler mobile-screen">
+                <BoardActions redo />
             </div>
             <div className="game-controlers computer-screen">
                 <BoardActions undo redo />

@@ -59,6 +59,7 @@
         .game-winner {
             color: #ffffff80;
             font-weight: 600;
+            white-space: nowrap;
         }
     }
 
@@ -83,9 +84,43 @@
     .panel-moves-list-wrapper {
         position: relative;
         border-bottom: 0.05rem solid #ffffff1a !important;
+        position: relative;
+        display: flex;
+
+        &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 4rem;
+            right: 4rem;
+            bottom: 0;
+            z-index: 99;
+            user-select: none;
+            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                #2a2725 0%,
+                #00000000 10%,
+                #00000000 90%,
+                #2a2725 100%
+            );
+        }
+
+        .game-controler {
+            height: 100%;
+
+            button {
+                height: 100%;
+                width: 4rem;
+                background: transparent !important;
+            }
+        }
 
         .panel-moves-list {
             height: 100%;
+            width: 100%;
+            padding: 0 30%;
             overflow-y: none;
             overflow-x: auto;
             scrollbar-width: none;
@@ -98,7 +133,7 @@
 
             & > div {
                 font-size: medium;
-                width: min-content;
+                width: fit-content;
             }
 
             .move-list-row {
