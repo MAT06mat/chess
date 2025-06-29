@@ -1,62 +1,95 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useGameContext from "./useGameContext";
-import { completeMove } from "../types";
+import { completeMove, move } from "../types";
 import postChessApi from "../utils/postChessApi";
 import getFen from "../utils/getFen";
 import useCallbackRegisterMove from "./useCallbackRegisterMove";
+import getCompleteMove from "../utils/moves/getCompleteMove";
+import getBotOpening from "../utils/getBotOpening";
 
-function useBot() {
+function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
     const { invertedColor, colorToPlay, movesHistory, actualMove } =
         useGameContext();
+
+    const calculateMove = useRef<string | null>(null);
+    const validMovesRef = useRef(validMoves);
+    const pieces = movesHistory[actualMove].pieces;
+
+    function playMove(fen: string, move: completeMove) {
+        setTimeout(() => {
+            if (calculateMove.current === fen) {
+                calculateMove.current = null;
+                registerMove(move, pieces);
+            }
+        }, (Math.random() + 1) * 500);
+    }
+
+    function playRandomMove(fen: string) {
+        if (calculateMove.current === null) return;
+
+        const moves = new Map(
+            Array.from(validMovesRef.current.entries()).filter(
+                ([, moves]) => moves.length > 0
+            )
+        );
+
+        const piece = Math.floor(moves.size * Math.random());
+        const [pieceId, pieceMoves] = [...moves.entries()][piece];
+        const selectedPiece = pieces.find((p) => p.id === pieceId);
+        if (selectedPiece === undefined) return;
+        const move = pieceMoves[Math.floor(pieceMoves.length * Math.random())];
+
+        const completeMove = getCompleteMove(move, selectedPiece);
+
+        playMove(fen, completeMove);
+    }
 
     const registerMove = useCallbackRegisterMove();
 
     useEffect(() => {
-        if (invertedColor ? colorToPlay !== "b" : colorToPlay !== "w") {
+        if (!useBot) return;
+
+        if (colorToPlay === (invertedColor ? "w" : "b")) {
+            validMovesRef.current = validMoves;
+            if (calculateMove.current !== null) return;
+
             const fen = getFen(movesHistory, colorToPlay, actualMove);
+
+            calculateMove.current = fen;
+
+            if (movesHistory.length === 1) {
+                return playMove(fen, getBotOpening());
+            }
+
             postChessApi({
                 fen: fen,
             }).then((data) => {
-                console.log(data);
-                const pieces = movesHistory[actualMove].pieces;
-                const pfx = "abcdefgh".indexOf(data.from[0]);
-                const pfy = data.from[1] - 1;
-                const ptx = "abcdefgh".indexOf(data.to[0]);
-                const pty = data.to[1] - 1;
+                if (data.type === "error") return playRandomMove(fen);
+
+                const fromX = "abcdefgh".indexOf(data.from[0]);
+                const fromY = data.from[1] - 1;
+                const toX = "abcdefgh".indexOf(data.to[0]);
+                const toY = data.to[1] - 1;
 
                 const selectedPiece = pieces.find(
-                    (p) => p.x === pfx && p.y === pfy
+                    (p) => p.x === fromX && p.y === fromY
                 );
-                console.log("find piece :", selectedPiece);
 
-                if (selectedPiece === undefined) return;
+                if (selectedPiece === undefined) return playRandomMove(fen);
 
-                const completeMove: completeMove = {
-                    fromX: pfx,
-                    fromY: pfy,
-                    toX: ptx,
-                    toY: pty,
-                    piece: selectedPiece,
-                };
-
-                if (data.isCapture) {
-                    completeMove.capture = true;
-                }
-
-                if (data.isCastling) {
-                    completeMove.special = "castling";
-                } else if (data.isPromotion) {
-                    completeMove.special = "promotion";
-                }
-
-                setTimeout(
-                    () => registerMove(completeMove, pieces),
-                    (Math.random() + 1) * 1000
+                const pieceMoves = validMovesRef.current.get(selectedPiece?.id);
+                const move = pieceMoves?.find(
+                    (m) => m.x === toX - fromX && m.y === toY - fromY
                 );
+
+                if (move === undefined) return playRandomMove(fen);
+
+                const completeMove = getCompleteMove(move, selectedPiece);
+                playMove(fen, completeMove);
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [movesHistory]);
+    }, [calculateMove, validMoves]);
 }
 
 export default useBot;

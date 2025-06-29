@@ -8,7 +8,8 @@ import GreenButton from "./GreenButton";
 import GreyButton from "./GreyButton";
 
 function WinnerPopup() {
-    const { colorWinner, setGameStatus } = useGameContext();
+    const { colorWinner, invertedColor, playVs, setGameStatus } =
+        useGameContext();
     const [visible, setVisible] = useState(true);
     const resetChessBoard = useCallbackResetChessBoard();
     const startGame = useCallbackStartGame();
@@ -38,11 +39,19 @@ function WinnerPopup() {
 
     let title = "Draw";
     if (colorWinner === "w") {
-        title = "White Won !";
+        title = "White won !";
     } else if (colorWinner === "b") {
-        title = "Black Won !";
+        title = "Black won !";
     } else if (colorWinner === "s") {
         title = "Stalemate";
+    }
+
+    if (playVs === "bot") {
+        if (colorWinner === (invertedColor ? "w" : "b")) {
+            title = "The bot has won";
+        } else if (colorWinner === (invertedColor ? "b" : "w")) {
+            title = "You won !";
+        }
     }
 
     return (

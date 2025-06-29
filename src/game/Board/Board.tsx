@@ -12,13 +12,13 @@ import WinnerPopup from "../Components/WinnerPopup";
 import invertColor from "../../utils/invertColor";
 import useCallbackRegisterMove from "../../hooks/useCallbackRegisterMove";
 import getCompleteMove from "../../utils/moves/getCompleteMove";
+import useBot from "../../hooks/useBot";
 
 function Board() {
     const {
         movesHistory,
         actualMove,
         colorToPlay,
-        colorWinner,
         setColorWinner,
         invertedColor,
         gameStatus,
@@ -40,6 +40,8 @@ function Board() {
     useEffect(() => {
         setSelectedPiece(null);
     }, [setSelectedPiece, pieces]);
+
+    useBot(validMoves, gameStatus === "playingVsBot");
 
     const registerMove = useCallbackRegisterMove();
 
@@ -129,16 +131,18 @@ function Board() {
 
     // Handle the piece click event
     function handlePieceClick(piece: piece) {
+        const isSandBox = gameStatus === "playingSandBox";
+        const isVsBot = gameStatus === "playingVsBot";
+        const isvsFriend = gameStatus === "playingVsFriend";
+        const isYourTurn = colorToPlay === (invertedColor ? "b" : "w");
+        const isColorToPlay = piece.type[0] === colorToPlay;
+
         if (
-            gameStatus !== "playingSandBox" &&
-            ((gameStatus !== "playingVsBot" &&
-                gameStatus !== "playingVsFriend") ||
-                piece.type[0] !== colorToPlay ||
-                (colorWinner && actualMove === movesHistory.length - 1))
+            isSandBox ||
+            (isColorToPlay && ((isVsBot && isYourTurn) || isvsFriend))
         ) {
-            return;
+            setSelectedPiece(piece);
         }
-        setSelectedPiece(piece);
     }
 
     return (
