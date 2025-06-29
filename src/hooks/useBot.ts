@@ -8,15 +8,19 @@ import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
 
 function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
-    const { invertedColor, colorToPlay, movesHistory, actualMove } =
+    const { invertedColor, colorToPlay, movesHistory, actualMove, gameStatus } =
         useGameContext();
 
     const calculateMove = useRef<string | null>(null);
     const validMovesRef = useRef(validMoves);
+    const gameStatusRef = useRef(gameStatus);
     const pieces = movesHistory[actualMove].pieces;
 
     function playMove(fen: string, move: completeMove) {
         setTimeout(() => {
+            if (gameStatusRef.current !== "playingVsBot") {
+                calculateMove.current = null;
+            }
             if (calculateMove.current === fen) {
                 calculateMove.current = null;
                 registerMove(move, pieces);

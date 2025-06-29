@@ -13,6 +13,7 @@ import invertColor from "../../utils/invertColor";
 import useCallbackRegisterMove from "../../hooks/useCallbackRegisterMove";
 import getCompleteMove from "../../utils/moves/getCompleteMove";
 import useBot from "../../hooks/useBot";
+import BoardHighLight from "./BoardHighLight";
 
 function Board() {
     const {
@@ -148,48 +149,25 @@ function Board() {
     return (
         <div className="board" ref={boardRef} onClick={handleBoardClick}>
             <BoardCoordinates />
-            {lastMove ? (
-                <>
-                    <BoardInfo
-                        className="highlight"
-                        x={lastMove.toX}
-                        y={lastMove.toY}
-                    />
-                    <BoardInfo
-                        className="highlight"
-                        x={lastMove.fromX}
-                        y={lastMove.fromY}
-                    />
-                </>
-            ) : null}
-            {selectedPiece ? (
-                <>
-                    <BoardInfo
-                        className="highlight"
-                        x={selectedPiece.x}
-                        y={selectedPiece.y}
-                    />
-                    {displayMoves.map((move, index) => {
-                        return (
-                            <BoardInfo
-                                className={
-                                    move.capture ? "capture-hint" : "hint"
-                                }
-                                borderWidth={
-                                    boardRef.current?.clientWidth
-                                        ? boardRef.current?.clientWidth *
-                                              0.011 +
-                                          "px"
-                                        : undefined
-                                }
-                                key={index}
-                                x={move.x + selectedPiece.x}
-                                y={move.y + selectedPiece.y}
-                            />
-                        );
-                    })}
-                </>
-            ) : null}
+            <BoardHighLight selectedPiece={selectedPiece} lastMove={lastMove} />
+            {selectedPiece
+                ? displayMoves.map((move, index) => {
+                      return (
+                          <BoardInfo
+                              className={move.capture ? "capture-hint" : "hint"}
+                              borderWidth={
+                                  boardRef.current?.clientWidth
+                                      ? boardRef.current?.clientWidth * 0.011 +
+                                        "px"
+                                      : undefined
+                              }
+                              key={index}
+                              x={move.x + selectedPiece.x}
+                              y={move.y + selectedPiece.y}
+                          />
+                      );
+                  })
+                : null}
             {pieces.map((piece) => (
                 <Piece
                     key={invertedColor ? piece.id + 64 : piece.id}
