@@ -16,6 +16,7 @@ const openings: completeMove[] = [
         toX: 4,
         toY: 3,
         piece: getPiece(4, 1),
+        san: "e4",
     },
     {
         fromX: 3,
@@ -23,6 +24,7 @@ const openings: completeMove[] = [
         toX: 3,
         toY: 3,
         piece: getPiece(3, 1),
+        san: "d4",
     },
     {
         fromX: 6,
@@ -30,6 +32,7 @@ const openings: completeMove[] = [
         toX: 5,
         toY: 2,
         piece: getPiece(6, 0),
+        san: "Nf3",
     },
     {
         fromX: 2,
@@ -37,6 +40,7 @@ const openings: completeMove[] = [
         toX: 2,
         toY: 3,
         piece: getPiece(2, 1),
+        san: "c4",
     },
     {
         fromX: 4,
@@ -44,6 +48,7 @@ const openings: completeMove[] = [
         toX: 4,
         toY: 2,
         piece: getPiece(4, 1),
+        san: "e3",
     },
     {
         fromX: 6,
@@ -51,6 +56,7 @@ const openings: completeMove[] = [
         toX: 6,
         toY: 2,
         piece: getPiece(6, 1),
+        san: "g3",
     },
     {
         fromX: 1,
@@ -58,6 +64,7 @@ const openings: completeMove[] = [
         toX: 1,
         toY: 2,
         piece: getPiece(1, 1),
+        san: "b3",
     },
     {
         fromX: 5,
@@ -65,6 +72,7 @@ const openings: completeMove[] = [
         toX: 5,
         toY: 3,
         piece: getPiece(5, 1),
+        san: "f4",
     },
 ];
 

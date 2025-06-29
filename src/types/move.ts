@@ -20,6 +20,7 @@ interface completeMove extends type {
     toY: number;
     piece: piece;
     toPiece?: piece;
+    san: string;
 }
 
 export type { move };

@@ -1,7 +1,6 @@
 import useGameContext from "../../../hooks/useGameContext";
 import { useEffect, useRef } from "react";
 import "../../../styles/PanelMovesList.scss";
-import getChessNotation from "../../../utils/getChessNotation";
 import BoardActions from "./BaordActions";
 
 interface customMove {
@@ -42,7 +41,7 @@ function PanelMovesList() {
 
     const chessMoves = movesHistory.map((moveHistory) => {
         if (!moveHistory.lastMove) return "";
-        return getChessNotation(moveHistory.lastMove);
+        return moveHistory.lastMove.san;
     });
 
     chessMoves.shift();
