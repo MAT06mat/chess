@@ -17,6 +17,10 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
     const gameStatusRef = useRef(gameStatus);
     const pieces = movesHistory[actualMove].pieces;
 
+    if (actualMove !== movesHistory.length - 1) {
+        calculateFenRef.current = null;
+    }
+
     function playMove(fen: string, move: completeMove) {
         setTimeout(() => {
             if (gameStatusRef.current !== "playingVsBot") {
