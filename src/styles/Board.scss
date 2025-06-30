@@ -19,7 +19,7 @@
         width: 100%;
         aspect-ratio: 1 / 1;
         border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px #00000033;
         position: relative;
 
         background-image: url("https://www.chess.com/boards/green/150.png");
@@ -60,20 +60,20 @@
             background-color: #ffff3375;
         }
 
-        .hint {
-            padding: 4.2%;
-            box-sizing: border-box;
-            background-clip: content-box;
-            background-color: #00000024;
-            border-radius: 50%;
-        }
-
+        .hint,
         .capture-hint {
             padding: 4.2%;
             box-sizing: border-box;
             background-clip: content-box;
-            border: 5px solid #00000024;
             border-radius: 50%;
+        }
+
+        .hint {
+            background-color: #00000024;
+        }
+
+        .capture-hint {
+            border: 5px solid #00000024;
         }
 
         .promotion-box {

@@ -26,6 +26,8 @@ type GameContextType = {
     playVs: playVs;
     setPlayVs: React.Dispatch<React.SetStateAction<playVs>>;
     piecesScores: piecesScores;
+    resignPopupVisible: boolean;
+    setResignPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

@@ -11,6 +11,7 @@ import getDefaultBoard from "../utils/getDefaultBoard";
 import invertColor from "../utils/invertColor";
 import { colorWinner, gameStatus, playSide, playVs } from "../types";
 import getPiecesScores from "../utils/getPiecesScores";
+import ResignPopup from "./Components/ResignPopup";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -27,12 +28,12 @@ function Game() {
         "invertedColor",
         false
     );
-
     const [playSide, setPlaySide] = usePersistedState<playSide>(
         "playSide",
         "white"
     );
     const [playVs, setPlayVs] = usePersistedState<playVs>("playVs", "friend");
+    const [resignPopupVisible, setResignPopupVisible] = useState(false);
 
     const title = "Chess " + gameStatus;
     const lastMove = movesHistory[actualMove].lastMove;
@@ -75,9 +76,12 @@ function Game() {
                 playVs,
                 setPlayVs,
                 piecesScores,
+                resignPopupVisible,
+                setResignPopupVisible,
             }}
         >
             <div className="game">
+                <ResignPopup />
                 <Title onlyMobileScreen />
                 <Board />
                 <BoardPanel />

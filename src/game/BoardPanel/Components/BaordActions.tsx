@@ -25,11 +25,16 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
         invertedColor,
         gameStatus,
         setGameStatus,
+        setResignPopupVisible,
     } = useGameContext();
 
     const resetChessBoard = useCallbackResetChessBoard();
 
     function resignGame() {
+        setResignPopupVisible(true);
+    }
+
+    function resetGame() {
         resetChessBoard();
         playSound("game-end");
         setGameStatus("modeSelection");
@@ -76,7 +81,7 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
                 </GreyButton>
             ) : null}
             {reset ? (
-                <GreyButton onClick={resignGame}>
+                <GreyButton onClick={resetGame}>
                     <ArrowSpinReset />
                 </GreyButton>
             ) : null}
