@@ -10,6 +10,7 @@ import "../styles/Game.scss";
 import getDefaultBoard from "../utils/getDefaultBoard";
 import invertColor from "../utils/invertColor";
 import { colorWinner, gameStatus, playSide, playVs } from "../types";
+import getPiecesScores from "../utils/getPiecesScores";
 
 function Game() {
     const [movesHistory, setMovesHistory] = usePersistedState<boardPosition[]>(
@@ -36,6 +37,7 @@ function Game() {
     const title = "Chess " + gameStatus;
     const lastMove = movesHistory[actualMove].lastMove;
     const colorToPlay = invertColor(lastMove?.piece.type[0]);
+    const piecesScores = getPiecesScores(movesHistory, actualMove);
 
     useEffect(() => {
         if (lastMove?.checkMate) {
@@ -72,6 +74,7 @@ function Game() {
                 setPlaySide,
                 playVs,
                 setPlayVs,
+                piecesScores,
             }}
         >
             <div className="game">

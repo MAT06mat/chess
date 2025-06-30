@@ -1,7 +1,7 @@
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import useGameContext from "../../../hooks/useGameContext";
-import CapturedPieces from "../../Components/CapturedPieces";
+import CapturedPiecesContainer from "../../Components/CapturedPieces";
 import PanelMovesList from "../Components/PanelMovesList";
 import GreyButton from "../../Components/GreyButton";
 
@@ -18,7 +18,7 @@ function GameEndPanel() {
     return (
         <>
             <div className="board-panel-content">
-                <CapturedPieces />
+                <CapturedPiecesContainer />
                 <PanelMovesList />
             </div>
             <div className="board-panel-footer">

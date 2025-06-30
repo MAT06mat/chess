@@ -1,6 +1,12 @@
 import React, { createContext } from "react";
 import boardPosition from "../types/boardPosition";
-import { colorWinner, gameStatus, playSide, playVs } from "../types";
+import {
+    colorWinner,
+    gameStatus,
+    piecesScores,
+    playSide,
+    playVs,
+} from "../types";
 
 type GameContextType = {
     movesHistory: boardPosition[];
@@ -19,6 +25,7 @@ type GameContextType = {
     setPlaySide: React.Dispatch<React.SetStateAction<playSide>>;
     playVs: playVs;
     setPlayVs: React.Dispatch<React.SetStateAction<playVs>>;
+    piecesScores: piecesScores;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);
