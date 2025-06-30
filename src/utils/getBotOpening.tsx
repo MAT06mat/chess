@@ -1,6 +1,9 @@
 import { completeMove } from "../types";
 import piece from "../types/piece";
 import getDefaultPieces from "./getDefaultPieces";
+import random from "random";
+
+const poisson = random.poisson();
 
 function getPiece(x: number, y: number): piece {
     return (
@@ -77,19 +80,8 @@ const openings: completeMove[] = [
 ];
 
 function getBotOpening(): completeMove {
-    let prob = 0;
-    let incr = 0.5;
-    const rand = Math.random();
-    let opening = openings[0];
-    openings.forEach((move) => {
-        prob += incr;
-        incr /= 2;
-        if (rand > prob) {
-            opening = move;
-        }
-    });
-
-    return opening;
+    const openingIndex = poisson();
+    return openings[openingIndex] || openings[0];
 }
 
 export default getBotOpening;

@@ -6,6 +6,7 @@ import getFen from "../utils/getFen";
 import useCallbackRegisterMove from "./useCallbackRegisterMove";
 import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
+import random from "random";
 
 function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
     const { invertedColor, colorToPlay, movesHistory, actualMove, gameStatus } =
@@ -25,7 +26,7 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
                 calculateFenRef.current = null;
                 registerMove(move, pieces);
             }
-        }, (Math.random() + 1) * 500);
+        }, random.int(500, 1000));
     }
 
     function playRandomMove(fen: string) {
@@ -37,11 +38,11 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
             )
         );
 
-        const piece = Math.floor(moves.size * Math.random());
-        const [pieceId, pieceMoves] = [...moves.entries()][piece];
+        const pieceIndex = random.int(0, moves.size - 1);
+        const [pieceId, pieceMoves] = [...moves.entries()][pieceIndex];
         const selectedPiece = pieces.find((p) => p.id === pieceId);
         if (selectedPiece === undefined) return;
-        const move = pieceMoves[Math.floor(pieceMoves.length * Math.random())];
+        const move = pieceMoves[random.int(0, pieceMoves.length - 1)];
 
         const completeMove = getCompleteMove(move, selectedPiece);
 

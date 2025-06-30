@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import useGameContext from "./useGameContext";
 import playSound from "../utils/playSound";
 import useCallbackResetChessBoard from "./useCallbackResetChessBoard";
+import random from "random";
 
 function useCallbackStartGame() {
     const { playSide, setInvertedColor, setGameStatus, playVs } =
@@ -11,7 +12,7 @@ function useCallbackStartGame() {
 
     return useCallback(() => {
         if (playSide === "random") {
-            setInvertedColor(Math.random() > 0.5);
+            setInvertedColor(random.boolean());
         }
         resetChessBoard();
         if (playVs === "friend") {
