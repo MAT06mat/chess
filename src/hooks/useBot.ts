@@ -11,7 +11,7 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
     const { invertedColor, colorToPlay, movesHistory, actualMove, gameStatus } =
         useGameContext();
 
-    const calculateMove = useRef<string | null>(null);
+    const calculateFenRef = useRef<string | null>(null);
     const validMovesRef = useRef(validMoves);
     const gameStatusRef = useRef(gameStatus);
     const pieces = movesHistory[actualMove].pieces;
@@ -19,17 +19,17 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
     function playMove(fen: string, move: completeMove) {
         setTimeout(() => {
             if (gameStatusRef.current !== "playingVsBot") {
-                calculateMove.current = null;
+                calculateFenRef.current = null;
             }
-            if (calculateMove.current === fen) {
-                calculateMove.current = null;
+            if (calculateFenRef.current === fen) {
+                calculateFenRef.current = null;
                 registerMove(move, pieces);
             }
         }, (Math.random() + 1) * 500);
     }
 
     function playRandomMove(fen: string) {
-        if (calculateMove.current === null) return;
+        console.error("Error while playing bot move. Playing random");
 
         const moves = new Map(
             Array.from(validMovesRef.current.entries()).filter(
@@ -51,15 +51,16 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
     const registerMove = useCallbackRegisterMove();
 
     useEffect(() => {
+        gameStatusRef.current = gameStatus;
         if (!useBot) return;
 
         if (colorToPlay === (invertedColor ? "w" : "b")) {
             validMovesRef.current = validMoves;
-            if (calculateMove.current !== null) return;
+            if (calculateFenRef.current !== null) return;
 
             const fen = getFen(movesHistory, colorToPlay, actualMove);
 
-            calculateMove.current = fen;
+            calculateFenRef.current = fen;
 
             if (movesHistory.length === 1) {
                 return playMove(fen, getBotOpening());
@@ -93,7 +94,7 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [calculateMove, validMoves]);
+    }, [calculateFenRef, validMoves, useBot, gameStatus]);
 }
 
 export default useBot;
