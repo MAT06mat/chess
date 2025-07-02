@@ -57,7 +57,7 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
 
     useEffect(() => {
         gameStatusRef.current = gameStatus;
-        if (!useBot) return;
+        if (!useBot || actualMove !== movesHistory.length - 1) return;
 
         if (colorToPlay === (invertedColor ? "w" : "b")) {
             validMovesRef.current = validMoves;
@@ -76,10 +76,10 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
             }).then((data) => {
                 if (data.type === "error") return playRandomMove(fen);
 
-                const fromX = "abcdefgh".indexOf(data.from[0]);
-                const fromY = data.from[1] - 1;
-                const toX = "abcdefgh".indexOf(data.to[0]);
-                const toY = data.to[1] - 1;
+                const fromX = data.fromNumeric[0] - 1;
+                const fromY = data.fromNumeric[1] - 1;
+                const toX = data.toNumeric[0] - 1;
+                const toY = data.toNumeric[1] - 1;
 
                 const selectedPiece = pieces.find(
                     (p) => p.x === fromX && p.y === fromY
