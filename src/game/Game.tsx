@@ -23,6 +23,10 @@ function Game() {
         "gameStatus",
         "modeSelection"
     );
+    const [gameReview, setGameReview] = usePersistedState<boolean>(
+        "gameReview",
+        false
+    );
     const [colorWinner, setColorWinner] = useState<colorWinner>(null);
     const [invertedColor, setInvertedColor] = usePersistedState(
         "invertedColor",
@@ -78,6 +82,8 @@ function Game() {
                 piecesScores,
                 resignPopupVisible,
                 setResignPopupVisible,
+                gameReview,
+                setGameReview,
             }}
         >
             <div className="game">

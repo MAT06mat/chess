@@ -1,13 +1,16 @@
+import { completeMove } from "../types";
 import boardPosition from "../types/boardPosition";
+import piece from "../types/piece";
 
 function getFen(
-    movesHistory: boardPosition[],
+    pieces: piece[],
+    completeMove: completeMove,
     colorToPlay: "w" | "b",
+    movesHistory: boardPosition[],
     actualMove: number
 ): string {
     let fen = "";
     let emptyCount = 0;
-    const pieces = movesHistory[actualMove].pieces;
 
     for (let row = 7; row >= 0; row--) {
         for (let col = 0; col < 8; col++) {
@@ -90,24 +93,26 @@ function getFen(
 
     let halfMoveClock = 0;
     let stopClock = false;
-    structuredClone(movesHistory)
-        .reverse()
-        .forEach((move) => {
-            if (
-                move.lastMove &&
-                move.lastMove.piece.type[1] !== "p" &&
-                !move.lastMove.capture &&
-                !stopClock
-            ) {
-                halfMoveClock++;
-            } else {
-                stopClock = true;
-            }
-        });
+    if (completeMove.piece.type[1] !== "p" && !completeMove.capture) {
+        structuredClone(movesHistory)
+            .reverse()
+            .forEach((move) => {
+                if (
+                    move.lastMove &&
+                    move.lastMove.piece.type[1] !== "p" &&
+                    !move.lastMove.capture &&
+                    !stopClock
+                ) {
+                    halfMoveClock++;
+                } else {
+                    stopClock = true;
+                }
+            });
+    }
 
-    fen += ` ${halfMoveClock}`;
+    fen += ` ${halfMoveClock + 1}`;
 
-    fen += " " + (Math.floor(actualMove / 2) + 1).toString();
+    fen += " " + (Math.floor((actualMove + 1) / 2) + 1).toString();
     return fen;
 }
 

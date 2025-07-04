@@ -1,10 +1,11 @@
 import { useCallback } from "react";
 import useGameContext from "./useGameContext";
 import piece from "../types/piece";
-import { completeMove } from "../types";
+import { completeMove, PostChessApiResponse } from "../types";
 import isCheck from "../utils/isCheck";
 import invertColor from "../utils/invertColor";
 import doMove from "../utils/moves/doMove";
+import getFen from "../utils/getFen";
 
 function useCallbackRegisterMove() {
     const {
@@ -17,17 +18,30 @@ function useCallbackRegisterMove() {
     } = useGameContext();
 
     return useCallback(
-        (completeMove: completeMove, pieces: piece[]) => {
+        (
+            completeMove: completeMove,
+            pieces: piece[],
+            chessApiData?: PostChessApiResponse
+        ) => {
             // Do the move
             pieces = doMove(completeMove, pieces);
 
             // Add the move to the history
             completeMove.check = isCheck(invertColor(colorToPlay), pieces);
+            const fen = getFen(
+                pieces,
+                completeMove,
+                invertColor(colorToPlay),
+                movesHistory,
+                actualMove
+            );
+            movesHistory[actualMove].chessApiData = chessApiData;
             setMovesHistory([
                 ...movesHistory.slice(0, actualMove + 1),
                 {
                     lastMove: completeMove,
                     pieces: pieces,
+                    fen: fen,
                 },
             ]);
             setActualMove((prev) => prev + 1);

@@ -2,11 +2,13 @@ import { ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     text?: string;
+    large?: boolean;
 }
 
-function GreenButton({ className = "", text, ...props }: Props) {
+function GreenButton({ className = "", large, text, ...props }: Props) {
+    const buttonClass = large ? "large-green-button" : "green-button";
     return (
-        <button className={"green-button " + className} {...props}>
+        <button className={buttonClass + " " + className} {...props}>
             {text}
         </button>
     );

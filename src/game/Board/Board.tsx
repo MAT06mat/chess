@@ -15,6 +15,7 @@ import getCompleteMove from "../../utils/moves/getCompleteMove";
 import useBot from "../../hooks/useBot";
 import BoardHighLight from "./BoardHighLight";
 import { CapturedPieces } from "../Components/CapturedPieces";
+import EvaluationBar from "./EvaluationBar";
 
 function Board() {
     const {
@@ -76,10 +77,7 @@ function Board() {
     // Pieces promotion
     useEffect(() => {
         if (!promotionBoxVisible && nextMove) {
-            const newPieces = structuredClone(pieces).map((piece) =>
-                piece.id === nextMove.toPiece?.id ? nextMove.toPiece : piece
-            );
-            registerMove(nextMove, newPieces);
+            registerMove(nextMove, pieces);
             setNextMove(null);
         }
     }, [promotionBoxVisible, nextMove, pieces, registerMove]);
@@ -153,56 +151,63 @@ function Board() {
                 color={invertedColor ? "b" : "w"}
                 onlyComputerScreen
             />
-            <div className="board" ref={boardRef} onClick={handleBoardClick}>
-                <BoardCoordinates />
-                <BoardHighLight
-                    selectedPiece={selectedPiece}
-                    lastMove={lastMove}
-                />
-                {selectedPiece
-                    ? displayMoves.map((move, index) => {
-                          return (
-                              <BoardInfo
-                                  className={
-                                      move.capture ? "capture-hint" : "hint"
-                                  }
-                                  borderWidth={
-                                      boardRef.current?.clientWidth
-                                          ? boardRef.current?.clientWidth *
-                                                0.011 +
-                                            "px"
-                                          : undefined
-                                  }
-                                  key={index}
-                                  x={move.x + selectedPiece.x}
-                                  y={move.y + selectedPiece.y}
-                              />
-                          );
-                      })
-                    : null}
-                {pieces.map((piece) => (
-                    <Piece
-                        key={invertedColor ? piece.id + 64 : piece.id}
-                        piece={piece}
-                        onPieceClick={handlePieceClick}
+            <div className="chessboard-layout">
+                <EvaluationBar />
+                <div
+                    className="board"
+                    ref={boardRef}
+                    onClick={handleBoardClick}
+                >
+                    <BoardCoordinates />
+                    <BoardHighLight
+                        selectedPiece={selectedPiece}
+                        lastMove={lastMove}
                     />
-                ))}
-                {promotionBoxVisible ? (
-                    <>
-                        <div
-                            ref={promotionCloseRef}
-                            className="promotion-box-close"
+                    {selectedPiece
+                        ? displayMoves.map((move, index) => {
+                              return (
+                                  <BoardInfo
+                                      className={
+                                          move.capture ? "capture-hint" : "hint"
+                                      }
+                                      borderWidth={
+                                          boardRef.current?.clientWidth
+                                              ? boardRef.current?.clientWidth *
+                                                    0.011 +
+                                                "px"
+                                              : undefined
+                                      }
+                                      key={index}
+                                      x={move.x + selectedPiece.x}
+                                      y={move.y + selectedPiece.y}
+                                  />
+                              );
+                          })
+                        : null}
+                    {pieces.map((piece) => (
+                        <Piece
+                            key={invertedColor ? piece.id + 64 : piece.id}
+                            piece={piece}
+                            onPieceClick={handlePieceClick}
                         />
-                        <PromotionBox
-                            x={nextMove?.toX}
-                            y={nextMove?.toY}
-                            setPromotionBoxVisible={setPromotionBoxVisible}
-                            setNextMove={setNextMove}
-                            nextMove={nextMove}
-                        />
-                    </>
-                ) : null}
-                <WinnerPopup />
+                    ))}
+                    {promotionBoxVisible ? (
+                        <>
+                            <div
+                                ref={promotionCloseRef}
+                                className="promotion-box-close"
+                            />
+                            <PromotionBox
+                                x={nextMove?.toX}
+                                y={nextMove?.toY}
+                                setPromotionBoxVisible={setPromotionBoxVisible}
+                                setNextMove={setNextMove}
+                                nextMove={nextMove}
+                            />
+                        </>
+                    ) : null}
+                    <WinnerPopup />
+                </div>
             </div>
             <CapturedPieces
                 color={invertedColor ? "w" : "b"}

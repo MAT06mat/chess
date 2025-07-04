@@ -1,5 +1,7 @@
+import ArrowChevronEnd from "../../../assets/svg/ArrowChevronEnd";
 import ArrowChevronLeft from "../../../assets/svg/ArrowChevronLeft";
 import ArrowChevronRight from "../../../assets/svg/ArrowChevronRight";
+import ArrowChevronStart from "../../../assets/svg/ArrowChevronStart";
 import ArrowSpinReset from "../../../assets/svg/ArrowSpinReset";
 import ArrowTriangleSwooshLeft from "../../../assets/svg/ArrowTriangleSwooshLeft";
 import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
@@ -12,11 +14,21 @@ interface Props {
     resign?: boolean;
     cancel?: boolean;
     reset?: boolean;
+    start?: boolean;
     undo?: boolean;
     redo?: boolean;
+    end?: boolean;
 }
 
-function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
+function BoardActions({
+    resign,
+    cancel,
+    reset,
+    start,
+    undo,
+    redo,
+    end,
+}: Props) {
     const {
         movesHistory,
         setMovesHistory,
@@ -60,12 +72,20 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
         setMovesHistory(newHistory);
     }
 
+    function goToStartChessBoard() {
+        setActualMove(0);
+    }
+
     function undoChessBoard() {
         setActualMove((prev) => prev - 1);
     }
 
     function redoChessBoard() {
         setActualMove((prev) => prev + 1);
+    }
+
+    function goToEndChessBoard() {
+        setActualMove(movesHistory.length - 1);
     }
 
     return (
@@ -85,6 +105,14 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
                     <ArrowSpinReset />
                 </GreyButton>
             ) : null}
+            {start ? (
+                <GreyButton
+                    onClick={goToStartChessBoard}
+                    disabled={actualMove <= 0}
+                >
+                    <ArrowChevronStart />
+                </GreyButton>
+            ) : null}
             {undo ? (
                 <GreyButton onClick={undoChessBoard} disabled={actualMove <= 0}>
                     <ArrowChevronLeft />
@@ -96,6 +124,14 @@ function BoardActions({ resign, cancel, reset, undo, redo }: Props) {
                     disabled={actualMove >= movesHistory.length - 1}
                 >
                     <ArrowChevronRight />
+                </GreyButton>
+            ) : null}
+            {end ? (
+                <GreyButton
+                    onClick={goToEndChessBoard}
+                    disabled={actualMove >= movesHistory.length - 1}
+                >
+                    <ArrowChevronEnd />
                 </GreyButton>
             ) : null}
         </>

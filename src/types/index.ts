@@ -6,3 +6,4 @@ export * from "./gameStatus";
 export * from "./playVs";
 export * from "./playSide";
 export * from "./piecesScore";
+export * from "./PostChessApi";

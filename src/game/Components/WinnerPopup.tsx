@@ -8,8 +8,15 @@ import GreenButton from "./GreenButton";
 import GreyButton from "./GreyButton";
 
 function WinnerPopup() {
-    const { colorWinner, invertedColor, playVs, setGameStatus } =
-        useGameContext();
+    const {
+        colorWinner,
+        invertedColor,
+        playVs,
+        setGameStatus,
+        setGameReview,
+        setActualMove,
+        gameReview,
+    } = useGameContext();
     const [visible, setVisible] = useState(true);
     const resetChessBoard = useCallbackResetChessBoard();
     const startGame = useCallbackStartGame();
@@ -33,7 +40,9 @@ function WinnerPopup() {
         setVisible(false);
     }
 
-    function gameReview() {
+    function runGameReview() {
+        setGameReview(true);
+        setActualMove(0);
         setVisible(false);
     }
 
@@ -57,15 +66,15 @@ function WinnerPopup() {
     return (
         <Popup
             className="winner-popup"
-            visible={colorWinner !== null && visible}
+            visible={colorWinner !== null && visible && !gameReview}
             onClick={handleClick}
         >
             <div className="winner-popup-title">{title}</div>
             <div className="winner-popup-buttons">
-                <GreenButton text="Rematch" onClick={rematch} />
+                <GreenButton text="Game Review" large onClick={runGameReview} />
                 <div className="rows-split">
                     <GreyButton text="New game" light onClick={newGame} />
-                    <GreyButton text="Game Review" light onClick={gameReview} />
+                    <GreyButton text="Rematch" light onClick={rematch} />
                 </div>
             </div>
         </Popup>

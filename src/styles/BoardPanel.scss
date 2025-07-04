@@ -31,6 +31,20 @@
         }
     }
 
+    &.gameEnd {
+        .board-panel-footer:has(.green-button) {
+            flex-direction: column;
+            height: 9.4rem;
+            .green-button {
+                font-size: 1.1rem;
+            }
+
+            div {
+                height: 100%;
+            }
+        }
+    }
+
     .board-panel-footer {
         background-color: #00000026;
         width: 100%;

@@ -38,6 +38,17 @@ function doSpecialMove(move: completeMove, pieces: piece[]): piece[] {
                     p.x === move.piece.x + x
                 )
         );
+    } else if (move.special === "promotion") {
+        pieces = pieces.map((piece) => {
+            if (piece.id === move.toPiece?.id) {
+                return {
+                    ...piece,
+                    type: move.toPiece.type,
+                    hasMoved: true,
+                };
+            }
+            return piece;
+        });
     }
 
     return pieces;

@@ -28,6 +28,8 @@ type GameContextType = {
     piecesScores: piecesScores;
     resignPopupVisible: boolean;
     setResignPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    gameReview: boolean;
+    setGameReview: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

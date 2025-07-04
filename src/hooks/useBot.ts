@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import useGameContext from "./useGameContext";
-import { completeMove, move } from "../types";
+import { completeMove, move, PostChessApiResponse } from "../types";
 import postChessApi from "../utils/postChessApi";
-import getFen from "../utils/getFen";
 import useCallbackRegisterMove from "./useCallbackRegisterMove";
 import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
@@ -21,14 +20,20 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
         calculateFenRef.current = null;
     }
 
-    function playMove(fen: string, move: completeMove) {
+    const registerMove = useCallbackRegisterMove();
+
+    function playMove(
+        fen: string,
+        move: completeMove,
+        postChessApiResponse?: PostChessApiResponse
+    ) {
         setTimeout(() => {
             if (gameStatusRef.current !== "playingVsBot") {
                 calculateFenRef.current = null;
             }
             if (calculateFenRef.current === fen) {
                 calculateFenRef.current = null;
-                registerMove(move, pieces);
+                registerMove(move, pieces, postChessApiResponse);
             }
         }, random.int(500, 1000));
     }
@@ -53,8 +58,6 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
         playMove(fen, completeMove);
     }
 
-    const registerMove = useCallbackRegisterMove();
-
     useEffect(() => {
         gameStatusRef.current = gameStatus;
         if (!useBot || actualMove !== movesHistory.length - 1) return;
@@ -63,7 +66,7 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
             validMovesRef.current = validMoves;
             if (calculateFenRef.current !== null) return;
 
-            const fen = getFen(movesHistory, colorToPlay, actualMove);
+            const fen = movesHistory[actualMove].fen;
 
             calculateFenRef.current = fen;
 
@@ -95,7 +98,23 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
                 if (move === undefined) return playRandomMove(fen);
 
                 const completeMove = getCompleteMove(move, selectedPiece);
-                playMove(fen, completeMove);
+
+                if (data.isCapture) {
+                    completeMove.capture = true;
+                }
+                if (data.isCastling) {
+                    completeMove.special = "castling";
+                }
+                if (data.isPromotion) {
+                    completeMove.special = "promotion";
+                    completeMove.toPiece = {
+                        type: selectedPiece.type[0] + data.promotion,
+                        x: toX,
+                        y: toY,
+                        id: selectedPiece.id,
+                    };
+                }
+                playMove(fen, completeMove, data);
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -34,8 +34,14 @@ function createPairMoves(arr: string[], actualMove: number) {
 }
 
 function PanelMovesList() {
-    const { setActualMove, actualMove, movesHistory, colorWinner, gameStatus } =
-        useGameContext();
+    const {
+        setActualMove,
+        actualMove,
+        movesHistory,
+        colorWinner,
+        gameStatus,
+        gameReview,
+    } = useGameContext();
 
     const isGameEnd = gameStatus === "gameEnd";
 
@@ -115,8 +121,13 @@ function PanelMovesList() {
             <div className="game-controler mobile-screen">
                 <BoardActions redo />
             </div>
-            <div className="game-controlers computer-screen">
-                <BoardActions undo redo />
+            <div
+                className={
+                    "game-controlers computer-screen" +
+                    (gameReview ? " game-review" : "")
+                }
+            >
+                <BoardActions start={isGameEnd} undo redo end={isGameEnd} />
             </div>
         </div>
     );

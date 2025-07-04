@@ -20,15 +20,6 @@
         justify-content: center;
         gap: 2rem;
 
-        button:last-child {
-            background-color: #81b64c;
-            color: #fff;
-
-            &:hover {
-                background-color: rgba(163, 209, 96);
-            }
-        }
-
         button {
             border-radius: 0.4rem;
             padding: 0.25rem 1rem;

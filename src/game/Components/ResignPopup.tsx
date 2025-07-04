@@ -4,6 +4,7 @@ import "../../styles/ResignPopup.scss";
 import useGameContext from "../../hooks/useGameContext";
 import playSound from "../../utils/playSound";
 import invertColor from "../../utils/invertColor";
+import GreenButton from "./GreenButton";
 
 function ResignPopup() {
     const {
@@ -43,7 +44,7 @@ function ResignPopup() {
             <div className="resign-popup-buttons">
                 <div className="rows-split">
                     <GreyButton text="Cancel" onClick={cancel} />
-                    <GreyButton text="Yes" onClick={resign} />
+                    <GreenButton text="Yes" onClick={resign} />
                 </div>
             </div>
         </Popup>

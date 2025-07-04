@@ -75,7 +75,7 @@ function ModeSelectionPanel() {
                 </div>
             </div>
             <div className="board-panel-footer">
-                <GreenButton text="Play" onClick={startGame} />
+                <GreenButton text="Play" large onClick={startGame} />
             </div>
         </>
     );

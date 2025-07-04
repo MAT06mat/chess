@@ -29,27 +29,46 @@
     width: 100%;
 }
 
-.green-button {
-    background-color: #81b64c !important;
+.large-green-button,
+.green-button,
+.grey-button {
     border: 0;
     border-radius: 0.5rem;
-    box-shadow: 0 0 0.8rem transparent, 0 0 1.6rem transparent,
-        inset 0 -0.8rem 2.4rem transparent,
-        inset 0 calc(0.3rem * -1) 0 0 #45753c;
-    color: #fff;
     cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: 800;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 2.4rem 0.4rem;
-    text-shadow: 0 0.1rem 0 rgba(0, 0, 0, 0.2);
-    transition: all 0.1s ease-out;
+    font-weight: 600;
     user-select: none;
+    transition: all 0.2s ease;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+}
+
+.green-button,
+.large-green-button {
+    background-color: #81b64c;
+    text-shadow: 0 0.1rem 0 #00000033;
 
     &:hover {
         background-color: #a3d160;
+    }
+}
+
+.large-green-button {
+    box-shadow: 0 0 0.8rem transparent, 0 0 1.6rem transparent,
+        inset 0 -0.8rem 2.4rem transparent,
+        inset 0 calc(0.3rem * -1) 0 0 #45753c;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 0 2.4rem 0.4rem;
+    transition: all 0.1s ease-out;
+
+    &:hover {
         box-shadow: 0 0 0.8rem rgba(93, 153, 72, 0.1),
             0 0 1.6rem rgba(93, 153, 72, 0.1),
             inset 0 -0.8rem 2.4rem rgba(69, 117, 60, 0.4),
@@ -59,17 +78,8 @@
 
 .grey-button {
     background-color: #ffffff1a;
-    border: 0;
-    border-radius: 0.5rem;
     fill: #ffffffb8;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
     color: #ffffffb0;
-    user-select: none;
 
     &.light-grey {
         background-color: #ffffff15;
@@ -79,15 +89,11 @@
         background-color: #ffffff24;
     }
 
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
+    &:disabled:hover {
+        background-color: #ffffff1a;
 
-        &:hover {
-            background-color: #ffffff1a;
-            &.light-grey {
-                background-color: #ffffff15;
-            }
+        &.light-grey {
+            background-color: #ffffff15;
         }
     }
 }
