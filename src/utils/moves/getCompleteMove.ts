@@ -2,7 +2,7 @@ import { completeMove, move } from "../../types";
 import piece from "../../types/piece";
 import getChessNotation from "../getChessNotation";
 
-function getCompleteMove(move: move, selectedPiece: piece): completeMove {
+function getcompleteMove(move: move, selectedPiece: piece): completeMove {
     const completeMove = {
         fromX: selectedPiece.x,
         fromY: selectedPiece.y,
@@ -20,4 +20,4 @@ function getCompleteMove(move: move, selectedPiece: piece): completeMove {
     return completeMove;
 }
 
-export default getCompleteMove;
+export default getcompleteMove;

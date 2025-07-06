@@ -17,6 +17,7 @@ import BoardHighLight from "./BoardHighLight";
 import { CapturedPieces } from "../Components/CapturedPieces";
 import EvaluationBar from "./EvaluationBar";
 import Arrows from "./Arrows";
+import getChessNotation from "../../utils/getChessNotation";
 
 function Board() {
     const {
@@ -61,6 +62,7 @@ function Board() {
             if (lastMove?.check) {
                 setColorWinner(invertColor(colorToPlay));
                 lastMove.checkMate = true;
+                lastMove.san = getChessNotation(lastMove);
             } else {
                 setColorWinner("s");
             }

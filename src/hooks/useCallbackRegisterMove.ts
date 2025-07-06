@@ -6,6 +6,7 @@ import isCheck from "../utils/moves/isCheck";
 import invertColor from "../utils/invertColor";
 import doMove from "../utils/moves/doMove";
 import getFen from "../utils/getFen";
+import getChessNotation from "../utils/getChessNotation";
 
 function useCallbackRegisterMove() {
     const {
@@ -28,6 +29,7 @@ function useCallbackRegisterMove() {
 
             // Add the move to the history
             completeMove.check = isCheck(invertColor(colorToPlay), pieces);
+            completeMove.san = getChessNotation(completeMove);
             const fen = getFen(
                 pieces,
                 completeMove,
