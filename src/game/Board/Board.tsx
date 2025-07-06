@@ -16,6 +16,7 @@ import useBot from "../../hooks/useBot";
 import BoardHighLight from "./BoardHighLight";
 import { CapturedPieces } from "../Components/CapturedPieces";
 import EvaluationBar from "./EvaluationBar";
+import Arrows from "./Arrows";
 
 function Board() {
     const {
@@ -206,6 +207,7 @@ function Board() {
                             />
                         </>
                     ) : null}
+                    <Arrows />
                     <WinnerPopup />
                 </div>
             </div>

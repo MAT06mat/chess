@@ -27,7 +27,10 @@ function Game() {
         "gameReview",
         false
     );
-    const [colorWinner, setColorWinner] = useState<colorWinner>(null);
+    const [colorWinner, setColorWinner] = usePersistedState<colorWinner>(
+        "colorWinner",
+        null
+    );
     const [invertedColor, setInvertedColor] = usePersistedState(
         "invertedColor",
         false

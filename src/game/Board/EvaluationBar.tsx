@@ -4,13 +4,12 @@ import usePositionReview from "../../hooks/usePositionReview";
 import boardPosition from "../../types/boardPosition";
 import "../../styles/EvaluationBar.scss";
 
-function evaluationToPercentage(score: number | undefined): null | number {
-    if (score === undefined) return null;
-    if (score >= 100) return 1;
+function evaluationToPercentage(score: number): number {
+    if (score >= 100) return 100;
     if (score <= -100) return 0;
     const clamped = Math.max(-10, Math.min(10, score));
     const percentage = 1 / (1 + Math.pow(10, -clamped * 0.25));
-    return percentage;
+    return percentage * 100;
 }
 
 function EvaluationBar() {
@@ -40,9 +39,8 @@ function EvaluationBar() {
                 setPercentage(0);
             }
         } else {
-            const p = evaluationToPercentage(chessApiData?.eval);
-            if (p !== null) {
-                setPercentage(p * 100);
+            if (chessApiData?.eval) {
+                setPercentage(evaluationToPercentage(chessApiData.eval));
             }
         }
 
