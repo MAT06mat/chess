@@ -1,8 +1,8 @@
 import { completeMove } from "../../types";
 import piece from "../../types/piece";
 import getPieceMoves from "./getPieceMoves";
-import isCheck from "../isCheck";
-import isPosInBoard from "../isPosInBoard";
+import isCheck from "./isCheck";
+import isPosInBoard from "./isPosInBoard";
 
 function getPieceValidMoves(
     selectedPiece: piece,

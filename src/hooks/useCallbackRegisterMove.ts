@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import useGameContext from "./useGameContext";
 import piece from "../types/piece";
 import { completeMove, PostChessApiResponse } from "../types";
-import isCheck from "../utils/isCheck";
+import isCheck from "../utils/moves/isCheck";
 import invertColor from "../utils/invertColor";
 import doMove from "../utils/moves/doMove";
 import getFen from "../utils/getFen";

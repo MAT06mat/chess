@@ -8,28 +8,31 @@ import {
     playVs,
 } from "../types";
 
+type Dispatch<T> = React.Dispatch<React.SetStateAction<T>>;
+
 type GameContextType = {
     movesHistory: boardPosition[];
-    setMovesHistory: React.Dispatch<React.SetStateAction<boardPosition[]>>;
+    setMovesHistory: Dispatch<boardPosition[]>;
     actualMove: number;
-    setActualMove: React.Dispatch<React.SetStateAction<number>>;
+    setActualMove: Dispatch<number>;
     title: string;
     colorToPlay: "w" | "b";
     colorWinner: colorWinner;
-    setColorWinner: React.Dispatch<React.SetStateAction<colorWinner>>;
+    setColorWinner: Dispatch<colorWinner>;
     invertedColor: boolean;
-    setInvertedColor: React.Dispatch<React.SetStateAction<boolean>>;
+    setInvertedColor: Dispatch<boolean>;
     gameStatus: gameStatus;
-    setGameStatus: React.Dispatch<React.SetStateAction<gameStatus>>;
+    setGameStatus: Dispatch<gameStatus>;
     playSide: playSide;
-    setPlaySide: React.Dispatch<React.SetStateAction<playSide>>;
+    setPlaySide: Dispatch<playSide>;
     playVs: playVs;
-    setPlayVs: React.Dispatch<React.SetStateAction<playVs>>;
+    setPlayVs: Dispatch<playVs>;
     piecesScores: piecesScores;
     resignPopupVisible: boolean;
-    setResignPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setResignPopupVisible: Dispatch<boolean>;
     gameReview: boolean;
-    setGameReview: React.Dispatch<React.SetStateAction<boolean>>;
+    setGameReview: Dispatch<boolean>;
 };
 
+export type { GameContextType };
 export const GameContext = createContext<GameContextType | null>(null);

@@ -3,13 +3,13 @@ import useGameContext from "../../hooks/useGameContext";
 const squareSize = 12.5;
 const halfSquare = squareSize / 2;
 
-function positionToCoords(pos: string, invertedColor: boolean) {
+function positionToCoords(pos: string, invertedColor?: boolean) {
     const x = (pos.charCodeAt(0) - "a".charCodeAt(0)) * squareSize + halfSquare;
     const y = 100 - ((parseInt(pos[1], 10) - 1) * squareSize + halfSquare);
-    if (!invertedColor) {
-        return [x, y];
+    if (invertedColor) {
+        return [100 - x, 100 - y];
     }
-    return [100 - x, 100 - y];
+    return [x, y];
 }
 
 interface ArrowProps {
