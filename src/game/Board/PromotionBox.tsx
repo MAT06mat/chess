@@ -1,13 +1,12 @@
 import useGameContext from "../../hooks/useGameContext";
-import { completeMove } from "../../types";
-import { piece } from "./Piece";
+import { CompleteMove, Piece, PieceSymbol } from "../../types";
 
 interface PromotionProps {
     x?: number;
     y?: number;
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setNextMove: React.Dispatch<React.SetStateAction<completeMove | null>>;
-    nextMove: completeMove | null;
+    setNextMove: React.Dispatch<React.SetStateAction<CompleteMove | null>>;
+    nextMove: CompleteMove | null;
 }
 
 function PromotionBox({
@@ -27,10 +26,13 @@ function PromotionBox({
     }
 
     function handleClick(event: React.MouseEvent) {
-        const pieceType = event.currentTarget.className.split(" ")[2];
+        const pieceComplete = event.currentTarget.className.split(" ")[2];
+        const pieceColor = pieceComplete[0];
+        const pieceType = pieceComplete[1];
         if (!nextMove) return;
-        const newPiece: piece = {
-            type: pieceType,
+        const newPiece: Piece = {
+            type: pieceType as PieceSymbol,
+            color: pieceColor as "w" | "b",
             x: nextMove.fromX,
             y: nextMove.fromY,
             id: nextMove.piece.id,
@@ -45,7 +47,7 @@ function PromotionBox({
         setPromotionBoxVisible(false);
     }
 
-    const color = nextMove.piece.type[0];
+    const color = nextMove.piece.color;
 
     const style = invertedColor
         ? {

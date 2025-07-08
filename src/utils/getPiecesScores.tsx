@@ -1,9 +1,7 @@
-import { piecesScores } from "../types";
-import boardPosition from "../types/boardPosition";
-import piece from "../types/piece";
+import { PiecesScores, Piece, BoardPosition } from "../types";
 import getDefaultPieces from "./getDefaultPieces";
 
-function countPieces(pieces: piece[]) {
+function countPieces(pieces: Piece[]) {
     const piecesNumber = new Map();
     for (let i = 0; i < pieces.length; i += 1) {
         let n = 0;
@@ -17,7 +15,7 @@ function countPieces(pieces: piece[]) {
 
 function countCapturedPieces(
     pieces: Map<string, number>,
-    defaultBoard: piece[]
+    defaultBoard: Piece[]
 ) {
     const capturedPieces: [string, number][] = [];
     const defaultBoardPieces = countPieces(defaultBoard);
@@ -83,9 +81,9 @@ const customSort = (a: [string, number], b: [string, number]) => {
 };
 
 function getPiecesScores(
-    movesHistory: boardPosition[],
+    movesHistory: BoardPosition[],
     actualMove: number
-): piecesScores {
+): PiecesScores {
     const actualBoard = movesHistory[actualMove].pieces;
     const piecesNumber = countPieces(actualBoard);
     const capturedPiecesNumber = countCapturedPieces(

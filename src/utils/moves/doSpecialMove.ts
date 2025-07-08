@@ -1,26 +1,25 @@
-import { completeMove } from "../../types";
-import piece from "../../types/piece";
+import { CompleteMove, Piece } from "../../types";
 
 /**
  * Handles special moves like castling for a piece based on the valid move provided.
  * If the move is castling, it moves the rook to the appropriate position.
  * If the move is en passant, it removes the captured pawn.
  *
- * @param {completeMove} move - The valid move object containing all informations.
- * @param {piece[]} pieces - The current list of pieces on the board.
- * @returns {piece[]} - This function does not return anything, it modifies the pieces array directly.
+ * @param {CompleteMove} move - The valid move object containing all informations.
+ * @param {Piece[]} pieces - The current list of pieces on the board.
+ * @returns {Piece[]} - This function does not return anything, it modifies the pieces array directly.
  */
-function doSpecialMove(move: completeMove, pieces: piece[]): piece[] {
+function doSpecialMove(move: CompleteMove, pieces: Piece[]): Piece[] {
     const x = move.toX - move.fromX;
-    if (move.special === "castling" && move.piece.type[1] === "k") {
+    if (move.special === "castling" && move.piece.type === "k") {
         const rookX = x === 2 ? 7 : x === -2 ? 0 : null;
         const newRookX = x === 2 ? 5 : x === -2 ? 3 : null;
         if (rookX !== null && newRookX !== null) {
             // Move the rook
             const rook = pieces.find(
                 (p) =>
-                    p.type[1] === "r" &&
-                    p.type[0] === move.piece.type[0] &&
+                    p.type === "r" &&
+                    p.color === move.piece.color &&
                     p.x === rookX
             );
             if (rook) {
@@ -33,7 +32,7 @@ function doSpecialMove(move: completeMove, pieces: piece[]): piece[] {
         pieces = pieces.filter(
             (p) =>
                 !(
-                    p.type[1] === "p" &&
+                    p.type === "p" &&
                     p.y === move.piece.y &&
                     p.x === move.piece.x + x
                 )

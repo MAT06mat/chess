@@ -1,7 +1,7 @@
-import boardPosition from "../types/boardPosition";
+import { BoardPosition } from "../types";
 import getDefaultPieces from "./getDefaultPieces";
 
-function getDefaultBoard(): boardPosition {
+function getDefaultBoard(): BoardPosition {
     return {
         pieces: getDefaultPieces(),
         lastMove: null,

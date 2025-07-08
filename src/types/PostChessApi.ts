@@ -1,3 +1,5 @@
+import { PieceSymbol } from "./Piece";
+
 type PostChessApiData = {
     fen: string;
     variants?: number; // max: 5, default: 1,
@@ -27,10 +29,10 @@ type PostChessApiResponse = {
     lan: string;
     turn: string;
     color: string;
-    piece: string;
+    piece: PieceSymbol;
     flags: string;
-    promotion: boolean | string;
-    captured: boolean | string;
+    promotion: false | PieceSymbol;
+    captured: false | PieceSymbol;
     isCapture: boolean;
     isCastling: boolean;
     isPromotion: boolean;

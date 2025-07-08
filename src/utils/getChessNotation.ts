@@ -1,4 +1,4 @@
-import { completeMove } from "../types";
+import { CompleteMove } from "../types";
 
 interface piecesNotationInterface {
     p: string;
@@ -25,8 +25,8 @@ function getCol(n: number) {
     return String.fromCharCode(97 + n);
 }
 
-function getChessNotation(move: completeMove) {
-    const p = move.piece.type[1];
+function getChessNotation(move: CompleteMove) {
+    const p = move.piece.type;
     const x = move.toX;
     const y = move.toY + 1;
     const capture = move.capture ? "x" : "";
@@ -42,7 +42,7 @@ function getChessNotation(move: completeMove) {
     if (move.special === "enPassant") {
         special = " e.p.";
     } else if (move.special === "promotion" && move.toPiece) {
-        pro = "=" + getPiece(move.toPiece.type[1]);
+        pro = "=" + getPiece(move.toPiece.type);
     } else if (move.special === "castling") {
         if (x === 6) return "0-0" + check;
         return "0-0-0" + check;

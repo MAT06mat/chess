@@ -1,14 +1,16 @@
-import piece from "../../types/piece";
+import { Piece } from "../../types";
 import getPieceValidMoves from "./getPieceValidMoves";
 
 function isCheck(
     color: string,
-    pieces: piece[],
+    pieces: Piece[],
     relativeX?: number[]
 ): boolean {
-    const king = pieces.find((piece) => piece.type === color + "k");
+    const king = pieces.find(
+        (piece) => piece.type === "k" && piece.color === color
+    );
     if (!king) return false;
-    const kingInit: piece = { ...king };
+    const kingInit: Piece = { ...king };
 
     if (!relativeX) {
         relativeX = [0];
@@ -17,7 +19,7 @@ function isCheck(
     const result = relativeX.some((n) => {
         king.x = kingInit.x + n;
         return pieces.some((piece) => {
-            if (piece.type[0] === color) return false;
+            if (piece.color === color) return false;
 
             const moveX = king.x - piece.x;
             const moveY = king.y - piece.y;

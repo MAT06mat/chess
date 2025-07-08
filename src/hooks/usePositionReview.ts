@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import postChessApi from "../utils/postChessApi";
 import useGameContext from "./useGameContext";
-import boardPosition from "../types/boardPosition";
+import { BoardPosition } from "../types";
 
 function usePositionReview(
     updatePercentage: (
         actualMove: number,
         colorWinner: string | null,
-        movesHistory: boardPosition[]
+        movesHistory: BoardPosition[]
     ) => void
 ) {
     const { movesHistory, gameStatus, actualMove, gameReview, colorWinner } =

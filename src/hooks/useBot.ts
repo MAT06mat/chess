@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import useGameContext from "./useGameContext";
-import { completeMove, move, PostChessApiResponse } from "../types";
+import { CompleteMove, RelativeMove, PostChessApiResponse } from "../types";
 import postChessApi from "../utils/postChessApi";
 import useCallbackRegisterMove from "./useCallbackRegisterMove";
 import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
 import random from "random";
 
-function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
+function useBot(validMoves: Map<number, RelativeMove[]>, useBot: boolean) {
     const { invertedColor, colorToPlay, movesHistory, actualMove, gameStatus } =
         useGameContext();
 
@@ -24,7 +24,7 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
 
     function playMove(
         fen: string,
-        move: completeMove,
+        move: CompleteMove,
         postChessApiResponse?: PostChessApiResponse
     ) {
         setTimeout(() => {
@@ -105,10 +105,11 @@ function useBot(validMoves: Map<number, move[]>, useBot: boolean) {
                 if (data.isCastling) {
                     completeMove.special = "castling";
                 }
-                if (data.isPromotion) {
+                if (data.isPromotion && data.promotion) {
                     completeMove.special = "promotion";
                     completeMove.toPiece = {
-                        type: selectedPiece.type[0] + data.promotion,
+                        type: data.promotion,
+                        color: selectedPiece.color,
                         x: toX,
                         y: toY,
                         id: selectedPiece.id,

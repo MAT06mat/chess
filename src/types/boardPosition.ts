@@ -1,12 +1,12 @@
-import { completeMove } from "./move";
-import piece from "./piece";
+import { CompleteMove } from "./Move";
+import { Piece } from "./Piece";
 import { PostChessApiResponse } from "./PostChessApi";
 
-interface boardPosition {
-    pieces: piece[];
-    lastMove: completeMove | null;
+interface BoardPosition {
+    pieces: Piece[];
+    lastMove: CompleteMove | null;
     fen: string;
     chessApiData?: PostChessApiResponse;
 }
 
-export default boardPosition;
+export type { BoardPosition };

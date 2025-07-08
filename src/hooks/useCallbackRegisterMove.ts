@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import useGameContext from "./useGameContext";
-import piece from "../types/piece";
-import { completeMove, PostChessApiResponse } from "../types";
+import { CompleteMove, Piece, PostChessApiResponse } from "../types";
 import isCheck from "../utils/moves/isCheck";
 import invertColor from "../utils/invertColor";
 import doMove from "../utils/moves/doMove";
@@ -20,8 +19,8 @@ function useCallbackRegisterMove() {
 
     return useCallback(
         (
-            completeMove: completeMove,
-            pieces: piece[],
+            completeMove: CompleteMove,
+            pieces: Piece[],
             chessApiData?: PostChessApiResponse
         ) => {
             // Do the move

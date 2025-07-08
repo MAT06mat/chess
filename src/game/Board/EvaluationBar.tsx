@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useGameContext from "../../hooks/useGameContext";
 import usePositionReview from "../../hooks/usePositionReview";
-import boardPosition from "../../types/boardPosition";
 import "../../styles/EvaluationBar.scss";
+import { BoardPosition } from "../../types";
 
 function evaluationToPercentage(score: number): number {
     if (score >= 100) return 100;
@@ -29,7 +29,7 @@ function EvaluationBar() {
     function updatePercentage(
         actualMove: number,
         colorWinner: string | null,
-        movesHistory: boardPosition[]
+        movesHistory: BoardPosition[]
     ) {
         const chessApiData = movesHistory[actualMove].chessApiData;
         if (actualMove === movesHistory.length - 1) {

@@ -1,5 +1,4 @@
-import { completeMove, move } from "../../types";
-import piece from "../../types/piece";
+import { CompleteMove, RelativeMove, Piece } from "../../types";
 import doMove from "./doMove";
 import getPieceValidMoves from "./getPieceValidMoves";
 import isCheck from "./isCheck";
@@ -7,9 +6,9 @@ import getCompleteMove from "./getCompleteMove";
 
 function getValidMoves(
     colorToPlay: "w" | "b" | "wb",
-    pieces: piece[],
-    lastMove: completeMove | null
-): [Map<number, move[]>, number] {
+    pieces: Piece[],
+    lastMove: CompleteMove | null
+): [Map<number, RelativeMove[]>, number] {
     let numberOfMove = 0;
     const map = new Map();
     if (colorToPlay === "wb") {
@@ -18,9 +17,7 @@ function getValidMoves(
         });
         return [map, 999];
     }
-    const piecesToPlay = pieces.filter(
-        (piece) => piece.type[0] === colorToPlay
-    );
+    const piecesToPlay = pieces.filter((piece) => piece.color === colorToPlay);
     piecesToPlay.forEach((piece) => {
         const validMoves = getPieceValidMoves(piece, pieces, lastMove);
 

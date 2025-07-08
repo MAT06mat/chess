@@ -1,3 +1,3 @@
-type playSide = "white" | "black" | "random";
+type PlaySide = "white" | "black" | "random";
 
-export type { playSide };
+export type { PlaySide };

@@ -1,18 +1,17 @@
-import { completeMove } from "../types";
-import piece from "../types/piece";
+import { CompleteMove, Piece } from "../types";
 import getDefaultPieces from "./getDefaultPieces";
 import random from "random";
 
 const poisson = random.poisson();
 
-function getPiece(x: number, y: number): piece {
+function getPiece(x: number, y: number): Piece {
     return (
         getDefaultPieces().find((p) => p.x === x && p.y === y) ||
         getDefaultPieces()[0]
     );
 }
 
-const openings: completeMove[] = [
+const openings: CompleteMove[] = [
     {
         fromX: 4,
         fromY: 1,
@@ -79,7 +78,7 @@ const openings: completeMove[] = [
     },
 ];
 
-function getBotOpening(): completeMove {
+function getBotOpening(): CompleteMove {
     const openingIndex = poisson();
     return openings[openingIndex] || openings[0];
 }

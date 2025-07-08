@@ -4,7 +4,7 @@ import Friends from "../../../assets/svg/Friends";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import useGameContext from "../../../hooks/useGameContext";
 import "../../../styles/ModeSelectionPanel.scss";
-import { playSide } from "../../../types";
+import { PlaySide } from "../../../types";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import GreenButton from "../../Components/GreenButton";
 import GreyButton from "../../Components/GreyButton";
@@ -17,7 +17,7 @@ function ModeSelectionPanel() {
 
     const startGame = useCallbackStartGame();
 
-    function colorIconClick(color: playSide) {
+    function colorIconClick(color: PlaySide) {
         setPlaySide(color);
         setInvertedColor(color === "black");
         resetChessBoard();

@@ -1,12 +1,10 @@
-import { completeMove } from "../types";
-import boardPosition from "../types/boardPosition";
-import piece from "../types/piece";
+import { CompleteMove, Piece, BoardPosition } from "../types";
 
 function getFen(
-    pieces: piece[],
-    completeMove: completeMove,
+    pieces: Piece[],
+    completeMove: CompleteMove,
     colorToPlay: "w" | "b",
-    movesHistory: boardPosition[],
+    movesHistory: BoardPosition[],
     actualMove: number
 ): string {
     let fen = "";
@@ -22,10 +20,10 @@ function getFen(
                     fen += emptyCount.toString();
                     emptyCount = 0;
                 }
-                if (piece.type[0] === "w") {
-                    fen += piece.type[1].toUpperCase();
+                if (piece.color === "w") {
+                    fen += piece.type.toUpperCase();
                 } else {
-                    fen += piece.type[1].toLowerCase();
+                    fen += piece.type.toLowerCase();
                 }
             }
         }
@@ -42,26 +40,50 @@ function getFen(
 
     let rights = "";
     pieces.forEach((piece) => {
-        if (piece.type === "wk" && !piece.hasMoved) {
+        if (piece.type === "k" && piece.color === "w" && !piece.hasMoved) {
             if (
-                pieces.some((p) => p.type === "wr" && !p.hasMoved && p.x === 7)
+                pieces.some(
+                    (p) =>
+                        p.type === "r" &&
+                        p.color === "w" &&
+                        !p.hasMoved &&
+                        p.x === 7
+                )
             ) {
                 rights += "K"; // White king-side castling
             }
             if (
-                pieces.some((p) => p.type === "wr" && !p.hasMoved && p.x === 0)
+                pieces.some(
+                    (p) =>
+                        p.type === "r" &&
+                        p.color === "w" &&
+                        !p.hasMoved &&
+                        p.x === 0
+                )
             ) {
                 rights += "Q"; // White queen-side castling
             }
         }
-        if (piece.type === "bk" && !piece.hasMoved) {
+        if (piece.type === "k" && piece.color === "b" && !piece.hasMoved) {
             if (
-                pieces.some((p) => p.type === "br" && !p.hasMoved && p.x === 7)
+                pieces.some(
+                    (p) =>
+                        p.type === "r" &&
+                        p.color === "b" &&
+                        !p.hasMoved &&
+                        p.x === 7
+                )
             ) {
                 rights += "k"; // Black king-side castling
             }
             if (
-                pieces.some((p) => p.type === "br" && !p.hasMoved && p.x === 0)
+                pieces.some(
+                    (p) =>
+                        p.type === "r" &&
+                        p.color === "b" &&
+                        !p.hasMoved &&
+                        p.x === 0
+                )
             ) {
                 rights += "q"; // Black queen-side castling
             }
@@ -75,7 +97,7 @@ function getFen(
     /*const lastMove = movesHistory[actualMove].lastMove;
     if (
         lastMove &&
-        lastMove.piece.type[1] === "p" &&
+        lastMove.piece.type === "p" &&
         Math.abs(lastMove.fromY - lastMove.toY) === 2
     ) {
         const targetX = lastMove.toX;
@@ -93,13 +115,13 @@ function getFen(
 
     let halfMoveClock = 0;
     let stopClock = false;
-    if (completeMove.piece.type[1] !== "p" && !completeMove.capture) {
+    if (completeMove.piece.type !== "p" && !completeMove.capture) {
         structuredClone(movesHistory)
             .reverse()
             .forEach((move) => {
                 if (
                     move.lastMove &&
-                    move.lastMove.piece.type[1] !== "p" &&
+                    move.lastMove.piece.type !== "p" &&
                     !move.lastMove.capture &&
                     !stopClock
                 ) {

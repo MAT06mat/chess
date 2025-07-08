@@ -1,9 +1,9 @@
 import useGameContext from "../../hooks/useGameContext";
-import piece from "../../types/piece";
+import { Piece as PieceType } from "../../types";
 
 interface PieceProps {
-    piece: piece;
-    onPieceClick: (piece: piece) => void;
+    piece: PieceType;
+    onPieceClick: (piece: PieceType) => void;
 }
 
 function Piece({ piece, onPieceClick }: PieceProps) {
@@ -25,7 +25,7 @@ function Piece({ piece, onPieceClick }: PieceProps) {
 
     return (
         <div
-            className={"piece in-board " + piece.type}
+            className={"piece in-board " + piece.color + piece.type}
             style={style}
             onClick={handleClick}
         />
@@ -33,4 +33,3 @@ function Piece({ piece, onPieceClick }: PieceProps) {
 }
 
 export default Piece;
-export type { piece };

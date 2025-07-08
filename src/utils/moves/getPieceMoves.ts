@@ -1,12 +1,12 @@
-import { move } from "../../types";
+import { RelativeMove } from "../../types";
 
 interface movesProps {
-    p: move[];
-    k: move[];
-    r: move[];
-    b: move[];
-    q: move[];
-    n: move[];
+    p: RelativeMove[];
+    k: RelativeMove[];
+    r: RelativeMove[];
+    b: RelativeMove[];
+    q: RelativeMove[];
+    n: RelativeMove[];
 }
 
 const moves: movesProps = {
@@ -162,7 +162,7 @@ const moves: movesProps = {
     ],
 };
 
-function getPieceMoves(pieceType: string): move[] {
+function getPieceMoves(pieceType: string): RelativeMove[] {
     return structuredClone(moves[pieceType as keyof movesProps] || []);
 }
 

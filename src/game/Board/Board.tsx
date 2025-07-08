@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import Piece, { piece } from "./Piece";
+import Piece from "./Piece";
 import BoardInfo from "./BoardInfo";
 import getSquarePos from "../../utils/getSquarePos";
 import PromotionBox from "./PromotionBox";
-import { completeMove, move } from "../../types";
+import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
 import useGameContext from "../../hooks/useGameContext";
 import "../../styles/Board.scss";
@@ -33,10 +33,10 @@ function Board() {
     const boardRef = useRef<HTMLDivElement>(null);
     const promotionCloseRef = useRef<HTMLDivElement>(null);
     const [validMoves, setValidMoves] = useState(new Map());
-    const [displayMoves, setDisplayMoves] = useState<move[]>([]);
-    const [selectedPiece, setSelectedPiece] = useState<piece | null>(null);
+    const [displayMoves, setDisplayMoves] = useState<RelativeMove[]>([]);
+    const [selectedPiece, setSelectedPiece] = useState<PieceType | null>(null);
     const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
-    const [nextMove, setNextMove] = useState<completeMove | null>(null);
+    const [nextMove, setNextMove] = useState<CompleteMove | null>(null);
 
     const pieces = movesHistory[actualMove].pieces;
     const lastMove = movesHistory[actualMove].lastMove;
@@ -133,12 +133,12 @@ function Board() {
     }
 
     // Handle the piece click event
-    function handlePieceClick(piece: piece) {
+    function handlePieceClick(piece: PieceType) {
         const isSandBox = gameStatus === "playingSandBox";
         const isVsBot = gameStatus === "playingVsBot";
         const isvsFriend = gameStatus === "playingVsFriend";
         const isYourTurn = colorToPlay === (invertedColor ? "b" : "w");
-        const isColorToPlay = piece.type[0] === colorToPlay;
+        const isColorToPlay = piece.color === colorToPlay;
 
         if (
             isSandBox ||

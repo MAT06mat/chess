@@ -1,11 +1,11 @@
-type piecesScore = {
+type PiecesScore = {
     score: number;
     pieces: [string, number][];
 };
 
-type piecesScores = {
-    w: piecesScore;
-    b: piecesScore;
+type PiecesScores = {
+    w: PiecesScore;
+    b: PiecesScore;
 };
 
-export type { piecesScores };
+export type { PiecesScores };

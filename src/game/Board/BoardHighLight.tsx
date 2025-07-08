@@ -1,10 +1,9 @@
-import { completeMove } from "../../types";
+import { CompleteMove, Piece } from "../../types";
 import BoardInfo from "./BoardInfo";
-import { piece } from "./Piece";
 
 interface Props {
-    selectedPiece: piece | null;
-    lastMove: completeMove | null;
+    selectedPiece: Piece | null;
+    lastMove: CompleteMove | null;
 }
 
 function BoardHighLight({ selectedPiece, lastMove }: Props) {

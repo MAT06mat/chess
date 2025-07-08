@@ -1,8 +1,8 @@
-type gameStatus =
+type GameStatus =
     | "modeSelection"
     | "playingVsBot"
     | "playingVsFriend"
     | "playingSandBox"
     | "gameEnd";
 
-export type { gameStatus };
+export type { GameStatus };

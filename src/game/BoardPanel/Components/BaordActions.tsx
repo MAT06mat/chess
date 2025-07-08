@@ -56,7 +56,7 @@ function BoardActions({
         const lastMove = movesHistory[movesHistory.length - 1].lastMove;
         let removeNumber = 1;
         if (
-            lastMove?.piece.type[0] === (invertedColor ? "w" : "b") &&
+            lastMove?.piece.color === (invertedColor ? "w" : "b") &&
             movesHistory.length !== 2 &&
             gameStatus === "playingVsBot"
         ) {

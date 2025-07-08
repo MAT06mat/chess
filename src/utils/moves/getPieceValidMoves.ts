@@ -1,24 +1,23 @@
-import { completeMove } from "../../types";
-import piece from "../../types/piece";
+import { CompleteMove, Piece } from "../../types";
 import getPieceMoves from "./getPieceMoves";
 import isCheck from "./isCheck";
 import isPosInBoard from "./isPosInBoard";
 
 function getPieceValidMoves(
-    selectedPiece: piece,
-    pieces: piece[],
-    lastMove: completeMove | null,
+    selectedPiece: Piece,
+    pieces: Piece[],
+    lastMove: CompleteMove | null,
     noCheck?: boolean
 ) {
-    const isWhite = selectedPiece.type[0] === "w";
-    const isPawn = selectedPiece.type[1] === "p";
-    const isKing = selectedPiece.type[1] === "k";
+    const isWhite = selectedPiece.color === "w";
+    const isPawn = selectedPiece.type === "p";
+    const isKing = selectedPiece.type === "k";
 
     const groupBlocked = new Set<number>(
         isPawn ? (isWhite ? [0, 1, 2] : [3, 4, 5]) : []
     );
 
-    const potentialMoves = getPieceMoves(selectedPiece.type[1]);
+    const potentialMoves = getPieceMoves(selectedPiece.type);
 
     return potentialMoves.filter((move) => {
         if (move.group !== undefined && groupBlocked.has(move.group)) {
@@ -33,9 +32,9 @@ function getPieceValidMoves(
         const targetPiece = pieces.find(
             (p) => p.x === targetX && p.y === targetY
         );
-        const isSameColor = targetPiece?.type[0] === selectedPiece.type[0];
+        const isSameColor = targetPiece?.color === selectedPiece.color;
         const isEnemy = targetPiece
-            ? targetPiece.type[0] !== selectedPiece.type[0]
+            ? targetPiece.color !== selectedPiece.color
             : false;
 
         // Prevent friendly fire or forward pawn capturing
@@ -54,8 +53,8 @@ function getPieceValidMoves(
                     move.capture = true;
                 } else if (
                     lastMove &&
-                    lastMove.piece.type[1] === "p" &&
-                    lastMove.piece.type[0] !== selectedPiece.type[0] &&
+                    lastMove.piece.type === "p" &&
+                    lastMove.piece.color !== selectedPiece.color &&
                     Math.abs(lastMove.fromY - lastMove.toY) === 2 &&
                     lastMove.toX === targetX &&
                     lastMove.toY === selectedPiece.y
@@ -83,8 +82,8 @@ function getPieceValidMoves(
             const rookX = isKingside ? 7 : 0;
             const rook = pieces.find(
                 (p) =>
-                    p.type[1] === "r" &&
-                    p.type[0] === selectedPiece.type[0] &&
+                    p.type === "r" &&
+                    p.color === selectedPiece.color &&
                     p.x === rookX &&
                     !p.hasMoved
             );
@@ -105,7 +104,7 @@ function getPieceValidMoves(
 
             if (
                 !noCheck &&
-                isCheck(selectedPiece.type[0], pieces, intermediateSquares)
+                isCheck(selectedPiece.color, pieces, intermediateSquares)
             ) {
                 return false;
             }

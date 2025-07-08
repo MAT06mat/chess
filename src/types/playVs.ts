@@ -1,3 +1,3 @@
-type playVs = "friend" | "bot" | "sandBox";
+type PlayVs = "friend" | "bot" | "sandBox";
 
-export type { playVs };
+export type { PlayVs };

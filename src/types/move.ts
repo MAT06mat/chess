@@ -1,27 +1,27 @@
-import piece from "./piece";
+import { Piece } from "./Piece";
 
-interface type {
+interface BaseMove {
     capture?: boolean;
     check?: boolean;
     checkMate?: boolean;
     special?: "enPassant" | "castling" | "promotion";
 }
 
-interface move extends type {
+interface RelativeMove extends BaseMove {
     x: number;
     y: number;
     group?: number;
 }
 
-interface completeMove extends type {
+interface CompleteMove extends BaseMove {
     fromX: number;
     fromY: number;
     toX: number;
     toY: number;
-    piece: piece;
-    toPiece?: piece;
+    piece: Piece;
+    toPiece?: Piece;
     san: string;
 }
 
-export type { move };
-export type { completeMove };
+export type { RelativeMove as RelativeMove };
+export type { CompleteMove as CompleteMove };

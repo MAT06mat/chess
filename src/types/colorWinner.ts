@@ -1,3 +1,3 @@
-type colorWinner = "w" | "b" | "s" | null;
+type ColorWinner = "w" | "b" | "s" | null;
 
-export type { colorWinner };
+export type { ColorWinner };

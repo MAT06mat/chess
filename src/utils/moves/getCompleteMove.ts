@@ -1,8 +1,10 @@
-import { completeMove, move } from "../../types";
-import piece from "../../types/piece";
+import { CompleteMove, RelativeMove, Piece } from "../../types";
 import getChessNotation from "../getChessNotation";
 
-function getcompleteMove(move: move, selectedPiece: piece): completeMove {
+function getcompleteMove(
+    move: RelativeMove,
+    selectedPiece: Piece
+): CompleteMove {
     const completeMove = {
         fromX: selectedPiece.x,
         fromY: selectedPiece.y,
