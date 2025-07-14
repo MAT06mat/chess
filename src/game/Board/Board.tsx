@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import Piece from "./Piece";
-import BoardInfo from "./BoardInfo";
-import getSquarePos from "../../utils/getSquarePos";
 import PromotionBox from "./PromotionBox";
 import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
@@ -11,13 +9,14 @@ import getValidMoves from "../../utils/moves/getValidMoves";
 import WinnerPopup from "../Components/WinnerPopup";
 import invertColor from "../../utils/invertColor";
 import useCallbackRegisterMove from "../../hooks/useCallbackRegisterMove";
-import getCompleteMove from "../../utils/moves/getCompleteMove";
 import useBot from "../../hooks/useBot";
 import BoardHighLight from "./BoardHighLight";
 import { CapturedPieces } from "../Components/CapturedPieces";
 import EvaluationBar from "./EvaluationBar";
 import Arrows from "./Arrows";
 import getChessNotation from "../../utils/getChessNotation";
+import useBoardClickEvent from "../../hooks/useBoardClickEvent";
+import DisplayMoves from "./DisplayMoves";
 
 function Board() {
     const {
@@ -26,6 +25,8 @@ function Board() {
         colorToPlay,
         setColorWinner,
         invertedColor,
+        playerColor,
+        opponentColor,
         gameStatus,
         setGameStatus,
     } = useGameContext();
@@ -94,104 +95,37 @@ function Board() {
         setDisplayMoves(validMoves.get(selectedPiece.id));
     }, [selectedPiece, validMoves]);
 
-    // Handle the board click event
-    function handleBoardClick(event: React.MouseEvent<HTMLDivElement>) {
-        if (promotionBoxVisible && event.target === promotionCloseRef.current) {
-            setNextMove(null);
-            setPromotionBoxVisible(false);
-            return;
-        }
-
-        const board = boardRef.current;
-        if (board) {
-            const { x, y } = getSquarePos(event, board, invertedColor);
-
-            // If a piece is selected, move it to the clicked position
-            if (selectedPiece) {
-                const validMove = displayMoves.find(
-                    (move) =>
-                        move.x === x - selectedPiece.x &&
-                        move.y === y - selectedPiece.y
-                );
-
-                if (validMove) {
-                    const completeMove = getCompleteMove(
-                        validMove,
-                        selectedPiece
-                    );
-
-                    if (completeMove.special === "promotion") {
-                        setPromotionBoxVisible(true);
-                        setNextMove(completeMove);
-                    } else {
-                        registerMove(completeMove, pieces);
-                    }
-                }
-                setSelectedPiece(null);
-            }
-        }
-    }
-
-    // Handle the piece click event
-    function handlePieceClick(piece: PieceType) {
-        const isSandBox = gameStatus === "playingSandBox";
-        const isVsBot = gameStatus === "playingVsBot";
-        const isvsFriend = gameStatus === "playingVsFriend";
-        const isYourTurn = colorToPlay === (invertedColor ? "b" : "w");
-        const isColorToPlay = piece.color === colorToPlay;
-
-        if (
-            isSandBox ||
-            (isColorToPlay && ((isVsBot && isYourTurn) || isvsFriend))
-        ) {
-            setSelectedPiece(piece);
-        }
-    }
+    // Handle board click events
+    const boardClickEvent = useBoardClickEvent(
+        boardRef,
+        promotionCloseRef,
+        validMoves,
+        displayMoves,
+        setDisplayMoves,
+        selectedPiece,
+        setSelectedPiece,
+        promotionBoxVisible,
+        setPromotionBoxVisible,
+        setNextMove
+    );
 
     return (
         <div className="board-layout">
-            <CapturedPieces
-                color={invertedColor ? "b" : "w"}
-                onlyComputerScreen
-            />
+            <CapturedPieces color={playerColor} onlyComputerScreen />
             <div className="chessboard-layout">
                 <EvaluationBar />
-                <div
-                    className="board"
-                    ref={boardRef}
-                    onClick={handleBoardClick}
-                >
+                <div className="board" ref={boardRef} {...boardClickEvent}>
                     <BoardCoordinates />
-                    <BoardHighLight
+                    <BoardHighLight selectedPiece={selectedPiece} />
+                    <DisplayMoves
                         selectedPiece={selectedPiece}
-                        lastMove={lastMove}
+                        displayMoves={displayMoves}
+                        boardRef={boardRef}
                     />
-                    {selectedPiece
-                        ? displayMoves.map((move, index) => {
-                              return (
-                                  <BoardInfo
-                                      className={
-                                          move.capture ? "capture-hint" : "hint"
-                                      }
-                                      borderWidth={
-                                          boardRef.current?.clientWidth
-                                              ? boardRef.current?.clientWidth *
-                                                    0.011 +
-                                                "px"
-                                              : undefined
-                                      }
-                                      key={index}
-                                      x={move.x + selectedPiece.x}
-                                      y={move.y + selectedPiece.y}
-                                  />
-                              );
-                          })
-                        : null}
                     {pieces.map((piece) => (
                         <Piece
                             key={invertedColor ? piece.id + 64 : piece.id}
                             piece={piece}
-                            onPieceClick={handlePieceClick}
                         />
                     ))}
                     {promotionBoxVisible ? (
@@ -201,8 +135,6 @@ function Board() {
                                 className="promotion-box-close"
                             />
                             <PromotionBox
-                                x={nextMove?.toX}
-                                y={nextMove?.toY}
                                 setPromotionBoxVisible={setPromotionBoxVisible}
                                 setNextMove={setNextMove}
                                 nextMove={nextMove}
@@ -213,10 +145,7 @@ function Board() {
                     <WinnerPopup />
                 </div>
             </div>
-            <CapturedPieces
-                color={invertedColor ? "w" : "b"}
-                onlyComputerScreen
-            />
+            <CapturedPieces color={opponentColor} onlyComputerScreen />
         </div>
     );
 }

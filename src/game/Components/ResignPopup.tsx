@@ -10,7 +10,7 @@ function ResignPopup() {
     const {
         setColorWinner,
         colorToPlay,
-        invertedColor,
+        opponentColor,
         gameStatus,
         setGameStatus,
         resignPopupVisible,
@@ -20,7 +20,7 @@ function ResignPopup() {
     function resign() {
         setResignPopupVisible(false);
         if (gameStatus === "playingVsBot") {
-            setColorWinner(invertedColor ? "w" : "b");
+            setColorWinner(opponentColor);
         } else {
             setColorWinner(invertColor(colorToPlay));
         }

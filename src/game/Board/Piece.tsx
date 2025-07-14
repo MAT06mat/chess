@@ -1,33 +1,16 @@
-import useGameContext from "../../hooks/useGameContext";
 import { Piece as PieceType } from "../../types";
+import BoardInfo from "./BoardInfo";
 
 interface PieceProps {
     piece: PieceType;
-    onPieceClick: (piece: PieceType) => void;
 }
 
-function Piece({ piece, onPieceClick }: PieceProps) {
-    const { invertedColor } = useGameContext();
-
-    const style = invertedColor
-        ? {
-              left: `${(7 - piece.x) * 12.5}%`,
-              bottom: `${(7 - piece.y) * 12.5}%`,
-          }
-        : {
-              left: `${piece.x * 12.5}%`,
-              bottom: `${piece.y * 12.5}%`,
-          };
-
-    function handleClick() {
-        onPieceClick(piece);
-    }
-
+function Piece({ piece }: PieceProps) {
     return (
-        <div
-            className={"piece in-board " + piece.color + piece.type}
-            style={style}
-            onClick={handleClick}
+        <BoardInfo
+            className={"piece " + piece.color + piece.type}
+            x={piece.x}
+            y={piece.y}
         />
     );
 }

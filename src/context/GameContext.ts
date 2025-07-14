@@ -20,6 +20,8 @@ type GameContextType = {
     colorWinner: ColorWinner;
     setColorWinner: Dispatch<ColorWinner>;
     invertedColor: boolean;
+    playerColor: "w" | "b";
+    opponentColor: "w" | "b";
     setInvertedColor: Dispatch<boolean>;
     gameStatus: GameStatus;
     setGameStatus: Dispatch<GameStatus>;

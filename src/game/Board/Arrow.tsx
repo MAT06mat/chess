@@ -1,16 +1,5 @@
 import useGameContext from "../../hooks/useGameContext";
-
-const squareSize = 12.5;
-const halfSquare = squareSize / 2;
-
-function positionToCoords(pos: string, invertedColor?: boolean) {
-    const x = (pos.charCodeAt(0) - "a".charCodeAt(0)) * squareSize + halfSquare;
-    const y = 100 - ((parseInt(pos[1], 10) - 1) * squareSize + halfSquare);
-    if (invertedColor) {
-        return [100 - x, 100 - y];
-    }
-    return [x, y];
-}
+import positionToCoords from "../../utils/positionToCoord";
 
 interface ArrowProps {
     from: string;
@@ -20,9 +9,10 @@ interface ArrowProps {
 
 function Arrow({ from, to, color }: ArrowProps) {
     const { invertedColor } = useGameContext();
+    if (to === from) return null;
 
-    const [x, y] = positionToCoords(from, invertedColor);
-    const [toX, toY] = positionToCoords(to, invertedColor);
+    const [x, y] = positionToCoords(from, invertedColor, true);
+    const [toX, toY] = positionToCoords(to, invertedColor, true);
     const dx = toX - x;
     const dy = toY - y;
 

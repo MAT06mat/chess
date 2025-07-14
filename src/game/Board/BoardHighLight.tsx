@@ -1,58 +1,53 @@
-import { CompleteMove, Piece } from "../../types";
+import { ReactNode, useEffect, useState } from "react";
+import useGameContext from "../../hooks/useGameContext";
+import { Piece } from "../../types";
+import positionToCoords from "../../utils/positionToCoord";
 import BoardInfo from "./BoardInfo";
 
 interface Props {
     selectedPiece: Piece | null;
-    lastMove: CompleteMove | null;
 }
 
-function BoardHighLight({ selectedPiece, lastMove }: Props) {
-    let lastMovePos = null;
-    let selectedPiecePos = null;
+function BoardHighLight({ selectedPiece }: Props) {
+    const { movesHistory, actualMove } = useGameContext();
+    const [allBoardInfos, setAllBoardInfos] = useState<ReactNode>(null);
 
-    if (lastMove) {
-        lastMovePos = (
-            <>
-                <BoardInfo
-                    className="highlight"
-                    x={lastMove.toX}
-                    y={lastMove.toY}
-                />
-                <BoardInfo
-                    className="highlight"
-                    x={lastMove.fromX}
-                    y={lastMove.fromY}
-                />
-            </>
-        );
-    }
+    useEffect(() => {
+        const lastMove = movesHistory[actualMove].lastMove;
+        const shapes = movesHistory[actualMove].shapes ?? [];
+        const redSquares = shapes.filter((shape) => shape.from === shape.to);
 
-    if (
-        selectedPiece &&
-        !(
-            lastMove?.fromX === selectedPiece.x &&
-            lastMove?.fromY === selectedPiece.y
-        ) &&
-        !(
-            lastMove?.toX === selectedPiece.x &&
-            lastMove?.toY === selectedPiece.y
-        )
-    ) {
-        selectedPiecePos = (
-            <BoardInfo
-                className="highlight"
-                x={selectedPiece.x}
-                y={selectedPiece.y}
-            />
-        );
-    }
+        const boardInfos: ReactNode[] = [];
+        const coords: string[] = [];
 
-    return (
-        <>
-            {lastMovePos}
-            {selectedPiecePos}
-        </>
-    );
+        function addHighLight(x: number, y: number, className: string) {
+            const coord = `${x},${y}`;
+            if (!coords.includes(coord)) {
+                coords.push(coord);
+                boardInfos.push(
+                    <BoardInfo className={className} x={x} y={y} key={coord} />
+                );
+            }
+        }
+
+        redSquares.forEach((shape) => {
+            const [x, y] = positionToCoords(shape.to);
+            addHighLight(x, 7 - y, "shape");
+        });
+
+        if (lastMove) {
+            addHighLight(lastMove.toX, lastMove.toY, "highlight");
+            addHighLight(lastMove.fromX, lastMove.fromY, "highlight");
+        }
+
+        if (selectedPiece) {
+            addHighLight(selectedPiece.x, selectedPiece.y, "highlight");
+        }
+
+        setAllBoardInfos(boardInfos);
+    }, [movesHistory, actualMove, selectedPiece]);
+
+    return allBoardInfos;
 }
 
 export default BoardHighLight;

@@ -48,6 +48,8 @@ function GameProvider({ children }: Props) {
     const lastMove = movesHistory[actualMove]?.lastMove;
     const colorToPlay = invertColor(lastMove?.piece.color);
     const piecesScores = getPiecesScores(movesHistory, actualMove);
+    const playerColor = invertedColor ? "b" : "w";
+    const opponentColor = invertedColor ? "w" : "b";
     const title = "Chess " + gameStatus;
 
     const gameValues: GameContextType = {
@@ -60,6 +62,8 @@ function GameProvider({ children }: Props) {
         colorWinner,
         setColorWinner,
         invertedColor,
+        playerColor,
+        opponentColor,
         setInvertedColor,
         gameStatus,
         setGameStatus,

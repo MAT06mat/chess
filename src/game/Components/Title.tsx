@@ -1,4 +1,3 @@
-import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
 import useGameContext from "../../hooks/useGameContext";
 import "../../styles/Title.scss";
 
@@ -8,8 +7,7 @@ interface Props {
 }
 
 function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
-    const { title, movesHistory, invertedColor, setInvertedColor } =
-        useGameContext();
+    const { title } = useGameContext();
 
     const className = onlyComputerScreen
         ? " computer-screen"
@@ -17,26 +15,7 @@ function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
         ? " mobile-screen"
         : "";
 
-    const showColorIcon = movesHistory.length <= 1;
-
-    const resetChessBoard = useCallbackResetChessBoard();
-
-    function onColorClick() {
-        setInvertedColor((prev) => !prev);
-        resetChessBoard();
-    }
-
-    return (
-        <div className={"game-title" + className}>
-            {showColorIcon ? (
-                <div
-                    className={"color-icon " + (invertedColor ? "b" : "")}
-                    onClick={onColorClick}
-                />
-            ) : null}
-            {title}
-        </div>
-    );
+    return <div className={"game-title" + className}>{title}</div>;
 }
 
 export default Title;

@@ -34,7 +34,7 @@ function BoardActions({
         setMovesHistory,
         actualMove,
         setActualMove,
-        invertedColor,
+        opponentColor,
         gameStatus,
         setGameStatus,
         setResignPopupVisible,
@@ -56,7 +56,7 @@ function BoardActions({
         const lastMove = movesHistory[movesHistory.length - 1].lastMove;
         let removeNumber = 1;
         if (
-            lastMove?.piece.color === (invertedColor ? "w" : "b") &&
+            lastMove?.piece.color === opponentColor &&
             movesHistory.length !== 2 &&
             gameStatus === "playingVsBot"
         ) {

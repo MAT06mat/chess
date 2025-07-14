@@ -2,21 +2,17 @@ import useGameContext from "../../hooks/useGameContext";
 import { CompleteMove, Piece, PieceSymbol } from "../../types";
 
 interface PromotionProps {
-    x?: number;
-    y?: number;
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setNextMove: React.Dispatch<React.SetStateAction<CompleteMove | null>>;
     nextMove: CompleteMove | null;
 }
 
 function PromotionBox({
-    x = 7,
-    y = 7,
     setPromotionBoxVisible,
     setNextMove,
     nextMove,
 }: PromotionProps) {
-    const { invertedColor } = useGameContext();
+    const { invertedColor, playerColor } = useGameContext();
 
     if (!nextMove) return;
 
@@ -48,24 +44,14 @@ function PromotionBox({
     }
 
     const color = nextMove.piece.color;
+    const top = color !== playerColor;
+    const coordX = invertedColor ? 7 - nextMove.toX : nextMove.toX;
+    const coordY = invertedColor ? 7 - nextMove.toY : nextMove.toY;
 
-    const style = invertedColor
-        ? {
-              left: `${(7 - x) * 12.5}%`,
-              bottom: `${
-                  color === (invertedColor ? "b" : "w")
-                      ? (7 - y) * 12.5
-                      : (7 - y) * 12.5 + 44
-              }%`,
-          }
-        : {
-              left: `${x * 12.5}%`,
-              bottom: `${
-                  color === (invertedColor ? "b" : "w")
-                      ? y * 12.5
-                      : y * 12.5 + 44
-              }%`,
-          };
+    const style = {
+        left: `${coordX * 12.5}%`,
+        bottom: `${coordY * 12.5 + (top ? 44 : 0)}%`,
+    };
 
     const piecesToDisplay = ["q", "r", "n", "b"];
 

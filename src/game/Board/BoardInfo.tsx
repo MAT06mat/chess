@@ -11,17 +11,14 @@ interface BoardInfoProps {
 function BoardInfo({ x, y, className, borderWidth }: BoardInfoProps) {
     const { invertedColor } = useGameContext();
 
-    const style: CSSProperties = invertedColor
-        ? {
-              left: `${(7 - x) * 12.5}%`,
-              bottom: `${(7 - y) * 12.5}%`,
-              borderWidth: borderWidth,
-          }
-        : {
-              left: `${x * 12.5}%`,
-              bottom: `${y * 12.5}%`,
-              borderWidth: borderWidth,
-          };
+    const coordX = invertedColor ? 7 - x : x;
+    const coordY = invertedColor ? 7 - y : y;
+
+    const style: CSSProperties = {
+        left: `${coordX * 12.5}%`,
+        bottom: `${coordY * 12.5}%`,
+        borderWidth: borderWidth,
+    };
 
     return <div className={"in-board " + className} style={style} />;
 }

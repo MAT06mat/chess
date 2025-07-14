@@ -8,7 +8,7 @@ import getBotOpening from "../utils/getBotOpening";
 import random from "random";
 
 function useBot(validMoves: Map<number, RelativeMove[]>, useBot: boolean) {
-    const { invertedColor, colorToPlay, movesHistory, actualMove, gameStatus } =
+    const { opponentColor, colorToPlay, movesHistory, actualMove, gameStatus } =
         useGameContext();
 
     const calculateFenRef = useRef<string | null>(null);
@@ -62,7 +62,7 @@ function useBot(validMoves: Map<number, RelativeMove[]>, useBot: boolean) {
         gameStatusRef.current = gameStatus;
         if (!useBot || actualMove !== movesHistory.length - 1) return;
 
-        if (colorToPlay === (invertedColor ? "w" : "b")) {
+        if (colorToPlay === opponentColor) {
             validMovesRef.current = validMoves;
             if (calculateFenRef.current !== null) return;
 

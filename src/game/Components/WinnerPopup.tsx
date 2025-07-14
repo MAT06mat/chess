@@ -10,7 +10,8 @@ import GreyButton from "./GreyButton";
 function WinnerPopup() {
     const {
         colorWinner,
-        invertedColor,
+        playerColor,
+        opponentColor,
         playVs,
         setGameStatus,
         setGameReview,
@@ -56,9 +57,9 @@ function WinnerPopup() {
     }
 
     if (playVs === "bot") {
-        if (colorWinner === (invertedColor ? "w" : "b")) {
+        if (colorWinner === opponentColor) {
             title = "The bot has won";
-        } else if (colorWinner === (invertedColor ? "b" : "w")) {
+        } else if (colorWinner === playerColor) {
             title = "You won !";
         }
     }
