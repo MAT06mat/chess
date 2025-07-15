@@ -98,13 +98,9 @@ function getPieceValidMoves(
                 return false;
             }
 
-            const intermediateSquares = isKingside
-                ? [0, 1, 3]
-                : [0, -1, -3, -4];
-
             if (
                 !noCheck &&
-                isCheck(selectedPiece.color, pieces, intermediateSquares)
+                isCheck(selectedPiece.color, pieces, [0, isKingside ? 1 : -1])
             ) {
                 return false;
             }
