@@ -14,11 +14,14 @@ interface CapturedPiecesProps {
 }
 
 function CapturedPieces({ color, onlyComputerScreen }: CapturedPiecesProps) {
-    const { piecesScores } = useGameContext();
+    const { piecesScores, gameStatus } = useGameContext();
     const pieces = piecesScores[color].pieces;
     const score = piecesScores[color].score;
 
-    if (useIsMobile() && onlyComputerScreen) {
+    if (
+        (useIsMobile() && onlyComputerScreen) ||
+        gameStatus === "playingSandBox"
+    ) {
         return null;
     }
 

@@ -5,10 +5,11 @@ function countPieces(pieces: Piece[]) {
     const piecesNumber = new Map();
     for (let i = 0; i < pieces.length; i += 1) {
         let n = 0;
-        if (piecesNumber.get(pieces[i].type)) {
-            n = piecesNumber.get(pieces[i].type);
+        const p = pieces[i].color + pieces[i].type;
+        if (piecesNumber.get(p)) {
+            n = piecesNumber.get(p);
         }
-        piecesNumber.set(pieces[i].type, n + 1);
+        piecesNumber.set(p, n + 1);
     }
     return piecesNumber;
 }
@@ -84,8 +85,8 @@ function getPiecesScores(
     movesHistory: BoardPosition[],
     actualMove: number
 ): PiecesScores {
-    const actualBoard = movesHistory[actualMove].pieces;
-    const piecesNumber = countPieces(actualBoard);
+    const actualPieces = movesHistory[actualMove].pieces;
+    const piecesNumber = countPieces(actualPieces);
     const capturedPiecesNumber = countCapturedPieces(
         piecesNumber,
         getDefaultPieces()

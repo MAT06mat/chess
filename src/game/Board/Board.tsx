@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Piece from "./Piece";
 import PromotionBox from "./PromotionBox";
 import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
@@ -17,6 +16,7 @@ import Arrows from "./Arrows";
 import getChessNotation from "../../utils/getChessNotation";
 import useBoardClickEvent from "../../hooks/useBoardClickEvent";
 import DisplayMoves from "./DisplayMoves";
+import Pieces from "./Pieces";
 
 function Board() {
     const {
@@ -24,7 +24,6 @@ function Board() {
         actualMove,
         colorToPlay,
         setColorWinner,
-        invertedColor,
         playerColor,
         opponentColor,
         gameStatus,
@@ -120,12 +119,7 @@ function Board() {
                         displayMoves={displayMoves}
                         boardRef={boardRef}
                     />
-                    {pieces.map((piece) => (
-                        <Piece
-                            key={invertedColor ? piece.id + 64 : piece.id}
-                            piece={piece}
-                        />
-                    ))}
+                    <Pieces />
                     {promotionBoxVisible ? (
                         <>
                             <div

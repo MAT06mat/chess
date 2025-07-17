@@ -48,6 +48,22 @@
                 height: 12.5%;
                 user-select: none;
                 pointer-events: none;
+
+                &.shape,
+                &.highlight {
+                    &.radius-top-left {
+                        border-radius: 4px 0 0 0;
+                    }
+                    &.radius-top-right {
+                        border-radius: 0 4px 0 0;
+                    }
+                    &.radius-bottom-left {
+                        border-radius: 0 0 0 4px;
+                    }
+                    &.radius-bottom-right {
+                        border-radius: 0 0 4px 0;
+                    }
+                }
             }
 
             .shape {
