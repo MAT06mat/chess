@@ -15,19 +15,18 @@ function usePositionReview(
     const calculateFenRef = useRef<string | null>(null);
 
     useEffect(() => {
-        if (gameStatus !== "gameEnd") return;
-        if (!gameReview) return;
+        if (gameStatus !== "gameEnd" || !gameReview) return;
         if (actualMove >= movesHistory.length - 1) return;
 
-        const actualBaord = movesHistory[actualMove];
-        if (actualBaord.chessApiData !== undefined) return;
+        const actualBoard = movesHistory[actualMove];
+        if (actualBoard.chessApiData !== undefined) return;
         if (calculateFenRef.current !== null) return;
-        calculateFenRef.current = actualBaord.fen;
+        calculateFenRef.current = actualBoard.fen;
 
-        postChessApi({ fen: actualBaord.fen })
+        postChessApi({ fen: actualBoard.fen })
             .then((data) => {
                 calculateFenRef.current = null;
-                actualBaord.chessApiData = data;
+                actualBoard.chessApiData = data;
                 updatePercentage(actualMove, colorWinner, movesHistory);
                 if (data.type === "error") {
                     console.error("Error fetching chess API data:", data);

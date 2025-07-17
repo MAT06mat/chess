@@ -3,8 +3,7 @@ import playSound from "../../utils/playSound";
 import useGameContext from "../../hooks/useGameContext";
 
 function PlaySound() {
-    const { movesHistory, actualMove } = useGameContext();
-    const lastMove = movesHistory[actualMove].lastMove;
+    const { lastMove } = useGameContext();
 
     useEffect(() => {
         if (lastMove?.checkMate) {

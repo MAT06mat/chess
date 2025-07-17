@@ -3,7 +3,7 @@ import useGameContext from "../../hooks/useGameContext";
 import Arrow, { ArrowProps } from "./Arrow";
 
 function Arrows() {
-    const { movesHistory, actualMove, gameReview } = useGameContext();
+    const { movesHistory, actualMove, gameReview, shapes } = useGameContext();
     const [allArrows, setAllArrows] = useState<ReactNode>(null);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ function Arrows() {
             }
         }
 
-        movesHistory[actualMove].shapes?.forEach(addArrow);
+        shapes.forEach(addArrow);
 
         if (actualMove > 0 && gameReview) {
             const chessApiData = movesHistory[actualMove - 1].chessApiData;
@@ -32,13 +32,13 @@ function Arrows() {
         }
 
         setAllArrows(arrows);
-    }, [movesHistory, actualMove, gameReview]);
+    }, [movesHistory, actualMove, gameReview, shapes]);
 
     // Reset Shapes on gameReview
     useEffect(() => {
         if (gameReview) {
             movesHistory.forEach((boardPosition) => {
-                boardPosition.shapes = undefined;
+                boardPosition.shapes = [];
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

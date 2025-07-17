@@ -2,8 +2,7 @@ import useGameContext from "../../hooks/useGameContext";
 import BoardInfo from "./BoardInfo";
 
 function Pieces() {
-    const { movesHistory, actualMove, invertedColor } = useGameContext();
-    const pieces = movesHistory[actualMove].pieces;
+    const { pieces, invertedColor } = useGameContext();
 
     return pieces.map((piece) => (
         <BoardInfo

@@ -94,8 +94,7 @@ function getFen(
     fen += rights || "-";
 
     // API DON'T SUPPORT THAT -> idk
-    /*const lastMove = movesHistory[actualMove].lastMove;
-    if (
+    /* if (
         lastMove &&
         lastMove.piece.type === "p" &&
         Math.abs(lastMove.fromY - lastMove.toY) === 2

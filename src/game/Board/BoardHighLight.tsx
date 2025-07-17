@@ -9,12 +9,10 @@ interface Props {
 }
 
 function BoardHighLight({ selectedPiece }: Props) {
-    const { movesHistory, actualMove } = useGameContext();
+    const { lastMove, shapes } = useGameContext();
     const [allBoardInfos, setAllBoardInfos] = useState<ReactNode>(null);
 
     useEffect(() => {
-        const lastMove = movesHistory[actualMove].lastMove;
-        const shapes = movesHistory[actualMove].shapes ?? [];
         const redSquares = shapes.filter((shape) => shape.from === shape.to);
 
         const boardInfos: ReactNode[] = [];
@@ -45,7 +43,7 @@ function BoardHighLight({ selectedPiece }: Props) {
         }
 
         setAllBoardInfos(boardInfos);
-    }, [movesHistory, actualMove, selectedPiece]);
+    }, [lastMove, shapes, selectedPiece]);
 
     return allBoardInfos;
 }

@@ -34,6 +34,10 @@ type GameContextType = {
     setResignPopupVisible: Dispatch<boolean>;
     gameReview: boolean;
     setGameReview: Dispatch<boolean>;
+    actualBoard: BoardPosition;
+    lastMove: BoardPosition["lastMove"];
+    pieces: BoardPosition["pieces"];
+    shapes: BoardPosition["shapes"];
 };
 
 export type { GameContextType };

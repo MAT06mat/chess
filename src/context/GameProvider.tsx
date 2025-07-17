@@ -45,9 +45,12 @@ function GameProvider({ children }: Props) {
     const [playVs, setPlayVs] = usePersistedState<PlayVs>("playVs", "friend");
     const [resignPopupVisible, setResignPopupVisible] = useState(false);
 
-    const lastMove = movesHistory[actualMove]?.lastMove;
+    const actualBoard = movesHistory[actualMove];
+    const pieces = actualBoard.pieces;
+    const lastMove = actualBoard.lastMove;
+    const shapes = actualBoard.shapes;
     const colorToPlay = invertColor(lastMove?.piece.color);
-    const piecesScores = getPiecesScores(movesHistory, actualMove);
+    const piecesScores = getPiecesScores(pieces);
     const playerColor = invertedColor ? "b" : "w";
     const opponentColor = invertedColor ? "w" : "b";
     const title = "Chess " + gameStatus;
@@ -76,6 +79,10 @@ function GameProvider({ children }: Props) {
         setResignPopupVisible,
         gameReview,
         setGameReview,
+        actualBoard,
+        lastMove,
+        pieces,
+        shapes,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const value = useMemo(() => gameValues, Object.values(gameValues));

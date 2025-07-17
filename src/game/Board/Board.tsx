@@ -20,14 +20,14 @@ import Pieces from "./Pieces";
 
 function Board() {
     const {
-        movesHistory,
-        actualMove,
         colorToPlay,
         setColorWinner,
         playerColor,
         opponentColor,
         gameStatus,
         setGameStatus,
+        lastMove,
+        pieces,
     } = useGameContext();
 
     const promotionCloseRef = useRef<HTMLDivElement>(null);
@@ -37,15 +37,12 @@ function Board() {
     const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
     const [nextMove, setNextMove] = useState<CompleteMove | null>(null);
 
-    const pieces = movesHistory[actualMove].pieces;
-    const lastMove = movesHistory[actualMove].lastMove;
-
     // Remove the selected piece on board change
     useEffect(() => {
         setSelectedPiece(null);
     }, [setSelectedPiece, pieces]);
 
-    useBot(validMoves, gameStatus === "playingVsBot");
+    useBot(validMoves);
 
     const registerMove = useCallbackRegisterMove();
 

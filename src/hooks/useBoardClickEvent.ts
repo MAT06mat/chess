@@ -17,6 +17,8 @@ const useBoardClickEvent = (
     setNextMove: React.Dispatch<React.SetStateAction<CompleteMove | null>>
 ): [JSX.IntrinsicElements["div"], React.RefObject<HTMLDivElement>] => {
     const {
+        pieces,
+        shapes,
         movesHistory,
         setMovesHistory,
         actualMove,
@@ -28,8 +30,6 @@ const useBoardClickEvent = (
     const registerMove = useCallbackRegisterMove();
 
     const boardRef = useRef<HTMLDivElement>(null);
-    const pieces = movesHistory[actualMove].pieces;
-    const shapes = movesHistory[actualMove].shapes;
 
     type ClickEvent = {
         x: number;
@@ -116,7 +116,7 @@ const useBoardClickEvent = (
 
         if (event.button === 0) {
             if (shapes) {
-                movesHistory[actualMove].shapes = undefined;
+                movesHistory[actualMove].shapes = [];
                 setMovesHistory([...movesHistory]); // Update the state to trigger a re-render
             }
 

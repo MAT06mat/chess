@@ -1,4 +1,4 @@
-import { PiecesScores, Piece, BoardPosition } from "../types";
+import { PiecesScores, Piece } from "../types";
 import getDefaultPieces from "./getDefaultPieces";
 
 function countPieces(pieces: Piece[]) {
@@ -81,12 +81,8 @@ const customSort = (a: [string, number], b: [string, number]) => {
     return indexA - indexB;
 };
 
-function getPiecesScores(
-    movesHistory: BoardPosition[],
-    actualMove: number
-): PiecesScores {
-    const actualPieces = movesHistory[actualMove].pieces;
-    const piecesNumber = countPieces(actualPieces);
+function getPiecesScores(pieces: Piece[]): PiecesScores {
+    const piecesNumber = countPieces(pieces);
     const capturedPiecesNumber = countCapturedPieces(
         piecesNumber,
         getDefaultPieces()

@@ -7,14 +7,19 @@ import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
 import random from "random";
 
-function useBot(validMoves: Map<number, RelativeMove[]>, useBot: boolean) {
-    const { opponentColor, colorToPlay, movesHistory, actualMove, gameStatus } =
-        useGameContext();
+function useBot(validMoves: Map<number, RelativeMove[]>) {
+    const {
+        opponentColor,
+        colorToPlay,
+        movesHistory,
+        actualMove,
+        gameStatus,
+        pieces,
+    } = useGameContext();
 
     const calculateFenRef = useRef<string | null>(null);
     const validMovesRef = useRef(validMoves);
     const gameStatusRef = useRef(gameStatus);
-    const pieces = movesHistory[actualMove].pieces;
 
     if (actualMove !== movesHistory.length - 1) {
         calculateFenRef.current = null;
@@ -60,7 +65,11 @@ function useBot(validMoves: Map<number, RelativeMove[]>, useBot: boolean) {
 
     useEffect(() => {
         gameStatusRef.current = gameStatus;
-        if (!useBot || actualMove !== movesHistory.length - 1) return;
+        if (
+            gameStatus !== "playingVsBot" ||
+            actualMove !== movesHistory.length - 1
+        )
+            return;
 
         if (colorToPlay === opponentColor) {
             validMovesRef.current = validMoves;
@@ -119,7 +128,7 @@ function useBot(validMoves: Map<number, RelativeMove[]>, useBot: boolean) {
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [calculateFenRef, validMoves, useBot, gameStatus]);
+    }, [calculateFenRef, validMoves, gameStatus]);
 }
 
 export default useBot;
