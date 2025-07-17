@@ -44,17 +44,6 @@ const useBoardClickEvent = (
         return String.fromCharCode(97 + x) + (y + 1);
     }
 
-    function shouldClosePromotionBox(event: MouseEvent) {
-        return (
-            promotionBoxVisible && event.target === promotionCloseRef.current
-        );
-    }
-
-    function closePromotionBox() {
-        setNextMove(null);
-        setPromotionBoxVisible(false);
-    }
-
     function findPieceAt(pos: { x: number; y: number }) {
         return pieces.find((p) => p.x === pos.x && p.y === pos.y) ?? null;
     }
@@ -105,8 +94,10 @@ const useBoardClickEvent = (
     }
 
     function handleBoardMouseDown(event: MouseEvent) {
-        if (shouldClosePromotionBox(event)) {
-            closePromotionBox();
+        // Close promotion box if visible
+        if (promotionBoxVisible && event.target === promotionCloseRef.current) {
+            setNextMove(null);
+            setPromotionBoxVisible(false);
             return;
         }
 
