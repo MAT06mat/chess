@@ -28,6 +28,7 @@ const useBoardClickEvent = (
         gameStatus,
     } = useGameContext();
     const registerMove = useCallbackRegisterMove();
+    const isSandBox = gameStatus === "playingSandBox";
 
     const boardRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +45,7 @@ const useBoardClickEvent = (
         return String.fromCharCode(97 + x) + (y + 1);
     }
 
-    function shouldClosePromotionBox(event: React.MouseEvent) {
+    function shouldClosePromotionBox(event: MouseEvent) {
         return (
             promotionBoxVisible && event.target === promotionCloseRef.current
         );
@@ -55,17 +56,11 @@ const useBoardClickEvent = (
         setPromotionBoxVisible(false);
     }
 
-    function getClickPos(event: React.MouseEvent<HTMLDivElement>) {
-        const board = boardRef.current;
-        return board ? getSquarePos(event, board, invertedColor) : null;
-    }
-
     function findPieceAt(pos: { x: number; y: number }) {
         return pieces.find((p) => p.x === pos.x && p.y === pos.y) ?? null;
     }
 
     function isPieceSelectable(piece: Piece) {
-        const isSandBox = gameStatus === "playingSandBox";
         const isVsBot = gameStatus === "playingVsBot";
         const isVsFriend = gameStatus === "playingVsFriend";
         const isYourTurn = colorToPlay === playerColor;
@@ -78,6 +73,16 @@ const useBoardClickEvent = (
 
     function getValidMoveTo(pos: { x: number; y: number }) {
         if (!selectedPiece) return null;
+        if (isSandBox) {
+            const dx = pos.x - selectedPiece.x;
+            const dy = pos.y - selectedPiece.y;
+            if (dx || dy) {
+                return {
+                    x: dx,
+                    y: dy,
+                };
+            }
+        }
         return displayMoves.find(
             (move) =>
                 move.x === pos.x - selectedPiece.x &&
@@ -86,7 +91,7 @@ const useBoardClickEvent = (
     }
 
     function toggleLastPieceSelected() {
-        if (pieceId === null) {
+        if (pieceId === null && !isSandBox) {
             setLastClick(null);
             setPieceId(selectedPiece?.id ?? null);
         } else {
@@ -100,13 +105,13 @@ const useBoardClickEvent = (
         setPieceId(null);
     }
 
-    function handleBoardMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+    function handleBoardMouseDown(event: MouseEvent) {
         if (shouldClosePromotionBox(event)) {
             closePromotionBox();
             return;
         }
 
-        const pos = getClickPos(event);
+        const pos = getSquarePos(event, boardRef.current, invertedColor);
         if (!pos) return;
 
         setLastClick({
@@ -136,9 +141,14 @@ const useBoardClickEvent = (
         }
     }
 
-    function handleBoardMouseUp(event: React.MouseEvent<HTMLDivElement>) {
-        const pos = getClickPos(event);
-        if (!pos || !lastClick || lastClick?.button !== event.button) return;
+    function handleBoardMouseUp(event: MouseEvent) {
+        const pos = getSquarePos(event, boardRef.current, invertedColor);
+        if (!pos) {
+            clearSelection();
+            return;
+        }
+
+        if (!lastClick || lastClick.button !== event.button) return;
 
         if (lastClick.button === 0) {
             if (!selectedPiece) return;
@@ -180,10 +190,11 @@ const useBoardClickEvent = (
         }
     }
 
+    window.onmousedown = handleBoardMouseDown;
+    window.onmouseup = handleBoardMouseUp;
+
     return [
         {
-            onMouseDown: handleBoardMouseDown,
-            onMouseUp: handleBoardMouseUp,
             onContextMenu: (event) => event.preventDefault(),
             ref: boardRef,
         },

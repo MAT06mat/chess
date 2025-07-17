@@ -12,9 +12,7 @@ function getValidMoves(
     let numberOfMove = 0;
     const map = new Map();
     if (colorToPlay === "wb") {
-        pieces.forEach((piece) => {
-            map.set(piece.id, getPieceValidMoves(piece, pieces, lastMove));
-        });
+        pieces.forEach((p) => map.set(p.id, []));
         return [map, 999];
     }
     const piecesToPlay = pieces.filter((piece) => piece.color === colorToPlay);

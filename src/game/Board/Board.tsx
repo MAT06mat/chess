@@ -36,6 +36,7 @@ function Board() {
     const [selectedPiece, setSelectedPiece] = useState<PieceType | null>(null);
     const [promotionBoxVisible, setPromotionBoxVisible] = useState(false);
     const [nextMove, setNextMove] = useState<CompleteMove | null>(null);
+    const isSandBox = gameStatus === "playingSandBox";
 
     // Remove the selected piece on board change
     useEffect(() => {
@@ -49,7 +50,7 @@ function Board() {
     // Find validMoves for the turn
     useEffect(() => {
         let color: "w" | "b" | "wb" = colorToPlay;
-        if (gameStatus === "playingSandBox") {
+        if (isSandBox) {
             color = "wb";
         }
         const [map, numberOfMove] = getValidMoves(color, pieces, lastMove);
@@ -69,7 +70,7 @@ function Board() {
         lastMove,
         pieces,
         setColorWinner,
-        gameStatus,
+        isSandBox,
         setGameStatus,
     ]);
 

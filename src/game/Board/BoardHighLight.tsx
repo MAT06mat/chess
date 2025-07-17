@@ -9,7 +9,7 @@ interface Props {
 }
 
 function BoardHighLight({ selectedPiece }: Props) {
-    const { lastMove, shapes } = useGameContext();
+    const { lastMove, shapes, gameStatus } = useGameContext();
     const [allBoardInfos, setAllBoardInfos] = useState<ReactNode>(null);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function BoardHighLight({ selectedPiece }: Props) {
             addHighLight(x, 7 - y, "shape");
         });
 
-        if (lastMove) {
+        if (lastMove && gameStatus !== "playingSandBox") {
             addHighLight(lastMove.toX, lastMove.toY, "highlight");
             addHighLight(lastMove.fromX, lastMove.fromY, "highlight");
         }
@@ -43,7 +43,7 @@ function BoardHighLight({ selectedPiece }: Props) {
         }
 
         setAllBoardInfos(boardInfos);
-    }, [lastMove, shapes, selectedPiece]);
+    }, [lastMove, shapes, gameStatus, selectedPiece]);
 
     return allBoardInfos;
 }

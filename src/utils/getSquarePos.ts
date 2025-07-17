@@ -1,14 +1,21 @@
+import isPosInBoard from "./moves/isPosInBoard";
+
 function getSquarePos(
-    event: React.MouseEvent<HTMLDivElement>,
-    board: HTMLDivElement,
+    event: MouseEvent,
+    board: HTMLDivElement | null,
     inverted: boolean
-): { x: number; y: number } {
-    const offsetX = board.getBoundingClientRect().left + window.scrollX;
-    const offsetY = board.getBoundingClientRect().top + window.scrollY;
+) {
+    if (!board) return null;
+
+    const offsetX = board.getBoundingClientRect().left;
+    const offsetY = board.getBoundingClientRect().top;
     const relX = event.clientX - offsetX;
     const relY = event.clientY - offsetY;
     const x = Math.floor(relX / (board.clientWidth / 8));
     const y = Math.floor(8 - relY / (board.clientHeight / 8));
+
+    if (!isPosInBoard(x, y)) return null;
+
     if (inverted) {
         return { x: 7 - x, y: 7 - y };
     }
