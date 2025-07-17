@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import useGameContext from "./useGameContext";
 import useCallbackRegisterMove from "./useCallbackRegisterMove";
 import getSquarePos from "../utils/getSquarePos";
@@ -6,6 +6,7 @@ import { CompleteMove, Piece, RelativeMove } from "../types";
 import getcompleteMove from "../utils/moves/getCompleteMove";
 
 const useBoardClickEvent = (
+    boardRef: React.RefObject<HTMLDivElement>,
     promotionCloseRef: React.RefObject<HTMLDivElement>,
     validMoves: Map<number, RelativeMove[]>,
     displayMoves: RelativeMove[],
@@ -15,7 +16,7 @@ const useBoardClickEvent = (
     promotionBoxVisible: boolean,
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>,
     setNextMove: React.Dispatch<React.SetStateAction<CompleteMove | null>>
-): [JSX.IntrinsicElements["div"], React.RefObject<HTMLDivElement>] => {
+) => {
     const {
         pieces,
         shapes,
@@ -29,8 +30,6 @@ const useBoardClickEvent = (
     } = useGameContext();
     const registerMove = useCallbackRegisterMove();
     const isSandBox = gameStatus === "playingSandBox";
-
-    const boardRef = useRef<HTMLDivElement>(null);
 
     type ClickEvent = {
         x: number;
@@ -192,14 +191,6 @@ const useBoardClickEvent = (
 
     window.onmousedown = handleBoardMouseDown;
     window.onmouseup = handleBoardMouseUp;
-
-    return [
-        {
-            onContextMenu: (event) => event.preventDefault(),
-            ref: boardRef,
-        },
-        boardRef,
-    ];
 };
 
 export default useBoardClickEvent;

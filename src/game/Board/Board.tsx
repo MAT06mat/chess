@@ -30,6 +30,7 @@ function Board() {
         pieces,
     } = useGameContext();
 
+    const boardRef = useRef<HTMLDivElement>(null);
     const promotionCloseRef = useRef<HTMLDivElement>(null);
     const [validMoves, setValidMoves] = useState(new Map());
     const [displayMoves, setDisplayMoves] = useState<RelativeMove[]>([]);
@@ -92,7 +93,8 @@ function Board() {
     }, [selectedPiece, validMoves]);
 
     // Handle board click events
-    const [boardClickEvent, boardRef] = useBoardClickEvent(
+    useBoardClickEvent(
+        boardRef,
         promotionCloseRef,
         validMoves,
         displayMoves,
@@ -109,7 +111,11 @@ function Board() {
             <CapturedPieces color={playerColor} onlyComputerScreen />
             <div className="chessboard-layout">
                 <EvaluationBar />
-                <div className="board" {...boardClickEvent}>
+                <div
+                    className="board"
+                    onContextMenu={(event) => event.preventDefault()}
+                    ref={boardRef}
+                >
                     <BoardCoordinates />
                     <BoardHighLight selectedPiece={selectedPiece} />
                     <DisplayMoves
