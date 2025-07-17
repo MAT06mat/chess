@@ -157,8 +157,7 @@ const useBoardClickEvent = (
                 toggleLastPieceSelected();
             }
         } else if (lastClick.button === 2) {
-            const newShapes = shapes ?? [];
-
+            const newShapes = structuredClone(shapes);
             const from = getSquare(lastClick.x, lastClick.y);
             const to = getSquare(pos.x, pos.y);
 

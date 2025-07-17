@@ -48,7 +48,7 @@ function GameProvider({ children }: Props) {
     const actualBoard = movesHistory[actualMove];
     const pieces = actualBoard.pieces;
     const lastMove = actualBoard.lastMove;
-    const shapes = actualBoard.shapes;
+    const shapes = actualBoard.shapes ?? [];
     const colorToPlay = invertColor(lastMove?.piece.color);
     const piecesScores = getPiecesScores(pieces);
     const playerColor = invertedColor ? "b" : "w";

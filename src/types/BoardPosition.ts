@@ -8,7 +8,7 @@ interface BoardPosition {
     lastMove: CompleteMove | null;
     fen: string;
     chessApiData?: PostChessApiResponse;
-    shapes: ArrowProps[];
+    shapes?: ArrowProps[];
 }
 
 export type { BoardPosition };

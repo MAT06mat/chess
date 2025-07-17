@@ -43,7 +43,6 @@ function useCallbackRegisterMove() {
                     lastMove: completeMove,
                     pieces: pieces,
                     fen: fen,
-                    shapes: [],
                 },
             ]);
             setActualMove((prev) => prev + 1);

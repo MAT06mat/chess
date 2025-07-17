@@ -7,6 +7,7 @@ import {
     PlaySide,
     PlayVs,
 } from "../types";
+import { ArrowProps } from "../game/Board/Arrow";
 
 type Dispatch<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -37,7 +38,7 @@ type GameContextType = {
     actualBoard: BoardPosition;
     lastMove: BoardPosition["lastMove"];
     pieces: BoardPosition["pieces"];
-    shapes: BoardPosition["shapes"];
+    shapes: ArrowProps[];
 };
 
 export type { GameContextType };
