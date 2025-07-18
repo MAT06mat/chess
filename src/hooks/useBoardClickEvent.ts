@@ -35,6 +35,7 @@ const useBoardClickEvent = (
         x: number;
         y: number;
         button: number;
+        identifier?: number;
     } | null;
 
     const [lastClick, setLastClick] = useState<ClickEvent>(null);
@@ -93,7 +94,7 @@ const useBoardClickEvent = (
         setPieceId(null);
     }
 
-    function handleBoardMouseDown(event: MouseEvent) {
+    function handleBoardMouseDown(event: MouseEvent, identifier?: number) {
         // Close promotion box if visible
         if (promotionBoxVisible && event.target === promotionCloseRef.current) {
             setNextMove(null);
@@ -107,6 +108,7 @@ const useBoardClickEvent = (
         setLastClick({
             ...pos,
             button: event.button,
+            identifier,
         });
 
         if (event.button === 0) {
@@ -182,6 +184,30 @@ const useBoardClickEvent = (
 
     window.onmousedown = handleBoardMouseDown;
     window.onmouseup = handleBoardMouseUp;
+
+    function handleBoardTouchDown(event: TouchEvent) {
+        if (event.touches.length !== 1) return;
+        const touch = event.touches[0];
+        const mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+        });
+        handleBoardMouseDown(mouseEvent, touch.identifier);
+    }
+
+    function handleBoardTouchUp(event: TouchEvent) {
+        const touch = event.changedTouches[0];
+        if (lastClick && lastClick.identifier !== touch.identifier) return;
+        event.preventDefault();
+        const mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+        });
+        handleBoardMouseUp(mouseEvent);
+    }
+
+    window.ontouchstart = handleBoardTouchDown;
+    window.ontouchend = handleBoardTouchUp;
 };
 
 export default useBoardClickEvent;
