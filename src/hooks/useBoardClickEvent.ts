@@ -133,11 +133,14 @@ const useBoardClickEvent = (
         }
     }
 
-    function handleBoardMouseUp(event: MouseEvent) {
+    function handleBoardMouseUp(
+        event: MouseEvent,
+        preventDefault?: () => void
+    ) {
         const pos = getSquarePos(event, boardRef.current, invertedColor);
         if (!pos) {
             clearSelection();
-            return "notPreventDefault";
+            return;
         }
 
         if (!lastClick || lastClick.button !== event.button) return;
@@ -145,6 +148,7 @@ const useBoardClickEvent = (
         if (lastClick.button === 0) {
             if (!selectedPiece) return;
 
+            preventDefault?.();
             const move = getValidMoveTo(pos);
             if (move) {
                 const completeMove = getcompleteMove(move, selectedPiece);
@@ -202,9 +206,10 @@ const useBoardClickEvent = (
             clientX: touch.clientX,
             clientY: touch.clientY,
         });
-        if (handleBoardMouseUp(mouseEvent) !== "notPreventDefault") {
+        function preventDefault() {
             event.preventDefault();
         }
+        handleBoardMouseUp(mouseEvent, preventDefault);
     }
 
     window.ontouchstart = handleBoardTouchDown;
