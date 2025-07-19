@@ -3,31 +3,38 @@ import { useEffect, useRef } from "react";
 import "../../../styles/PanelMovesList.scss";
 import BoardActions from "./BaordActions";
 
+type refObj = React.RefObject<HTMLDivElement>;
+
 interface customMove {
     move: string | null;
     index: number;
     className: string;
-    selected: boolean;
+    ref: refObj | null;
 }
 
 function createCustomMove(
     move: string | null,
     index: number,
-    actualMove: number
+    actualMove: number,
+    ref: refObj
 ) {
     const selected = index === actualMove;
     const className = selected ? "move-notation selected" : "move-notation";
-    return { move, index, className, selected };
+    const newRef = selected || (index === 1 && actualMove === 0) ? ref : null;
+    if (newRef) {
+        console.log("REF:", newRef);
+    }
+    return { move, index, className, ref: newRef };
 }
 
-function createPairMoves(arr: string[], actualMove: number) {
+function createPairMoves(arr: string[], actualMove: number, ref: refObj) {
     const result: customMove[][] = [];
     for (let i = 0; i < arr.length; i += 2) {
         const first = arr[i];
         const second = arr[i + 1] !== undefined ? arr[i + 1] : null;
         result.push([
-            createCustomMove(first, i + 1, actualMove),
-            createCustomMove(second, i + 2, actualMove),
+            createCustomMove(first, i + 1, actualMove, ref),
+            createCustomMove(second, i + 2, actualMove, ref),
         ]);
     }
     return result;
@@ -52,7 +59,6 @@ function PanelMovesList() {
 
     chessMoves.shift();
 
-    const panelMovesListRef = useRef<HTMLDivElement>(null);
     const selectedMoveRef = useRef<HTMLDivElement>(null);
     const gameWinnerRef = useRef<HTMLDivElement>(null);
 
@@ -70,21 +76,21 @@ function PanelMovesList() {
         });
     }, [actualMove, movesHistory]);
 
-    const movesList = createPairMoves(chessMoves, actualMove);
+    const movesList = createPairMoves(chessMoves, actualMove, selectedMoveRef);
 
     return (
         <div className="panel-moves-list-wrapper">
             <div className="game-controler mobile-screen">
                 <BoardActions undo />
             </div>
-            <div className="panel-moves-list" ref={panelMovesListRef}>
+            <div className="panel-moves-list">
                 {movesList.map((moves, index) => {
                     const lightRow = index % 2 === 1 ? " light-row" : "";
                     return (
                         <div key={index} className={"move-list-row" + lightRow}>
                             <div className="number">{index + 1}.</div>
                             <div
-                                ref={moves[0].selected ? selectedMoveRef : null}
+                                ref={moves[0].ref}
                                 className={moves[0].className}
                                 onClick={() => setActualMove(moves[0].index)}
                             >
@@ -92,11 +98,7 @@ function PanelMovesList() {
                             </div>
                             {moves[1].move ? (
                                 <div
-                                    ref={
-                                        moves[1].selected
-                                            ? selectedMoveRef
-                                            : null
-                                    }
+                                    ref={moves[1].ref}
                                     className={moves[1].className}
                                     onClick={() =>
                                         setActualMove(moves[1].index)
