@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useGameContext from "./useGameContext";
 import useCallbackRegisterMove from "./useCallbackRegisterMove";
 import getSquarePos from "../utils/getSquarePos";
 import { CompleteMove, Piece, RelativeMove } from "../types";
 import getcompleteMove from "../utils/moves/getCompleteMove";
+import {
+    getSquare,
+    findPieceAt,
+    isPieceSelectable,
+    getValidMoveTo,
+} from "../utils/boardUtils";
 
 const useBoardClickEvent = (
     boardRef: React.RefObject<HTMLDivElement>,
@@ -41,179 +47,215 @@ const useBoardClickEvent = (
     const [lastClick, setLastClick] = useState<ClickEvent>(null);
     const [pieceId, setPieceId] = useState<number | null>(null);
 
-    function getSquare(x: number, y: number) {
-        return String.fromCharCode(97 + x) + (y + 1);
-    }
+    const clearSelection = useCallback(() => {
+        setSelectedPiece(null);
+        setLastClick(null);
+        setPieceId(null);
+    }, [setSelectedPiece]);
 
-    function findPieceAt(pos: { x: number; y: number }) {
-        return pieces.find((p) => p.x === pos.x && p.y === pos.y) ?? null;
-    }
-
-    function isPieceSelectable(piece: Piece) {
-        const isVsBot = gameStatus === "playingVsBot";
-        const isVsFriend = gameStatus === "playingVsFriend";
-        const isYourTurn = colorToPlay === playerColor;
-        const isColorToPlay = piece.color === colorToPlay;
-        return (
-            isSandBox ||
-            (isColorToPlay && ((isVsBot && isYourTurn) || isVsFriend))
-        );
-    }
-
-    function getValidMoveTo(pos: { x: number; y: number }) {
-        if (!selectedPiece) return null;
-        if (isSandBox) {
-            const dx = pos.x - selectedPiece.x;
-            const dy = pos.y - selectedPiece.y;
-            if (dx || dy) {
-                return {
-                    x: dx,
-                    y: dy,
-                };
-            }
-        }
-        return displayMoves.find(
-            (move) =>
-                move.x === pos.x - selectedPiece.x &&
-                move.y === pos.y - selectedPiece.y
-        );
-    }
-
-    function toggleLastPieceSelected() {
+    const toggleLastPieceSelected = useCallback(() => {
         if (pieceId === null && !isSandBox) {
             setLastClick(null);
             setPieceId(selectedPiece?.id ?? null);
         } else {
             clearSelection();
         }
-    }
+    }, [pieceId, isSandBox, selectedPiece, clearSelection]);
 
-    function clearSelection() {
-        setSelectedPiece(null);
-        setLastClick(null);
-        setPieceId(null);
-    }
-
-    function handleBoardMouseDown(event: MouseEvent, identifier?: number) {
-        // Close promotion box if visible
-        if (promotionBoxVisible && event.target === promotionCloseRef.current) {
-            setNextMove(null);
-            setPromotionBoxVisible(false);
-            return;
-        }
-
-        const pos = getSquarePos(event, boardRef.current, invertedColor);
-        if (!pos) return;
-
-        setLastClick({
-            ...pos,
-            button: event.button,
-            identifier,
-        });
-
-        if (event.button === 0) {
-            if (shapes) {
-                movesHistory[actualMove].shapes = [];
-                setMovesHistory([...movesHistory]); // Update the state to trigger a re-render
-            }
-
-            const piece = findPieceAt(pos);
-            const move = getValidMoveTo(pos);
-            if (piece && isPieceSelectable(piece) && !move) {
-                setSelectedPiece(piece);
-                setDisplayMoves(validMoves.get(piece.id) ?? []);
-                if (pieceId !== piece.id) {
-                    setPieceId(null);
-                }
-            } else if (!getValidMoveTo(pos)) {
-                clearSelection();
-            }
-        } else if (selectedPiece) {
-            setSelectedPiece(null);
-        }
-    }
-
-    function handleBoardMouseUp(
-        event: MouseEvent,
-        preventDefault?: () => void
-    ) {
-        const pos = getSquarePos(event, boardRef.current, invertedColor);
-        if (!pos) {
-            clearSelection();
-            return;
-        }
-
-        if (!lastClick || lastClick.button !== event.button) return;
-
-        if (lastClick.button === 0) {
-            if (!selectedPiece) return;
-
-            preventDefault?.();
-            const move = getValidMoveTo(pos);
-            if (move) {
-                const completeMove = getcompleteMove(move, selectedPiece);
-                if (completeMove.special === "promotion") {
-                    setPromotionBoxVisible(true);
-                    setNextMove(completeMove);
-                } else {
-                    registerMove(completeMove, pieces);
-                }
-                clearSelection();
-            } else {
-                toggleLastPieceSelected();
-            }
-        } else if (lastClick.button === 2) {
-            const newShapes = structuredClone(shapes);
-            const from = getSquare(lastClick.x, lastClick.y);
-            const to = getSquare(pos.x, pos.y);
-
+    const handleBoardMouseDown = useCallback(
+        (event: MouseEvent, identifier?: number) => {
             if (
-                newShapes.some(
-                    (shape) => shape.from === from && shape.to === to
-                )
+                promotionBoxVisible &&
+                event.target === promotionCloseRef.current
             ) {
-                movesHistory[actualMove].shapes = newShapes.filter(
-                    (shape) => shape.from !== from || shape.to !== to
-                );
-            } else {
-                newShapes.push({
-                    from: from,
-                    to: to,
-                });
-                movesHistory[actualMove].shapes = newShapes;
+                setNextMove(null);
+                setPromotionBoxVisible(false);
+                return;
             }
-            setMovesHistory([...movesHistory]); // Update the state to trigger a re-render
-        }
-    }
 
-    window.onmousedown = handleBoardMouseDown;
-    window.onmouseup = handleBoardMouseUp;
+            const pos = getSquarePos(event, boardRef.current, invertedColor);
+            if (!pos) return;
 
-    function handleBoardTouchDown(event: TouchEvent) {
-        if (event.touches.length !== 1) return;
-        const touch = event.touches[0];
-        const mouseEvent = new MouseEvent("mousedown", {
-            clientX: touch.clientX,
-            clientY: touch.clientY,
+            setLastClick({ ...pos, button: event.button, identifier });
+
+            if (event.button === 0) {
+                if (shapes) {
+                    movesHistory[actualMove].shapes = [];
+                    setMovesHistory([...movesHistory]);
+                }
+
+                const piece = findPieceAt(pos, pieces);
+                const move = getValidMoveTo(
+                    pos,
+                    selectedPiece,
+                    displayMoves,
+                    isSandBox
+                );
+
+                if (
+                    piece &&
+                    isPieceSelectable(
+                        piece,
+                        gameStatus,
+                        colorToPlay,
+                        playerColor
+                    ) &&
+                    !move
+                ) {
+                    setSelectedPiece(piece);
+                    setDisplayMoves(validMoves.get(piece.id) ?? []);
+                    if (pieceId !== piece.id) setPieceId(null);
+                } else if (!move) {
+                    clearSelection();
+                }
+            } else if (selectedPiece) {
+                setSelectedPiece(null);
+            }
+        },
+        [
+            boardRef,
+            promotionCloseRef,
+            promotionBoxVisible,
+            setNextMove,
+            setPromotionBoxVisible,
+            shapes,
+            movesHistory,
+            actualMove,
+            setMovesHistory,
+            setSelectedPiece,
+            setDisplayMoves,
+            validMoves,
+            pieceId,
+            selectedPiece,
+            invertedColor,
+            clearSelection,
+            pieces,
+            colorToPlay,
+            gameStatus,
+            playerColor,
+            displayMoves,
+            isSandBox,
+        ]
+    );
+
+    const handleBoardMouseUp = useCallback(
+        (event: MouseEvent, preventDefault?: () => void) => {
+            const pos = getSquarePos(event, boardRef.current, invertedColor);
+            if (!pos) {
+                clearSelection();
+                return;
+            }
+
+            if (!lastClick || lastClick.button !== event.button) return;
+
+            if (lastClick.button === 0) {
+                if (!selectedPiece) return;
+                preventDefault?.();
+
+                const move = getValidMoveTo(
+                    pos,
+                    selectedPiece,
+                    displayMoves,
+                    isSandBox
+                );
+                if (move) {
+                    const completeMove = getcompleteMove(move, selectedPiece);
+                    if (completeMove.special === "promotion") {
+                        setPromotionBoxVisible(true);
+                        setNextMove(completeMove);
+                    } else {
+                        registerMove(completeMove, pieces);
+                    }
+                    clearSelection();
+                } else {
+                    toggleLastPieceSelected();
+                }
+            } else if (lastClick.button === 2) {
+                if (gameStatus === "modeSelection") return;
+                const from = getSquare(lastClick.x, lastClick.y);
+                const to = getSquare(pos.x, pos.y);
+                const newShapes = structuredClone(shapes);
+
+                const exists = newShapes.some(
+                    (s) => s.from === from && s.to === to
+                );
+                movesHistory[actualMove].shapes = exists
+                    ? newShapes.filter((s) => s.from !== from || s.to !== to)
+                    : [...newShapes, { from, to }];
+
+                setMovesHistory([...movesHistory]);
+            }
+        },
+        [
+            boardRef,
+            invertedColor,
+            lastClick,
+            selectedPiece,
+            setPromotionBoxVisible,
+            setNextMove,
+            registerMove,
+            pieces,
+            clearSelection,
+            toggleLastPieceSelected,
+            shapes,
+            movesHistory,
+            actualMove,
+            gameStatus,
+            setMovesHistory,
+            displayMoves,
+            isSandBox,
+        ]
+    );
+
+    const handleBoardTouchDown = useCallback(
+        (event: TouchEvent) => {
+            if (event.touches.length !== 1) return;
+            const touch = event.touches[0];
+            const mouseEvent = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            });
+            handleBoardMouseDown(mouseEvent, touch.identifier);
+        },
+        [handleBoardMouseDown]
+    );
+
+    const handleBoardTouchUp = useCallback(
+        (event: TouchEvent) => {
+            const touch = event.changedTouches[0];
+            if (!lastClick || lastClick.identifier !== touch.identifier) return;
+            const mouseEvent = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            });
+            function preventDefault() {
+                event.preventDefault();
+            }
+            handleBoardMouseUp(mouseEvent, preventDefault);
+        },
+        [handleBoardMouseUp, lastClick]
+    );
+
+    useEffect(() => {
+        window.addEventListener("mousedown", handleBoardMouseDown);
+        window.addEventListener("mouseup", handleBoardMouseUp);
+        window.addEventListener("touchstart", handleBoardTouchDown, {
+            passive: false,
         });
-        handleBoardMouseDown(mouseEvent, touch.identifier);
-    }
+        window.addEventListener("touchend", handleBoardTouchUp);
 
-    function handleBoardTouchUp(event: TouchEvent) {
-        const touch = event.changedTouches[0];
-        if (lastClick && lastClick.identifier !== touch.identifier) return;
-        const mouseEvent = new MouseEvent("mousedown", {
-            clientX: touch.clientX,
-            clientY: touch.clientY,
-        });
-        function preventDefault() {
-            event.preventDefault();
-        }
-        handleBoardMouseUp(mouseEvent, preventDefault);
-    }
-
-    window.ontouchstart = handleBoardTouchDown;
-    window.ontouchend = handleBoardTouchUp;
+        return () => {
+            window.removeEventListener("mousedown", handleBoardMouseDown);
+            window.removeEventListener("mouseup", handleBoardMouseUp);
+            window.removeEventListener("touchstart", handleBoardTouchDown);
+            window.removeEventListener("touchend", handleBoardTouchUp);
+        };
+    }, [
+        handleBoardMouseDown,
+        handleBoardMouseUp,
+        handleBoardTouchDown,
+        handleBoardTouchUp,
+    ]);
 };
 
 export default useBoardClickEvent;
