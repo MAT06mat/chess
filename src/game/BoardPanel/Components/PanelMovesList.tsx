@@ -62,6 +62,8 @@ function PanelMovesList() {
     const selectedMoveRef = useRef<HTMLDivElement>(null);
     const gameWinnerRef = useRef<HTMLDivElement>(null);
 
+    const movesList = createPairMoves(chessMoves, actualMove, selectedMoveRef);
+
     useEffect(() => {
         let divElement = null;
         if (gameWinnerRef.current && actualMove === movesHistory.length - 1) {
@@ -75,8 +77,6 @@ function PanelMovesList() {
             inline: "center",
         });
     }, [actualMove, movesHistory]);
-
-    const movesList = createPairMoves(chessMoves, actualMove, selectedMoveRef);
 
     return (
         <div className="panel-moves-list-wrapper">
