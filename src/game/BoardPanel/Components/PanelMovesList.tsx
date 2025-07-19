@@ -21,9 +21,6 @@ function createCustomMove(
     const selected = index === actualMove;
     const className = selected ? "move-notation selected" : "move-notation";
     const newRef = selected || (index === 1 && actualMove === 0) ? ref : null;
-    if (newRef) {
-        console.log("REF:", newRef);
-    }
     return { move, index, className, ref: newRef };
 }
 
