@@ -212,6 +212,11 @@ const useBoardClickEvent = (
         handleBoardMouseUp(mouseEvent, preventDefault);
     }
 
+    window.ontouchmove = (event: TouchEvent) => {
+        if (!lastClick) return;
+        event.preventDefault();
+    };
+
     window.ontouchstart = handleBoardTouchDown;
     window.ontouchend = handleBoardTouchUp;
 };
