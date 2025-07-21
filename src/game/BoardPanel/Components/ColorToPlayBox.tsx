@@ -1,10 +1,9 @@
+import { useColorToPlay } from "../../../stores/useBoardSelectors";
 import "../../../styles/ColorToPlayBox.scss";
 
-interface Props {
-    colorToPlay: "w" | "b";
-}
+function ColorToPlayBox() {
+    const colorToPlay = useColorToPlay();
 
-function ColorToPlayBox({ colorToPlay }: Props) {
     let text = "";
     if (colorToPlay === "w") {
         text = "White to play";

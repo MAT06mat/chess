@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import useGameContext from "../../hooks/useGameContext";
 import usePositionReview from "../../hooks/usePositionReview";
 import "../../styles/EvaluationBar.scss";
 import { BoardPosition } from "../../types";
+import { useBoardStore } from "../../stores/useBoardStore";
+import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 
 function evaluationToPercentage(score: number): number {
     if (score >= 100) return 100;
@@ -13,26 +15,25 @@ function evaluationToPercentage(score: number): number {
 }
 
 function EvaluationBar() {
-    const {
-        gameStatus,
-        movesHistory,
-        actualMove,
-        colorWinner,
-        gameReview,
-        invertedColor,
-    } = useGameContext();
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const gameReview = useGameStateStore((state) => state.gameReview);
+    const colorWinner = useGameStateStore((state) => state.colorWinner);
+
+    const history = useBoardStore((state) => state.history);
+    const currentMove = useBoardStore((state) => state.currentMove);
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
 
     const [percentage, setPercentage] = useState(50);
     const [evaluation, setEvaluation] = useState<number>(0.5);
     const [mate, setMate] = useState<null | number>(null);
 
     function updatePercentage(
-        actualMove: number,
+        currentMove: number,
         colorWinner: string | null,
-        movesHistory: BoardPosition[]
+        history: BoardPosition[]
     ) {
-        const chessApiData = movesHistory[actualMove].chessApiData;
-        if (actualMove === movesHistory.length - 1) {
+        const chessApiData = history[currentMove].chessApiData;
+        if (currentMove === history.length - 1) {
             if (colorWinner === "w") {
                 setPercentage(100);
             } else if (colorWinner === "b") {
@@ -58,8 +59,8 @@ function EvaluationBar() {
     usePositionReview(updatePercentage);
 
     useEffect(() => {
-        updatePercentage(actualMove, colorWinner, movesHistory);
-    }, [actualMove, colorWinner, movesHistory]);
+        updatePercentage(currentMove, colorWinner, history);
+    }, [currentMove, colorWinner, history]);
 
     if (gameStatus !== "gameEnd") return;
     if (!gameReview) return;
@@ -77,7 +78,7 @@ function EvaluationBar() {
             whiteText = "";
         }
     }
-    if (actualMove === movesHistory.length - 1) {
+    if (currentMove === history.length - 1) {
         if (colorWinner === "w") {
             whiteText = "1-0";
             blackText = "";

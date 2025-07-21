@@ -1,17 +1,16 @@
 import Title from "../Components/Title";
-import useGameContext from "../../hooks/useGameContext";
 import "../../styles/BoardPanel.scss";
 import ModeSelectionPanel from "./Panels/ModeSelectionPanel";
 import GameEndPanel from "./Panels/GameEndPanel";
 import PlaySandBoxPanel from "./Panels/PlaySandBoxPanel";
 import PlayVsFriendPanel from "./Panels/PlayVsFriendPanel";
 import PlayVsBotPanel from "./Panels/PlayVsBotPanel";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 
 function BoardPanel() {
-    const { gameStatus } = useGameContext();
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
 
     let panelContent = null;
-
     if (gameStatus === "modeSelection") {
         panelContent = <ModeSelectionPanel />;
     } else if (gameStatus === "playingVsFriend") {

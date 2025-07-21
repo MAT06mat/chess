@@ -6,9 +6,13 @@ import ArrowSpinReset from "../../../assets/svg/ArrowSpinReset";
 import ArrowTriangleSwooshLeft from "../../../assets/svg/ArrowTriangleSwooshLeft";
 import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
-import useGameContext from "../../../hooks/useGameContext";
+import { useBoardStore } from "../../../stores/useBoardStore";
+import { useGameStateStore } from "../../../stores/useGameStateStore";
+import { usePopupStore } from "../../../stores/usePopupStore";
+import { useSettingsStore } from "../../../stores/useSettingsStore";
 import playSound from "../../../utils/playSound";
 import GreyButton from "../../Components/GreyButton";
+import ResignPopup from "../../Components/ResignPopup";
 
 interface Props {
     resign?: boolean;
@@ -29,21 +33,23 @@ function BoardActions({
     redo,
     end,
 }: Props) {
-    const {
-        movesHistory,
-        setMovesHistory,
-        actualMove,
-        setActualMove,
-        opponentColor,
-        gameStatus,
-        setGameStatus,
-        setResignPopupVisible,
-    } = useGameContext();
+    const addPopup = usePopupStore((state) => state.addPopup);
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const setGameStatus = useGameStateStore((state) => state.setGameStatus);
+
+    const history = useBoardStore((state) => state.history);
+    const currentMove = useBoardStore((state) => state.currentMove);
+    const goToFirstMove = useBoardStore((state) => state.goToFirstMove);
+    const goToLastMove = useBoardStore((state) => state.goToLastMove);
+    const currentMoveUndo = useBoardStore((state) => state.currentMoveUndo);
+    const currentMoveRedo = useBoardStore((state) => state.currentMoveRedo);
+    const undoMove = useBoardStore((state) => state.undoMove);
+    const opponentColor = useSettingsStore((state) => state.opponentColor);
 
     const resetChessBoard = useCallbackResetChessBoard();
 
     function resignGame() {
-        setResignPopupVisible(true);
+        addPopup(<ResignPopup />);
     }
 
     function resetGame() {
@@ -53,39 +59,16 @@ function BoardActions({
     }
 
     function completeUndoChessBoard() {
-        const lastMove = movesHistory[movesHistory.length - 1].lastMove;
+        const lastMove = history[history.length - 1].lastMove;
         let removeNumber = 1;
         if (
             lastMove?.piece.color === opponentColor &&
-            movesHistory.length !== 2 &&
+            history.length !== 2 &&
             gameStatus === "playingVsBot"
         ) {
             removeNumber = 2;
         }
-        if (movesHistory.length <= removeNumber) {
-            return;
-        }
-        const newHistory = movesHistory.slice(0, -removeNumber);
-        if (actualMove >= movesHistory.length - removeNumber) {
-            setActualMove(movesHistory.length - removeNumber - 1);
-        }
-        setMovesHistory(newHistory);
-    }
-
-    function goToStartChessBoard() {
-        setActualMove(0);
-    }
-
-    function undoChessBoard() {
-        setActualMove((prev) => prev - 1);
-    }
-
-    function redoChessBoard() {
-        setActualMove((prev) => prev + 1);
-    }
-
-    function goToEndChessBoard() {
-        setActualMove(movesHistory.length - 1);
+        undoMove(removeNumber);
     }
 
     return (
@@ -106,30 +89,30 @@ function BoardActions({
                 </GreyButton>
             ) : null}
             {start ? (
-                <GreyButton
-                    onClick={goToStartChessBoard}
-                    disabled={actualMove <= 0}
-                >
+                <GreyButton onClick={goToFirstMove} disabled={currentMove <= 0}>
                     <ArrowChevronStart />
                 </GreyButton>
             ) : null}
             {undo ? (
-                <GreyButton onClick={undoChessBoard} disabled={actualMove <= 0}>
+                <GreyButton
+                    onClick={currentMoveUndo}
+                    disabled={currentMove <= 0}
+                >
                     <ArrowChevronLeft />
                 </GreyButton>
             ) : null}
             {redo ? (
                 <GreyButton
-                    onClick={redoChessBoard}
-                    disabled={actualMove >= movesHistory.length - 1}
+                    onClick={currentMoveRedo}
+                    disabled={currentMove >= history.length - 1}
                 >
                     <ArrowChevronRight />
                 </GreyButton>
             ) : null}
             {end ? (
                 <GreyButton
-                    onClick={goToEndChessBoard}
-                    disabled={actualMove >= movesHistory.length - 1}
+                    onClick={goToLastMove}
+                    disabled={currentMove >= history.length - 1}
                 >
                     <ArrowChevronEnd />
                 </GreyButton>

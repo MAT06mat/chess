@@ -1,52 +1,46 @@
-import useGameContext from "../../hooks/useGameContext";
+import { useSettingsStore } from "../../stores/useSettingsStore";
 import { CompleteMove, Piece, PieceSymbol } from "../../types";
 
 interface PromotionProps {
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setNextMove: React.Dispatch<React.SetStateAction<CompleteMove | null>>;
-    nextMove: CompleteMove | null;
+    nextMoveRef: React.MutableRefObject<CompleteMove | null>;
 }
 
-function PromotionBox({
-    setPromotionBoxVisible,
-    setNextMove,
-    nextMove,
-}: PromotionProps) {
-    const { invertedColor, playerColor } = useGameContext();
-
-    if (!nextMove) return;
+function PromotionBox({ setPromotionBoxVisible, nextMoveRef }: PromotionProps) {
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
+    const playerColor = useSettingsStore((state) => state.playerColor);
+    if (!nextMoveRef.current) return;
 
     function handleClose() {
         setPromotionBoxVisible(false);
-        setNextMove(null);
+        nextMoveRef.current = null;
     }
 
     function handleClick(event: React.MouseEvent) {
-        const pieceComplete = event.currentTarget.className.split(" ")[2];
+        const pieceComplete = event.currentTarget.className.split(" ")[3];
         const pieceColor = pieceComplete[0];
         const pieceType = pieceComplete[1];
-        if (!nextMove) return;
+        if (!nextMoveRef.current) return;
         const newPiece: Piece = {
             type: pieceType as PieceSymbol,
             color: pieceColor as "w" | "b",
-            x: nextMove.fromX,
-            y: nextMove.fromY,
-            id: nextMove.piece.id,
+            x: nextMoveRef.current.fromX,
+            y: nextMoveRef.current.fromY,
+            id: nextMoveRef.current.piece.id,
             hasMoved: true,
         };
-        setNextMove((move) => {
-            if (move) {
-                move.toPiece = newPiece;
-            }
-            return move;
-        });
+        nextMoveRef.current.toPiece = newPiece;
         setPromotionBoxVisible(false);
     }
 
-    const color = nextMove.piece.color;
+    const color = nextMoveRef.current.piece.color;
     const top = color !== playerColor;
-    const coordX = invertedColor ? 7 - nextMove.toX : nextMove.toX;
-    const coordY = invertedColor ? 7 - nextMove.toY : nextMove.toY;
+    const coordX = invertedColor
+        ? 7 - nextMoveRef.current.toX
+        : nextMoveRef.current.toX;
+    const coordY = invertedColor
+        ? 7 - nextMoveRef.current.toY
+        : nextMoveRef.current.toY;
 
     const style = {
         left: `${coordX * 12.5}%`,
@@ -61,7 +55,9 @@ function PromotionBox({
                 return (
                     <div
                         key={p}
-                        className={"promotion-piece in-board " + color + p}
+                        className={
+                            "promotion-piece piece in-board " + color + p
+                        }
                         onClick={handleClick}
                     />
                 );

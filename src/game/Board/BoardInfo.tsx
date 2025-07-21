@@ -1,16 +1,20 @@
-import { CSSProperties } from "react";
-import useGameContext from "../../hooks/useGameContext";
+import { CSSProperties, memo } from "react";
 
 interface BoardInfoProps {
     x: number;
     y: number;
+    invertedColor: boolean;
     className?: string;
     borderWidth?: string;
 }
 
-function BoardInfo({ x, y, className, borderWidth }: BoardInfoProps) {
-    const { invertedColor } = useGameContext();
-
+function BoardInfo({
+    x,
+    y,
+    invertedColor,
+    className,
+    borderWidth,
+}: BoardInfoProps) {
     const coordX = invertedColor ? 7 - x : x;
     const coordY = invertedColor ? 7 - y : y;
 
@@ -36,4 +40,4 @@ function BoardInfo({ x, y, className, borderWidth }: BoardInfoProps) {
     return <div className={className} style={style} />;
 }
 
-export default BoardInfo;
+export default memo(BoardInfo);

@@ -1,27 +1,42 @@
-import { ReactNode, useEffect, useState } from "react";
-import useGameContext from "../../hooks/useGameContext";
+import { useEffect, useMemo } from "react";
 import Arrow, { ArrowProps } from "./Arrow";
+import { useBoardStore } from "../../stores/useBoardStore";
+import { useShapes } from "../../stores/useBoardSelectors";
+import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 
 function Arrows() {
-    const { movesHistory, actualMove, gameReview, shapes } = useGameContext();
-    const [allArrows, setAllArrows] = useState<ReactNode>(null);
+    const clearShapes = useBoardStore((state) => state.clearShapes);
+    const history = useBoardStore((state) => state.history);
+    const currentMove = useBoardStore((state) => state.currentMove);
+    const shapes = useShapes();
 
-    useEffect(() => {
-        const arrows: ReactNode[] = [];
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
+
+    const gameReview = useGameStateStore((state) => state.gameReview);
+
+    const allArrows = useMemo(() => {
+        const arrows: React.ReactNode[] = [];
         const coords: string[] = [];
 
         function addArrow(arrow: ArrowProps) {
             const coord = `${arrow.from},${arrow.to}`;
             if (!coords.includes(coord)) {
                 coords.push(coord);
-                arrows.push(<Arrow {...arrow} key={coord} />);
+                arrows.push(
+                    <Arrow
+                        {...arrow}
+                        invertedColor={invertedColor}
+                        key={coord}
+                    />
+                );
             }
         }
 
         shapes.forEach(addArrow);
 
-        if (actualMove > 0 && gameReview) {
-            const chessApiData = movesHistory[actualMove - 1].chessApiData;
+        if (currentMove > 0 && gameReview) {
+            const chessApiData = history[currentMove - 1]?.chessApiData;
             if (chessApiData) {
                 addArrow({
                     from: chessApiData.from,
@@ -31,18 +46,14 @@ function Arrows() {
             }
         }
 
-        setAllArrows(arrows);
-    }, [movesHistory, actualMove, gameReview, shapes]);
+        return arrows;
+    }, [shapes, currentMove, gameReview, history, invertedColor]);
 
-    // Reset Shapes on gameReview
     useEffect(() => {
         if (gameReview) {
-            movesHistory.forEach((boardPosition) => {
-                boardPosition.shapes = [];
-            });
+            clearShapes();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [gameReview]);
+    }, [gameReview, clearShapes]);
 
     return (
         <svg viewBox="0 0 100 100" className="arrows">

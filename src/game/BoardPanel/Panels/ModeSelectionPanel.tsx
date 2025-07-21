@@ -2,16 +2,21 @@ import Bot from "../../../assets/svg/Bot";
 import SandBox from "../../../assets/svg/SandBox";
 import Friends from "../../../assets/svg/Friends";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
-import useGameContext from "../../../hooks/useGameContext";
 import "../../../styles/ModeSelectionPanel.scss";
 import { PlaySide } from "../../../types";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import GreenButton from "../../Components/GreenButton";
 import GreyButton from "../../Components/GreyButton";
+import { useSettingsStore } from "../../../stores/useSettingsStore";
 
 function ModeSelectionPanel() {
-    const { setInvertedColor, playSide, setPlaySide, playVs, setPlayVs } =
-        useGameContext();
+    const playSide = useSettingsStore((state) => state.playSide);
+    const playVs = useSettingsStore((state) => state.playVs);
+    const setPlaySide = useSettingsStore((state) => state.setPlaySide);
+    const setPlayVs = useSettingsStore((state) => state.setPlayVs);
+    const updateInvertedColor = useSettingsStore(
+        (state) => state.updateInvertedColor
+    );
 
     const resetChessBoard = useCallbackResetChessBoard();
 
@@ -19,7 +24,7 @@ function ModeSelectionPanel() {
 
     function colorIconClick(color: PlaySide) {
         setPlaySide(color);
-        setInvertedColor(color === "black");
+        updateInvertedColor();
         resetChessBoard();
     }
 

@@ -1,17 +1,18 @@
 import { useCallback } from "react";
-import getDefaultBoard from "../utils/getDefaultBoard";
-import useGameContext from "./useGameContext";
+import { useBoardStore } from "../stores/useBoardStore";
+import { useGameStateStore } from "../stores/useGameStateStore";
 
 function useCallbackResetChessBoard() {
-    const { setMovesHistory, setActualMove, setColorWinner, setGameReview } =
-        useGameContext();
+    const setColorWinner = useGameStateStore((state) => state.setColorWinner);
+    const setGameReview = useGameStateStore((state) => state.setGameReview);
+
+    const resetHistory = useBoardStore((state) => state.resetHistory);
 
     return useCallback(() => {
-        setMovesHistory([getDefaultBoard()]);
         setGameReview(false);
-        setActualMove(0);
+        resetHistory();
         setColorWinner(null);
-    }, [setMovesHistory, setActualMove, setColorWinner, setGameReview]);
+    }, [setGameReview, resetHistory, setColorWinner]);
 }
 
 export default useCallbackResetChessBoard;

@@ -1,5 +1,6 @@
-import useGameContext from "../../hooks/useGameContext";
 import useIsMobile from "../../hooks/useIsMobile";
+import { usePiecesScores } from "../../stores/useBoardSelectors";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 import "../../styles/CapturedPieces.scss";
 
 function classNameFormat(key: string, value: number) {
@@ -14,7 +15,8 @@ interface CapturedPiecesProps {
 }
 
 function CapturedPieces({ color, onlyComputerScreen }: CapturedPiecesProps) {
-    const { piecesScores, gameStatus } = useGameContext();
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const piecesScores = usePiecesScores();
     const pieces = piecesScores[color].pieces;
     const score = piecesScores[color].score;
 

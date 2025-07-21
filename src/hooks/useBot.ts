@@ -1,31 +1,31 @@
 import { useEffect, useRef } from "react";
-import useGameContext from "./useGameContext";
 import { CompleteMove, RelativeMove, PostChessApiResponse } from "../types";
 import postChessApi from "../utils/postChessApi";
-import useCallbackRegisterMove from "./useCallbackRegisterMove";
 import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
 import random from "random";
+import { useBoardStore } from "../stores/useBoardStore";
+import { useColorToPlay, usePieces } from "../stores/useBoardSelectors";
+import { useSettingsStore } from "../stores/useSettingsStore";
+import { useGameStateStore } from "../stores/useGameStateStore";
 
 function useBot(validMoves: Map<number, RelativeMove[]>) {
-    const {
-        opponentColor,
-        colorToPlay,
-        movesHistory,
-        actualMove,
-        gameStatus,
-        pieces,
-    } = useGameContext();
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+
+    const history = useBoardStore((state) => state.history);
+    const currentMove = useBoardStore((state) => state.currentMove);
+    const pieces = usePieces();
+    const colorToPlay = useColorToPlay();
+    const registerMove = useBoardStore((state) => state.registerMove);
+    const opponentColor = useSettingsStore((state) => state.opponentColor);
 
     const calculateFenRef = useRef<string | null>(null);
     const validMovesRef = useRef(validMoves);
     const gameStatusRef = useRef(gameStatus);
 
-    if (actualMove !== movesHistory.length - 1) {
+    if (currentMove !== history.length - 1) {
         calculateFenRef.current = null;
     }
-
-    const registerMove = useCallbackRegisterMove();
 
     function playMove(
         fen: string,
@@ -65,21 +65,17 @@ function useBot(validMoves: Map<number, RelativeMove[]>) {
 
     useEffect(() => {
         gameStatusRef.current = gameStatus;
-        if (
-            gameStatus !== "playingVsBot" ||
-            actualMove !== movesHistory.length - 1
-        )
+        if (gameStatus !== "playingVsBot" || currentMove !== history.length - 1)
             return;
 
         if (colorToPlay === opponentColor) {
             validMovesRef.current = validMoves;
             if (calculateFenRef.current !== null) return;
 
-            const fen = movesHistory[actualMove].fen;
-
+            const fen = history[currentMove].fen;
             calculateFenRef.current = fen;
 
-            if (movesHistory.length === 1) {
+            if (history.length === 1) {
                 return playMove(fen, getBotOpening());
             }
 

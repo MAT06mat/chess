@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import playSound from "../../utils/playSound";
-import useGameContext from "../../hooks/useGameContext";
+import { useLastMove } from "../../stores/useBoardSelectors";
 
 function PlaySound() {
-    const { lastMove } = useGameContext();
+    const lastMove = useLastMove();
 
     useEffect(() => {
         if (lastMove?.checkMate) {

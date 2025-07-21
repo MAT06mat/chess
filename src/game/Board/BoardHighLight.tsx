@@ -1,29 +1,38 @@
-import { ReactNode, useEffect, useState } from "react";
-import useGameContext from "../../hooks/useGameContext";
+import { ReactNode, useMemo } from "react";
 import { Piece } from "../../types";
 import positionToCoords from "../../utils/positionToCoord";
 import BoardInfo from "./BoardInfo";
+import { useLastMove, useShapes } from "../../stores/useBoardSelectors";
+import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 
 interface Props {
     selectedPiece: Piece | null;
 }
 
 function BoardHighLight({ selectedPiece }: Props) {
-    const { lastMove, shapes, gameStatus } = useGameContext();
-    const [allBoardInfos, setAllBoardInfos] = useState<ReactNode>(null);
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const lastMove = useLastMove();
+    const shapes = useShapes();
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
 
-    useEffect(() => {
+    return useMemo(() => {
         const redSquares = shapes.filter((shape) => shape.from === shape.to);
-
-        const boardInfos: ReactNode[] = [];
+        const infos: ReactNode[] = [];
         const coords: string[] = [];
 
         function addHighLight(x: number, y: number, className: string) {
             const coord = `${x},${y}`;
             if (!coords.includes(coord)) {
                 coords.push(coord);
-                boardInfos.push(
-                    <BoardInfo className={className} x={x} y={y} key={coord} />
+                infos.push(
+                    <BoardInfo
+                        className={className}
+                        invertedColor={invertedColor}
+                        x={x}
+                        y={y}
+                        key={coord}
+                    />
                 );
             }
         }
@@ -42,10 +51,8 @@ function BoardHighLight({ selectedPiece }: Props) {
             addHighLight(selectedPiece.x, selectedPiece.y, "highlight");
         }
 
-        setAllBoardInfos(boardInfos);
-    }, [lastMove, shapes, gameStatus, selectedPiece]);
-
-    return allBoardInfos;
+        return infos;
+    }, [lastMove, shapes, gameStatus, selectedPiece, invertedColor]);
 }
 
 export default BoardHighLight;

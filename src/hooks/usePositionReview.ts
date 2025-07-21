@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import postChessApi from "../utils/postChessApi";
-import useGameContext from "./useGameContext";
 import { BoardPosition } from "../types";
+import { useBoardStore } from "../stores/useBoardStore";
+import { useGameStateStore } from "../stores/useGameStateStore";
 
 function usePositionReview(
     updatePercentage: (
@@ -10,15 +11,19 @@ function usePositionReview(
         movesHistory: BoardPosition[]
     ) => void
 ) {
-    const { movesHistory, gameStatus, actualMove, gameReview, colorWinner } =
-        useGameContext();
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const gameReview = useGameStateStore((state) => state.gameReview);
+    const colorWinner = useGameStateStore((state) => state.colorWinner);
+
+    const history = useBoardStore((state) => state.history);
+    const currentMove = useBoardStore((state) => state.currentMove);
     const calculateFenRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (gameStatus !== "gameEnd" || !gameReview) return;
-        if (actualMove >= movesHistory.length - 1) return;
+        if (currentMove >= history.length - 1) return;
 
-        const actualBoard = movesHistory[actualMove];
+        const actualBoard = history[currentMove];
         if (actualBoard.chessApiData !== undefined) return;
         if (calculateFenRef.current !== null) return;
         calculateFenRef.current = actualBoard.fen;
@@ -27,7 +32,7 @@ function usePositionReview(
             .then((data) => {
                 calculateFenRef.current = null;
                 actualBoard.chessApiData = data;
-                updatePercentage(actualMove, colorWinner, movesHistory);
+                updatePercentage(currentMove, colorWinner, history);
                 if (data.type === "error") {
                     console.error("Error fetching chess API data:", data);
                 }
@@ -37,9 +42,9 @@ function usePositionReview(
                 calculateFenRef.current = null;
             });
     }, [
-        movesHistory,
+        history,
         gameStatus,
-        actualMove,
+        currentMove,
         gameReview,
         updatePercentage,
         colorWinner,

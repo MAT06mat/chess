@@ -4,7 +4,6 @@
     justify-content: center;
     width: min(100%, 80vh);
     height: min(100%, 80vh);
-    touch-action: none;
 
     &:has(:last-child.captured-pieces) {
         // 5rem -> height of .captured-pieces * 2
@@ -48,7 +47,7 @@
                 width: 12.5%;
                 height: 12.5%;
                 user-select: none;
-                pointer-events: none;
+                touch-action: none;
 
                 &.shape,
                 &.highlight {

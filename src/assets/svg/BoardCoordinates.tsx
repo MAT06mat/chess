@@ -1,7 +1,7 @@
-import useGameContext from "../../hooks/useGameContext";
+import { useSettingsStore } from "../../stores/useSettingsStore";
 
 function BoardCoordinates() {
-    const { invertedColor } = useGameContext();
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
 
     if (!invertedColor) {
         return (

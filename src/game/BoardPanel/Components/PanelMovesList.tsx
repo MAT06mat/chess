@@ -1,7 +1,8 @@
-import useGameContext from "../../../hooks/useGameContext";
 import { useEffect, useRef } from "react";
 import "../../../styles/PanelMovesList.scss";
 import BoardActions from "./BaordActions";
+import { useBoardStore } from "../../../stores/useBoardStore";
+import { useGameStateStore } from "../../../stores/useGameStateStore";
 
 type refObj = React.RefObject<HTMLDivElement>;
 
@@ -15,41 +16,40 @@ interface customMove {
 function createCustomMove(
     move: string | null,
     index: number,
-    actualMove: number,
+    currentMove: number,
     ref: refObj
 ) {
-    const selected = index === actualMove;
+    const selected = index === currentMove;
     const className = selected ? "move-notation selected" : "move-notation";
-    const newRef = selected || (index === 1 && actualMove === 0) ? ref : null;
+    const newRef = selected || (index === 1 && currentMove === 0) ? ref : null;
     return { move, index, className, ref: newRef };
 }
 
-function createPairMoves(arr: string[], actualMove: number, ref: refObj) {
+function createPairMoves(arr: string[], currentMove: number, ref: refObj) {
     const result: customMove[][] = [];
     for (let i = 0; i < arr.length; i += 2) {
         const first = arr[i];
         const second = arr[i + 1] !== undefined ? arr[i + 1] : null;
         result.push([
-            createCustomMove(first, i + 1, actualMove, ref),
-            createCustomMove(second, i + 2, actualMove, ref),
+            createCustomMove(first, i + 1, currentMove, ref),
+            createCustomMove(second, i + 2, currentMove, ref),
         ]);
     }
     return result;
 }
 
 function PanelMovesList() {
-    const {
-        setActualMove,
-        actualMove,
-        movesHistory,
-        colorWinner,
-        gameStatus,
-        gameReview,
-    } = useGameContext();
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const gameReview = useGameStateStore((state) => state.gameReview);
+    const colorWinner = useGameStateStore((state) => state.colorWinner);
+
+    const history = useBoardStore((state) => state.history);
+    const currentMove = useBoardStore((state) => state.currentMove);
+    const setCurrentMove = useBoardStore((state) => state.setCurrentMove);
 
     const isGameEnd = gameStatus === "gameEnd";
 
-    const chessMoves = movesHistory.map((moveHistory) => {
+    const chessMoves = history.map((moveHistory) => {
         if (!moveHistory.lastMove) return "";
         return moveHistory.lastMove.san;
     });
@@ -59,11 +59,11 @@ function PanelMovesList() {
     const selectedMoveRef = useRef<HTMLDivElement>(null);
     const gameWinnerRef = useRef<HTMLDivElement>(null);
 
-    const movesList = createPairMoves(chessMoves, actualMove, selectedMoveRef);
+    const movesList = createPairMoves(chessMoves, currentMove, selectedMoveRef);
 
     useEffect(() => {
         let divElement = null;
-        if (gameWinnerRef.current && actualMove === movesHistory.length - 1) {
+        if (gameWinnerRef.current && currentMove === history.length - 1) {
             divElement = gameWinnerRef.current;
         } else {
             divElement = selectedMoveRef.current;
@@ -73,7 +73,7 @@ function PanelMovesList() {
             block: "nearest",
             inline: "center",
         });
-    }, [actualMove, movesHistory]);
+    }, [history, currentMove]);
 
     return (
         <div className="panel-moves-list-wrapper">
@@ -89,7 +89,7 @@ function PanelMovesList() {
                             <div
                                 ref={moves[0].ref}
                                 className={moves[0].className}
-                                onClick={() => setActualMove(moves[0].index)}
+                                onClick={() => setCurrentMove(moves[0].index)}
                             >
                                 {moves[0].move}
                             </div>
@@ -98,7 +98,7 @@ function PanelMovesList() {
                                     ref={moves[1].ref}
                                     className={moves[1].className}
                                     onClick={() =>
-                                        setActualMove(moves[1].index)
+                                        setCurrentMove(moves[1].index)
                                     }
                                 >
                                     {moves[1].move}

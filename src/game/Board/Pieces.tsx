@@ -1,15 +1,18 @@
-import useGameContext from "../../hooks/useGameContext";
+import { usePieces } from "../../stores/useBoardSelectors";
+import { useSettingsStore } from "../../stores/useSettingsStore";
 import BoardInfo from "./BoardInfo";
 
 function Pieces() {
-    const { pieces, invertedColor } = useGameContext();
+    const pieces = usePieces();
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
 
     return pieces.map((piece) => (
         <BoardInfo
             className={"piece " + piece.color + piece.type}
-            key={invertedColor ? piece.id + 64 : piece.id}
+            invertedColor={invertedColor}
             x={piece.x}
             y={piece.y}
+            key={invertedColor ? piece.id + 64 : piece.id}
         />
     ));
 }

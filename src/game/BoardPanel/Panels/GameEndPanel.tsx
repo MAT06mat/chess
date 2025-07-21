@@ -1,14 +1,18 @@
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
-import useGameContext from "../../../hooks/useGameContext";
 import CapturedPiecesContainer from "../../Components/CapturedPieces";
 import PanelMovesList from "../Components/PanelMovesList";
 import GreyButton from "../../Components/GreyButton";
 import GreenButton from "../../Components/GreenButton";
+import { useBoardStore } from "../../../stores/useBoardStore";
+import { useGameStateStore } from "../../../stores/useGameStateStore";
 
 function GameEndPanel() {
-    const { setGameStatus, setActualMove, gameReview, setGameReview } =
-        useGameContext();
+    const gameReview = useGameStateStore((state) => state.gameReview);
+    const setGameReview = useGameStateStore((state) => state.setGameReview);
+    const setGameStatus = useGameStateStore((state) => state.setGameStatus);
+
+    const goToFirstMove = useBoardStore((state) => state.goToFirstMove);
     const resetChessBoard = useCallbackResetChessBoard();
     const startGame = useCallbackStartGame();
 
@@ -19,7 +23,7 @@ function GameEndPanel() {
 
     function runGameReview() {
         setGameReview(true);
-        setActualMove(0);
+        goToFirstMove();
     }
 
     return (

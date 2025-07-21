@@ -1,4 +1,4 @@
-import useGameContext from "../../hooks/useGameContext";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 import "../../styles/Title.scss";
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
-    const { title } = useGameContext();
+    const title = useGameStateStore((state) => state.title);
 
     const className = onlyComputerScreen
         ? " computer-screen"

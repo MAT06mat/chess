@@ -1,24 +1,24 @@
 import { useState } from "react";
 import Popup from "./Popup";
-import useGameContext from "../../hooks/useGameContext";
 import "../../styles/WinnerPopup.scss";
 import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../hooks/useCallbackStartGame";
 import GreenButton from "./GreenButton";
 import GreyButton from "./GreyButton";
+import { useBoardStore } from "../../stores/useBoardStore";
+import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useGameStateStore } from "../../stores/useGameStateStore";
 
 function WinnerPopup() {
-    const {
-        colorWinner,
-        playerColor,
-        opponentColor,
-        playVs,
-        setGameStatus,
-        setGameReview,
-        setActualMove,
-        gameReview,
-    } = useGameContext();
+    const gameReview = useGameStateStore((state) => state.gameReview);
+    const colorWinner = useGameStateStore((state) => state.colorWinner);
+    const setGameReview = useGameStateStore((state) => state.setGameReview);
+    const setGameStatus = useGameStateStore((state) => state.setGameStatus);
     const [visible, setVisible] = useState(true);
+    const goToFirstMove = useBoardStore((state) => state.goToFirstMove);
+    const playerColor = useSettingsStore((state) => state.playerColor);
+    const opponentColor = useSettingsStore((state) => state.opponentColor);
+    const playVs = useSettingsStore((state) => state.playVs);
     const resetChessBoard = useCallbackResetChessBoard();
     const startGame = useCallbackStartGame();
 
@@ -43,7 +43,7 @@ function WinnerPopup() {
 
     function runGameReview() {
         setGameReview(true);
-        setActualMove(0);
+        goToFirstMove();
         setVisible(false);
     }
 

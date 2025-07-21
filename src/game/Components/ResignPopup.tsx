@@ -1,24 +1,26 @@
 import Popup from "./Popup";
 import GreyButton from "./GreyButton";
 import "../../styles/ResignPopup.scss";
-import useGameContext from "../../hooks/useGameContext";
 import playSound from "../../utils/playSound";
 import invertColor from "../../utils/invertColor";
 import GreenButton from "./GreenButton";
+import { useColorToPlay } from "../../stores/useBoardSelectors";
+import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useGameStateStore } from "../../stores/useGameStateStore";
+import { usePopupStore } from "../../stores/usePopupStore";
 
 function ResignPopup() {
-    const {
-        setColorWinner,
-        colorToPlay,
-        opponentColor,
-        gameStatus,
-        setGameStatus,
-        resignPopupVisible,
-        setResignPopupVisible,
-    } = useGameContext();
+    const removePopup = usePopupStore((state) => state.removePopup);
+
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const setColorWinner = useGameStateStore((state) => state.setColorWinner);
+    const setGameStatus = useGameStateStore((state) => state.setGameStatus);
+
+    const colorToPlay = useColorToPlay();
+    const opponentColor = useSettingsStore((state) => state.opponentColor);
 
     function resign() {
-        setResignPopupVisible(false);
+        removePopup();
         if (gameStatus === "playingVsBot") {
             setColorWinner(opponentColor);
         } else {
@@ -28,22 +30,14 @@ function ResignPopup() {
         playSound("game-end");
     }
 
-    function cancel() {
-        setResignPopupVisible(false);
-    }
-
     return (
-        <Popup
-            className="resign-popup"
-            visible={resignPopupVisible}
-            onClick={cancel}
-        >
+        <Popup className="resign-popup" onClick={removePopup}>
             <div className="resign-popup-text">
                 Are you sure you want to resign?
             </div>
             <div className="resign-popup-buttons">
                 <div className="rows-split">
-                    <GreyButton text="Cancel" onClick={cancel} />
+                    <GreyButton text="Cancel" onClick={removePopup} />
                     <GreenButton text="Yes" onClick={resign} />
                 </div>
             </div>

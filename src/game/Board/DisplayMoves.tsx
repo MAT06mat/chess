@@ -1,3 +1,4 @@
+import { useSettingsStore } from "../../stores/useSettingsStore";
 import { Piece } from "../../types";
 import BoardInfo from "./BoardInfo";
 
@@ -8,9 +9,10 @@ interface Props {
 }
 
 function DisplayMoves({ selectedPiece, displayMoves, boardRef }: Props) {
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
     if (!selectedPiece) return null;
 
-    const moves = displayMoves.map((move, index) => {
+    return displayMoves.map((move, index) => {
         return (
             <BoardInfo
                 className={move.capture ? "capture-hint" : "hint"}
@@ -19,14 +21,13 @@ function DisplayMoves({ selectedPiece, displayMoves, boardRef }: Props) {
                         ? boardRef.current?.clientWidth * 0.011 + "px"
                         : undefined
                 }
-                key={index}
+                invertedColor={invertedColor}
                 x={move.x + selectedPiece.x}
                 y={move.y + selectedPiece.y}
+                key={index}
             />
         );
     });
-
-    return moves;
 }
 
 export default DisplayMoves;

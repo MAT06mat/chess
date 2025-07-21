@@ -1,19 +1,20 @@
 import { useCallback } from "react";
-import useGameContext from "./useGameContext";
 import playSound from "../utils/playSound";
 import useCallbackResetChessBoard from "./useCallbackResetChessBoard";
-import random from "random";
+import { useSettingsStore } from "../stores/useSettingsStore";
+import { useGameStateStore } from "../stores/useGameStateStore";
 
 function useCallbackStartGame() {
-    const { playSide, setInvertedColor, setGameStatus, playVs } =
-        useGameContext();
+    const setGameStatus = useGameStateStore((state) => state.setGameStatus);
+    const playVs = useSettingsStore((state) => state.playVs);
+    const updateInvertedColor = useSettingsStore(
+        (state) => state.updateInvertedColor
+    );
 
     const resetChessBoard = useCallbackResetChessBoard();
 
     return useCallback(() => {
-        if (playSide === "random") {
-            setInvertedColor(random.boolean());
-        }
+        updateInvertedColor();
         resetChessBoard();
         if (playVs === "friend") {
             setGameStatus("playingVsFriend");
@@ -23,7 +24,7 @@ function useCallbackStartGame() {
             setGameStatus("playingSandBox");
         }
         playSound("game-start");
-    }, [playSide, playVs, setInvertedColor, resetChessBoard, setGameStatus]);
+    }, [playVs, updateInvertedColor, resetChessBoard, setGameStatus]);
 }
 
 export default useCallbackStartGame;

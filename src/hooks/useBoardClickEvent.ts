@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import useGameContext from "./useGameContext";
-import useCallbackRegisterMove from "./useCallbackRegisterMove";
+import React, { useCallback, useEffect, useRef } from "react";
 import getSquarePos from "../utils/getSquarePos";
 import { CompleteMove, Piece, RelativeMove } from "../types";
 import getcompleteMove from "../utils/moves/getCompleteMove";
@@ -10,6 +8,15 @@ import {
     isPieceSelectable,
     getValidMoveTo,
 } from "../utils/boardUtils";
+import { useBoardStore } from "../stores/useBoardStore";
+import {
+    useColorToPlay,
+    usePieces,
+    useShapes,
+} from "../stores/useBoardSelectors";
+import { useSettingsStore } from "../stores/useSettingsStore";
+import { useGameStateStore } from "../stores/useGameStateStore";
+import { usePopupStore } from "../stores/usePopupStore";
 
 const useBoardClickEvent = (
     boardRef: React.RefObject<HTMLDivElement>,
@@ -21,21 +28,23 @@ const useBoardClickEvent = (
     setSelectedPiece: React.Dispatch<React.SetStateAction<Piece | null>>,
     promotionBoxVisible: boolean,
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    setNextMove: React.Dispatch<React.SetStateAction<CompleteMove | null>>
+    nextMoveRef: React.MutableRefObject<CompleteMove | null>
 ) => {
-    const {
-        pieces,
-        shapes,
-        movesHistory,
-        setMovesHistory,
-        actualMove,
-        colorToPlay,
-        invertedColor,
-        playerColor,
-        gameStatus,
-    } = useGameContext();
-    const registerMove = useCallbackRegisterMove();
-    const isSandBox = gameStatus === "playingSandBox";
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const isSandBox = useGameStateStore((state) => state.isSandBox);
+
+    const history = useBoardStore((state) => state.history);
+    const setHistory = useBoardStore((state) => state.setHistory);
+    const currentMove = useBoardStore((state) => state.currentMove);
+    const pieces = usePieces();
+    const shapes = useShapes();
+    const colorToPlay = useColorToPlay();
+    const registerMove = useBoardStore((state) => state.registerMove);
+
+    const invertedColor = useSettingsStore((state) => state.invertedColor);
+    const playerColor = useSettingsStore((state) => state.playerColor);
+
+    const isPopupOpen = usePopupStore((state) => state.isPopupOpen);
 
     type ClickEvent = {
         x: number;
@@ -44,23 +53,23 @@ const useBoardClickEvent = (
         identifier?: number;
     } | null;
 
-    const [lastClick, setLastClick] = useState<ClickEvent>(null);
-    const [pieceId, setPieceId] = useState<number | null>(null);
+    const lastClickRef = useRef<ClickEvent>(null);
+    const pieceIdRef = useRef<number | null>(null);
 
     const clearSelection = useCallback(() => {
         setSelectedPiece(null);
-        setLastClick(null);
-        setPieceId(null);
+        lastClickRef.current = null;
+        pieceIdRef.current = null;
     }, [setSelectedPiece]);
 
     const toggleLastPieceSelected = useCallback(() => {
-        if (pieceId === null && !isSandBox) {
-            setLastClick(null);
-            setPieceId(selectedPiece?.id ?? null);
+        if (pieceIdRef.current === null && !isSandBox) {
+            lastClickRef.current = null;
+            pieceIdRef.current = selectedPiece?.id ?? null;
         } else {
             clearSelection();
         }
-    }, [pieceId, isSandBox, selectedPiece, clearSelection]);
+    }, [isSandBox, selectedPiece, clearSelection]);
 
     const handleBoardMouseDown = useCallback(
         (event: MouseEvent, identifier?: number) => {
@@ -68,20 +77,24 @@ const useBoardClickEvent = (
                 promotionBoxVisible &&
                 event.target === promotionCloseRef.current
             ) {
-                setNextMove(null);
+                nextMoveRef.current = null;
                 setPromotionBoxVisible(false);
                 return;
             }
 
             const pos = getSquarePos(event, boardRef.current, invertedColor);
-            if (!pos) return;
+            if (!pos || isPopupOpen) return;
 
-            setLastClick({ ...pos, button: event.button, identifier });
+            lastClickRef.current = { ...pos, button: event.button, identifier };
 
             if (event.button === 0) {
-                if (shapes) {
-                    movesHistory[actualMove].shapes = [];
-                    setMovesHistory([...movesHistory]);
+                if (shapes && shapes.length !== 0) {
+                    const newHistory = [...history];
+                    newHistory[currentMove] = {
+                        ...history[currentMove],
+                        shapes: [],
+                    };
+                    setHistory(newHistory);
                 }
 
                 const piece = findPieceAt(pos, pieces);
@@ -104,7 +117,8 @@ const useBoardClickEvent = (
                 ) {
                     setSelectedPiece(piece);
                     setDisplayMoves(validMoves.get(piece.id) ?? []);
-                    if (pieceId !== piece.id) setPieceId(null);
+                    if (pieceIdRef.current !== piece.id)
+                        pieceIdRef.current = null;
                 } else if (!move) {
                     clearSelection();
                 }
@@ -115,17 +129,17 @@ const useBoardClickEvent = (
         [
             boardRef,
             promotionCloseRef,
+            nextMoveRef,
             promotionBoxVisible,
-            setNextMove,
             setPromotionBoxVisible,
             shapes,
-            movesHistory,
-            actualMove,
-            setMovesHistory,
+            history,
+            currentMove,
+            isPopupOpen,
+            setHistory,
             setSelectedPiece,
             setDisplayMoves,
             validMoves,
-            pieceId,
             selectedPiece,
             invertedColor,
             clearSelection,
@@ -146,6 +160,8 @@ const useBoardClickEvent = (
                 return;
             }
 
+            const lastClick = lastClickRef.current;
+
             if (!lastClick || lastClick.button !== event.button) return;
 
             if (lastClick.button === 0) {
@@ -162,7 +178,7 @@ const useBoardClickEvent = (
                     const completeMove = getcompleteMove(move, selectedPiece);
                     if (completeMove.special === "promotion") {
                         setPromotionBoxVisible(true);
-                        setNextMove(completeMove);
+                        nextMoveRef.current = completeMove;
                     } else {
                         registerMove(completeMove, pieces);
                     }
@@ -179,29 +195,34 @@ const useBoardClickEvent = (
                 const exists = newShapes.some(
                     (s) => s.from === from && s.to === to
                 );
-                movesHistory[actualMove].shapes = exists
+                const updatedShapes = exists
                     ? newShapes.filter((s) => s.from !== from || s.to !== to)
                     : [...newShapes, { from, to }];
 
-                setMovesHistory([...movesHistory]);
+                const newHistory = [...history];
+                newHistory[currentMove] = {
+                    ...history[currentMove],
+                    shapes: updatedShapes,
+                };
+
+                setHistory(newHistory);
             }
         },
         [
             boardRef,
             invertedColor,
-            lastClick,
             selectedPiece,
             setPromotionBoxVisible,
-            setNextMove,
+            nextMoveRef,
             registerMove,
             pieces,
             clearSelection,
             toggleLastPieceSelected,
             shapes,
-            movesHistory,
-            actualMove,
+            history,
+            currentMove,
             gameStatus,
-            setMovesHistory,
+            setHistory,
             displayMoves,
             isSandBox,
         ]
@@ -223,6 +244,7 @@ const useBoardClickEvent = (
     const handleBoardTouchUp = useCallback(
         (event: TouchEvent) => {
             const touch = event.changedTouches[0];
+            const lastClick = lastClickRef.current;
             if (!lastClick || lastClick.identifier !== touch.identifier) return;
             const mouseEvent = new MouseEvent("mousedown", {
                 clientX: touch.clientX,
@@ -233,7 +255,7 @@ const useBoardClickEvent = (
             }
             handleBoardMouseUp(mouseEvent, preventDefault);
         },
-        [handleBoardMouseUp, lastClick]
+        [handleBoardMouseUp]
     );
 
     useEffect(() => {

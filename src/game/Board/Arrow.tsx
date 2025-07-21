@@ -1,4 +1,4 @@
-import useGameContext from "../../hooks/useGameContext";
+import { memo } from "react";
 import positionToCoords from "../../utils/positionToCoord";
 
 interface ArrowProps {
@@ -7,8 +7,12 @@ interface ArrowProps {
     color?: "orange" | "blue" | "green";
 }
 
-function Arrow({ from, to, color }: ArrowProps) {
-    const { invertedColor } = useGameContext();
+function Arrow({
+    from,
+    to,
+    color,
+    invertedColor,
+}: ArrowProps & { invertedColor: boolean }) {
     if (to === from) return null;
 
     const [x, y] = positionToCoords(from, invertedColor, true);
@@ -110,4 +114,4 @@ function Arrow({ from, to, color }: ArrowProps) {
 }
 
 export type { ArrowProps };
-export default Arrow;
+export default memo(Arrow);
