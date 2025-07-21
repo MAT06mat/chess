@@ -1,14 +1,13 @@
 .winner-popup {
-    width: 100%;
-    max-width: 400px;
-    margin: 2rem;
+    max-width: 375px;
+    background-color: #312e2b;
 
     .winner-popup-title {
         padding: 1rem;
         font-size: x-large;
         font-weight: 600;
         background-color: #ffffff0b;
-        border-radius: 16px 16px 0 0;
+        border-radius: 0.6rem 0.6rem 0 0;
     }
 
     .winner-popup-buttons {

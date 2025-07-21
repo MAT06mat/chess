@@ -9,12 +9,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
 
-    .popup {
-        background-color: #312e2b;
-        position: relative;
-        border-radius: 16px;
-        z-index: 1001;
-        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.65);
-    }
+.popup {
+    position: relative;
+    z-index: 1001;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.65);
+    background-color: #272522;
+    border-radius: 0.6rem;
+    border: 0.05rem solid #ffffff1a;
+    font-size: 14px;
+    margin: 2rem;
+    width: 100%;
 }
