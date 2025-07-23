@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { CompleteMove, RelativeMove, PostChessApiResponse } from "../types";
-import postChessApi from "../utils/postChessApi";
+import useChessApi from "../stores/useChessApi";
 import getCompleteMove from "../utils/moves/getCompleteMove";
 import getBotOpening from "../utils/getBotOpening";
 import random from "random";
@@ -19,35 +19,30 @@ function useBot(validMoves: Map<number, RelativeMove[]>) {
     const registerMove = useBoardStore((state) => state.registerMove);
     const opponentColor = useSettingsStore((state) => state.opponentColor);
 
-    const calculateFenRef = useRef<string | null>(null);
-    const validMovesRef = useRef(validMoves);
-    const gameStatusRef = useRef(gameStatus);
+    const requestIdRef = useRef(0);
 
-    if (currentMove !== history.length - 1) {
-        calculateFenRef.current = null;
-    }
+    const playMove = useCallback(
+        (move: CompleteMove, data?: PostChessApiResponse) => {
+            const thisRequestId = ++requestIdRef.current;
 
-    function playMove(
-        fen: string,
-        move: CompleteMove,
-        postChessApiResponse?: PostChessApiResponse
-    ) {
-        setTimeout(() => {
-            if (gameStatusRef.current !== "playingVsBot") {
-                calculateFenRef.current = null;
-            }
-            if (calculateFenRef.current === fen) {
-                calculateFenRef.current = null;
-                registerMove(move, pieces, postChessApiResponse);
-            }
-        }, random.int(500, 1000));
-    }
+            const timeoutId = setTimeout(() => {
+                if (requestIdRef.current !== thisRequestId) return;
 
-    function playRandomMove(fen: string) {
-        console.error("Error while playing bot move. Playing random");
+                if (gameStatus !== "playingVsBot") return;
+
+                registerMove(move, pieces, data);
+            }, random.int(500, 1000));
+
+            return () => clearTimeout(timeoutId);
+        },
+        [pieces, registerMove, gameStatus]
+    );
+
+    const playRandomMove = useCallback(() => {
+        console.warn("[Bot] Error while playing bot move. Playing random");
 
         const moves = new Map(
-            Array.from(validMovesRef.current.entries()).filter(
+            Array.from(validMoves.entries()).filter(
                 ([, moves]) => moves.length > 0
             )
         );
@@ -60,71 +55,94 @@ function useBot(validMoves: Map<number, RelativeMove[]>) {
 
         const completeMove = getCompleteMove(move, selectedPiece);
 
-        playMove(fen, completeMove);
-    }
+        playMove(completeMove);
+    }, [pieces, playMove, validMoves]);
 
-    useEffect(() => {
-        gameStatusRef.current = gameStatus;
-        if (gameStatus !== "playingVsBot" || currentMove !== history.length - 1)
-            return;
-
-        if (colorToPlay === opponentColor) {
-            validMovesRef.current = validMoves;
-            if (calculateFenRef.current !== null) return;
-
-            const fen = history[currentMove].fen;
-            calculateFenRef.current = fen;
-
-            if (history.length === 1) {
-                return playMove(fen, getBotOpening());
+    const playMoveFromData = useCallback(
+        (data: PostChessApiResponse) => {
+            if (data.type === "error") {
+                console.warn("[Bot] Received error response", data);
+                return playRandomMove();
             }
 
-            postChessApi({
-                fen: fen,
-            }).then((data) => {
-                if (data.type === "error") return playRandomMove(fen);
+            const fromX = data.fromNumeric[0] - 1;
+            const fromY = data.fromNumeric[1] - 1;
+            const toX = data.toNumeric[0] - 1;
+            const toY = data.toNumeric[1] - 1;
 
-                const fromX = data.fromNumeric[0] - 1;
-                const fromY = data.fromNumeric[1] - 1;
-                const toX = data.toNumeric[0] - 1;
-                const toY = data.toNumeric[1] - 1;
+            const selectedPiece = pieces.find(
+                (p) => p.x === fromX && p.y === fromY
+            );
 
-                const selectedPiece = pieces.find(
-                    (p) => p.x === fromX && p.y === fromY
-                );
+            if (!selectedPiece) return playRandomMove();
 
-                if (selectedPiece === undefined) return playRandomMove(fen);
+            const pieceMoves = validMoves.get(selectedPiece?.id);
+            const move = pieceMoves?.find(
+                (m) => m.x === toX - fromX && m.y === toY - fromY
+            );
 
-                const pieceMoves = validMovesRef.current.get(selectedPiece?.id);
-                const move = pieceMoves?.find(
-                    (m) => m.x === toX - fromX && m.y === toY - fromY
-                );
+            if (!move) return playRandomMove();
 
-                if (move === undefined) return playRandomMove(fen);
+            const completeMove = getCompleteMove(move, selectedPiece);
 
-                const completeMove = getCompleteMove(move, selectedPiece);
+            if (data.isCapture) {
+                completeMove.capture = true;
+            }
+            if (data.isCastling) {
+                completeMove.special = "castling";
+            }
+            if (data.isPromotion && data.promotion) {
+                completeMove.special = "promotion";
+                completeMove.toPiece = {
+                    type: data.promotion,
+                    color: selectedPiece.color,
+                    x: toX,
+                    y: toY,
+                    id: selectedPiece.id,
+                };
+            }
+            playMove(completeMove, data);
+        },
+        [pieces, playMove, playRandomMove, validMoves]
+    );
 
-                if (data.isCapture) {
-                    completeMove.capture = true;
-                }
-                if (data.isCastling) {
-                    completeMove.special = "castling";
-                }
-                if (data.isPromotion && data.promotion) {
-                    completeMove.special = "promotion";
-                    completeMove.toPiece = {
-                        type: data.promotion,
-                        color: selectedPiece.color,
-                        x: toX,
-                        y: toY,
-                        id: selectedPiece.id,
-                    };
-                }
-                playMove(fen, completeMove, data);
-            });
+    const shouldPlay =
+        gameStatus === "playingVsBot" &&
+        colorToPlay === opponentColor &&
+        currentMove === history.length - 1;
+
+    const fen = history[currentMove]?.fen || "";
+
+    const { data, isSuccess, isPending, refetch } = useChessApi({ fen }, "bot");
+
+    useEffect(() => {
+        if (!shouldPlay) return;
+
+        if (history.length === 1) {
+            playMove(getBotOpening());
+            return;
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [calculateFenRef, validMoves, gameStatus]);
+
+        refetch();
+    }, [shouldPlay, refetch, history.length, playMove]);
+
+    useEffect(() => {
+        if (!shouldPlay) return;
+
+        if (isSuccess && data) {
+            playMoveFromData(data);
+        } else if (!isPending && (!isSuccess || !data)) {
+            console.warn("[Bot] No API data or request failed");
+            playRandomMove();
+        }
+    }, [
+        shouldPlay,
+        isPending,
+        isSuccess,
+        data,
+        playMoveFromData,
+        playRandomMove,
+    ]);
 }
 
 export default useBot;

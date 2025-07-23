@@ -122,14 +122,15 @@ export const useBoardStore = create(
                             };
                         });
                     },
-                    clearShapes: () =>
+                    clearShapes: () => {
                         set((state) => {
                             const newHistory = state.history.map((bp) => ({
                                 ...bp,
                                 shapes: [],
                             }));
                             return { history: newHistory };
-                        }),
+                        });
+                    },
                 };
             }
         ),

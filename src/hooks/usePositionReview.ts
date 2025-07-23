@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
-import postChessApi from "../utils/postChessApi";
+import { useEffect } from "react";
+import useChessApi from "../stores/useChessApi";
 import { BoardPosition } from "../types";
 import { useBoardStore } from "../stores/useBoardStore";
 import { useGameStateStore } from "../stores/useGameStateStore";
+import { useCurrentBoard } from "../stores/useBoardSelectors";
 
 function usePositionReview(
     updatePercentage: (
@@ -17,37 +18,39 @@ function usePositionReview(
 
     const history = useBoardStore((state) => state.history);
     const currentMove = useBoardStore((state) => state.currentMove);
-    const calculateFenRef = useRef<string | null>(null);
+
+    const currentBoard = useCurrentBoard();
+    const fen = currentBoard.fen;
+
+    const { data, isSuccess, refetch } = useChessApi({ fen }, "review");
+
+    const shouldFetch =
+        gameStatus === "gameEnd" &&
+        gameReview &&
+        currentMove < history.length - 1 &&
+        !currentBoard.chessApiData;
 
     useEffect(() => {
-        if (gameStatus !== "gameEnd" || !gameReview) return;
-        if (currentMove >= history.length - 1) return;
+        if (!shouldFetch) return;
+        refetch();
+    }, [shouldFetch, refetch]);
 
-        const actualBoard = history[currentMove];
-        if (actualBoard.chessApiData !== undefined) return;
-        if (calculateFenRef.current !== null) return;
-        calculateFenRef.current = actualBoard.fen;
+    useEffect(() => {
+        if (!isSuccess || !data) return;
 
-        postChessApi({ fen: actualBoard.fen })
-            .then((data) => {
-                calculateFenRef.current = null;
-                actualBoard.chessApiData = data;
-                updatePercentage(currentMove, colorWinner, history);
-                if (data.type === "error") {
-                    console.error("Error fetching chess API data:", data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error while fetching chess API data:", error);
-                calculateFenRef.current = null;
-            });
+        currentBoard.chessApiData = data;
+        updatePercentage(currentMove, colorWinner, history);
+        if (data.type === "error") {
+            console.error("Error fetching chess API data:", data);
+        }
     }, [
-        history,
-        gameStatus,
+        isSuccess,
+        data,
         currentMove,
-        gameReview,
-        updatePercentage,
         colorWinner,
+        history,
+        currentBoard,
+        updatePercentage,
     ]);
 }
 
