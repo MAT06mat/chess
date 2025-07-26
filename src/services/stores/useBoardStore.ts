@@ -1,16 +1,16 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
-import getDefaultBoard from "../utils/getDefaultBoard";
+import getDefaultBoard from "../../utils/getDefaultBoard";
 import {
     BoardPosition,
     CompleteMove,
     Piece,
     PostChessApiResponse,
-} from "../types";
-import doMove from "../utils/moves/doMove";
-import isCheck from "../utils/moves/isCheck";
-import getChessNotation from "../utils/getChessNotation";
-import getFen from "../utils/getFen";
+} from "../../types";
+import doMove from "../engine/doMove";
+import isCheck from "../engine/isCheck";
+import getFen from "../../utils/getFen";
+import { moveToSan } from "../../utils/formatting";
 
 export const useBoardStore = create(
     persist(
@@ -58,7 +58,7 @@ export const useBoardStore = create(
 
                             // Add the move to the history
                             completeMove.check = isCheck(lastColor, newPieces);
-                            completeMove.san = getChessNotation(completeMove);
+                            completeMove.san = moveToSan(completeMove);
                             const fen = getFen(
                                 newPieces,
                                 completeMove,

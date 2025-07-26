@@ -1,4 +1,4 @@
-import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
 
 function BoardCoordinates() {
     const invertedColor = useSettingsStore((state) => state.invertedColor);

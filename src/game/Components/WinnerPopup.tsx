@@ -1,13 +1,13 @@
 import { useState } from "react";
-import Popup from "./Popup";
+import Popup from "./ui/Popup";
 import "../../styles/WinnerPopup.scss";
 import useCallbackResetChessBoard from "../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../hooks/useCallbackStartGame";
-import GreenButton from "./GreenButton";
-import GreyButton from "./GreyButton";
-import { useBoardStore } from "../../stores/useBoardStore";
-import { useSettingsStore } from "../../stores/useSettingsStore";
-import { useGameStateStore } from "../../stores/useGameStateStore";
+import GreenButton from "./ui/GreenButton";
+import GreyButton from "./ui/GreyButton";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
+import { useBoardStore } from "../../services/stores/useBoardStore";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
 
 function WinnerPopup() {
     const gameReview = useGameStateStore((state) => state.gameReview);

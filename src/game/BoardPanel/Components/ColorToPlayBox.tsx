@@ -1,4 +1,4 @@
-import { useColorToPlay } from "../../../stores/useBoardSelectors";
+import { useColorToPlay } from "../../../services/stores/useBoardSelectors";
 import "../../../styles/ColorToPlayBox.scss";
 
 function ColorToPlayBox() {

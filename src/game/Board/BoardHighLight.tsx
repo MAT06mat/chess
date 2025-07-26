@@ -1,10 +1,13 @@
 import { ReactNode, useMemo } from "react";
 import { Piece } from "../../types";
-import positionToCoords from "../../utils/positionToCoord";
 import BoardInfo from "./BoardInfo";
-import { useLastMove, useShapes } from "../../stores/useBoardSelectors";
-import { useSettingsStore } from "../../stores/useSettingsStore";
-import { useGameStateStore } from "../../stores/useGameStateStore";
+import {
+    useLastMove,
+    useShapes,
+} from "../../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
+import { squareToCoords } from "../../utils/formatting";
 
 interface Props {
     selectedPiece: Piece | null;
@@ -38,8 +41,8 @@ function BoardHighLight({ selectedPiece }: Props) {
         }
 
         redSquares.forEach((shape) => {
-            const [x, y] = positionToCoords(shape.to);
-            addHighLight(x, 7 - y, "shape");
+            const coord = squareToCoords(shape.to);
+            addHighLight(coord.x, coord.y, "shape");
         });
 
         if (lastMove && gameStatus !== "playingSandBox") {

@@ -1,4 +1,5 @@
 import { CSSProperties, memo } from "react";
+import { invertCoords } from "../../utils/helpers";
 
 interface BoardInfoProps {
     x: number;
@@ -15,23 +16,22 @@ function BoardInfo({
     className,
     borderWidth,
 }: BoardInfoProps) {
-    const coordX = invertedColor ? 7 - x : x;
-    const coordY = invertedColor ? 7 - y : y;
+    const coords = invertedColor ? invertCoords({ x, y }) : { x, y };
 
     let borderRadius = "";
-    if (coordX === 0 && coordY === 0) {
+    if (coords.x === 0 && coords.y === 0) {
         borderRadius = " radius-bottom-left";
-    } else if (coordX === 7 && coordY === 0) {
+    } else if (coords.x === 7 && coords.y === 0) {
         borderRadius = " radius-bottom-right";
-    } else if (coordX === 0 && coordY === 7) {
+    } else if (coords.x === 0 && coords.y === 7) {
         borderRadius = " radius-top-left";
-    } else if (coordX === 7 && coordY === 7) {
+    } else if (coords.x === 7 && coords.y === 7) {
         borderRadius = " radius-top-right";
     }
 
     const style: CSSProperties = {
-        left: `${coordX * 12.5}%`,
-        bottom: `${coordY * 12.5}%`,
+        left: `${coords.x * 12.5}%`,
+        bottom: `${coords.y * 12.5}%`,
         borderWidth: borderWidth,
     };
 

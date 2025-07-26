@@ -1,4 +1,4 @@
-import { useGameStateStore } from "../../stores/useGameStateStore";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
 import "../../styles/Title.scss";
 
 interface Props {

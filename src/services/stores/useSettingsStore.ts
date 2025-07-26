@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
-import { PlaySide, PlayVs } from "../types";
+import { PlaySide, PlayVs } from "../../types";
 import random from "random";
 
 type SettingsState = {

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { useBoardStore } from "../stores/useBoardStore";
-import { useGameStateStore } from "../stores/useGameStateStore";
+import { useBoardStore } from "../services/stores/useBoardStore";
+import { useGameStateStore } from "../services/stores/useGameStateStore";
 
 function useCallbackResetChessBoard() {
     const setColorWinner = useGameStateStore((state) => state.setColorWinner);

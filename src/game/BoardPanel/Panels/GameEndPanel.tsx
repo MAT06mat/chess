@@ -2,10 +2,10 @@ import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoar
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import CapturedPiecesContainer from "../../Components/CapturedPieces";
 import PanelMovesList from "../Components/PanelMovesList";
-import GreyButton from "../../Components/GreyButton";
-import GreenButton from "../../Components/GreenButton";
-import { useBoardStore } from "../../../stores/useBoardStore";
-import { useGameStateStore } from "../../../stores/useGameStateStore";
+import GreyButton from "../../Components/ui/GreyButton";
+import GreenButton from "../../Components/ui/GreenButton";
+import { useBoardStore } from "../../../services/stores/useBoardStore";
+import { useGameStateStore } from "../../../services/stores/useGameStateStore";
 
 function GameEndPanel() {
     const gameReview = useGameStateStore((state) => state.gameReview);

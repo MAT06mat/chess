@@ -1,5 +1,5 @@
-import { CompleteMove, Piece } from "../types";
-import getDefaultPieces from "./getDefaultPieces";
+import { CompleteMove, Piece } from "../../types";
+import getDefaultPieces from "../../utils/getDefaultPieces";
 import random from "random";
 
 const poisson = random.poisson();

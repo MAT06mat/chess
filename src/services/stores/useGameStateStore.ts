@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
-import { ColorWinner, GameStatus } from "../types";
+import { ColorWinner, GameStatus } from "../../types";
 
 type GameState = {
     gameStatus: GameStatus;

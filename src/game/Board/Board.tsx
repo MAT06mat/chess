@@ -2,27 +2,27 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import PromotionBox from "./PromotionBox";
 import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
-import "../../styles/Board.scss";
-import getValidMoves from "../../utils/moves/getValidMoves";
+import getValidMoves from "../../services/engine/getValidMoves";
 import WinnerPopup from "../Components/WinnerPopup";
-import invertColor from "../../utils/invertColor";
-import useBot from "../../hooks/useBot";
+import { invertColor } from "../../utils/helpers";
+import useBot from "../../services/bot/useBot";
 import BoardHighLight from "./BoardHighLight";
 import { CapturedPieces } from "../Components/CapturedPieces";
 import EvaluationBar from "./EvaluationBar";
 import Arrows from "./Arrows";
-import getChessNotation from "../../utils/getChessNotation";
 import useBoardClickEvent from "../../hooks/useBoardClickEvent";
 import DisplayMoves from "./DisplayMoves";
 import Pieces from "./Pieces";
-import { useBoardStore } from "../../stores/useBoardStore";
+import { useBoardStore } from "../../services/stores/useBoardStore";
 import {
     useColorToPlay,
     useLastMove,
     usePieces,
-} from "../../stores/useBoardSelectors";
-import { useSettingsStore } from "../../stores/useSettingsStore";
-import { useGameStateStore } from "../../stores/useGameStateStore";
+} from "../../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
+import "../../styles/Board.scss";
+import { moveToSan } from "../../utils/formatting";
 
 function Board() {
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
@@ -62,7 +62,7 @@ function Board() {
         if (lastMove?.check) {
             setColorWinner(invertColor(colorToPlay));
             lastMove.checkMate = true;
-            lastMove.san = getChessNotation(lastMove);
+            lastMove.san = moveToSan(lastMove);
         } else {
             setColorWinner("s");
         }

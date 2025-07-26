@@ -1,4 +1,4 @@
-import { usePopupStore } from "../../stores/usePopupStore";
+import { usePopupStore } from "../../services/stores/usePopupStore";
 
 function PopupProvider() {
     return usePopupStore((state) => state.currentPopup);

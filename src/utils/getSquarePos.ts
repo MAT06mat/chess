@@ -1,4 +1,4 @@
-import isPosInBoard from "./moves/isPosInBoard";
+import { invertCoords, isCoordsInBoard } from "./helpers";
 
 function getSquarePos(
     event: MouseEvent,
@@ -13,13 +13,11 @@ function getSquarePos(
     const relY = event.clientY - offsetY;
     const x = Math.floor(relX / (board.clientWidth / 8));
     const y = Math.floor(8 - relY / (board.clientHeight / 8));
+    const coords = { x, y };
 
-    if (!isPosInBoard(x, y)) return null;
+    if (!isCoordsInBoard(coords)) return null;
 
-    if (inverted) {
-        return { x: 7 - x, y: 7 - y };
-    }
-    return { x, y };
+    return inverted ? invertCoords(coords) : coords;
 }
 
 export default getSquarePos;

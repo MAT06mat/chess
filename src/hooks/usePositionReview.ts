@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import useChessApi from "../stores/useChessApi";
+import useChessApi from "../services/chessApi/useChessApi";
 import { BoardPosition } from "../types";
-import { useBoardStore } from "../stores/useBoardStore";
-import { useGameStateStore } from "../stores/useGameStateStore";
-import { useCurrentBoard } from "../stores/useBoardSelectors";
+import { useBoardStore } from "../services/stores/useBoardStore";
+import { useGameStateStore } from "../services/stores/useGameStateStore";
+import { useCurrentBoard } from "../services/stores/useBoardSelectors";
 
 function usePositionReview(
     updatePercentage: (

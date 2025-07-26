@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PostChessApiData, PostChessApiResponse } from "../types";
+import { PostChessApiData, PostChessApiResponse } from "../../types";
 
 function useChessApi(postData: PostChessApiData, ctx: string) {
     const post = {

@@ -1,6 +1,6 @@
 import { useBoardStore } from "./useBoardStore";
-import invertColor from "../utils/invertColor";
-import getPiecesScores from "../utils/getPiecesScores";
+import { invertColor } from "../../utils/helpers";
+import getPiecesScores from "../../utils/getPiecesScores";
 
 export function useCurrentBoard() {
     return useBoardStore((state) => state.history[state.currentMove]);

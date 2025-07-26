@@ -1,4 +1,4 @@
-import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
 import { CompleteMove, Piece, PieceSymbol } from "../../types";
 
 interface PromotionProps {

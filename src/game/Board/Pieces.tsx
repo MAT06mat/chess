@@ -1,5 +1,5 @@
-import { usePieces } from "../../stores/useBoardSelectors";
-import { useSettingsStore } from "../../stores/useSettingsStore";
+import { usePieces } from "../../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
 import BoardInfo from "./BoardInfo";
 
 function Pieces() {

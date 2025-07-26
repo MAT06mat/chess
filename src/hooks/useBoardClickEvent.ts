@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import getSquarePos from "../utils/getSquarePos";
 import { CompleteMove, Piece, RelativeMove } from "../types";
-import getcompleteMove from "../utils/moves/getCompleteMove";
-import {
-    getSquare,
-    findPieceAt,
-    isPieceSelectable,
-    getValidMoveTo,
-} from "../utils/boardUtils";
-import { useBoardStore } from "../stores/useBoardStore";
+import getcompleteMove from "../services/engine/getCompleteMove";
+import { useBoardStore } from "../services/stores/useBoardStore";
 import {
     useColorToPlay,
     usePieces,
     useShapes,
-} from "../stores/useBoardSelectors";
-import { useSettingsStore } from "../stores/useSettingsStore";
-import { useGameStateStore } from "../stores/useGameStateStore";
-import { usePopupStore } from "../stores/usePopupStore";
+} from "../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../services/stores/useSettingsStore";
+import { useGameStateStore } from "../services/stores/useGameStateStore";
+import { usePopupStore } from "../services/stores/usePopupStore";
+import { coordsToSquare } from "../utils/formatting";
+import {
+    findPieceAt,
+    getValidMoveTo,
+    isPieceSelectable,
+} from "../utils/helpers";
 
 const useBoardClickEvent = (
     boardRef: React.RefObject<HTMLDivElement>,
@@ -188,8 +188,8 @@ const useBoardClickEvent = (
                 }
             } else if (lastClick.button === 2) {
                 if (gameStatus === "modeSelection") return;
-                const from = getSquare(lastClick.x, lastClick.y);
-                const to = getSquare(pos.x, pos.y);
+                const from = coordsToSquare(lastClick.x, lastClick.y);
+                const to = coordsToSquare(pos.x, pos.y);
                 const newShapes = structuredClone(shapes);
 
                 const exists = newShapes.some(

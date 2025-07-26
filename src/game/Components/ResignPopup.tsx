@@ -1,13 +1,13 @@
-import Popup from "./Popup";
-import GreyButton from "./GreyButton";
+import Popup from "./ui/Popup";
+import GreyButton from "./ui/GreyButton";
 import "../../styles/ResignPopup.scss";
 import playSound from "../../utils/playSound";
-import invertColor from "../../utils/invertColor";
-import GreenButton from "./GreenButton";
-import { useColorToPlay } from "../../stores/useBoardSelectors";
-import { useSettingsStore } from "../../stores/useSettingsStore";
-import { useGameStateStore } from "../../stores/useGameStateStore";
-import { usePopupStore } from "../../stores/usePopupStore";
+import { invertColor } from "../../utils/helpers";
+import GreenButton from "./ui/GreenButton";
+import { usePopupStore } from "../../services/stores/usePopupStore";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
+import { useColorToPlay } from "../../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
 
 function ResignPopup() {
     const removePopup = usePopupStore((state) => state.removePopup);

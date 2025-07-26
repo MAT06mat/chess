@@ -1,19 +1,31 @@
 import { GameStatus, Piece, RelativeMove } from "../types";
 
-export function getSquare(x: number, y: number) {
-    return String.fromCharCode(97 + x) + (y + 1);
+type Coords = {
+    x: number;
+    y: number;
+};
+
+export function invertColor(color: string | undefined): "w" | "b" {
+    return color === "w" ? "b" : "w";
 }
 
-export function findPieceAt(pos: { x: number; y: number }, pieces: Piece[]) {
-    return pieces.find((p) => p.x === pos.x && p.y === pos.y) ?? null;
-}
+export const invertCoords = (coord: Coords) => ({
+    x: 7 - coord.x,
+    y: 7 - coord.y,
+});
 
-export function isPieceSelectable(
+export const isCoordsInBoard = ({ x, y }: Coords) =>
+    x >= 0 && x < 8 && y >= 0 && y < 8;
+
+export const findPieceAt = (coords: Coords, pieces: Piece[]) =>
+    pieces.find((p) => p.x === coords.x && p.y === coords.y) ?? null;
+
+export const isPieceSelectable = (
     piece: Piece,
     gameStatus: GameStatus,
     colorToPlay: "w" | "b",
     playerColor: "w" | "b"
-) {
+) => {
     const isVsBot = gameStatus === "playingVsBot";
     const isVsFriend = gameStatus === "playingVsFriend";
     const isYourTurn = colorToPlay === playerColor;
@@ -22,22 +34,22 @@ export function isPieceSelectable(
     return (
         isSandBox || (isColorToPlay && ((isVsBot && isYourTurn) || isVsFriend))
     );
-}
+};
 
-export function getValidMoveTo(
-    pos: { x: number; y: number },
+export const getValidMoveTo = (
+    coords: Coords,
     selectedPiece: Piece | null,
     displayMoves: RelativeMove[],
     isSandBox: boolean
-): RelativeMove | null {
+) => {
     if (!selectedPiece) return null;
 
-    const dx = pos.x - selectedPiece.x;
-    const dy = pos.y - selectedPiece.y;
+    const dx = coords.x - selectedPiece.x;
+    const dy = coords.y - selectedPiece.y;
 
     if (isSandBox && (dx || dy)) {
         return { x: dx, y: dy };
     }
 
     return displayMoves.find((m) => m.x === dx && m.y === dy) ?? null;
-}
+};

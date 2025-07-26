@@ -5,7 +5,7 @@ import GameEndPanel from "./Panels/GameEndPanel";
 import PlaySandBoxPanel from "./Panels/PlaySandBoxPanel";
 import PlayVsFriendPanel from "./Panels/PlayVsFriendPanel";
 import PlayVsBotPanel from "./Panels/PlayVsBotPanel";
-import { useGameStateStore } from "../../stores/useGameStateStore";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
 
 function BoardPanel() {
     const gameStatus = useGameStateStore((state) => state.gameStatus);

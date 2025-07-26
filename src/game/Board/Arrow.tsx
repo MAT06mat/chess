@@ -1,5 +1,5 @@
 import { memo } from "react";
-import positionToCoords from "../../utils/positionToCoord";
+import { squareToBoardCoords } from "../../utils/formatting";
 
 interface ArrowProps {
     from: string;
@@ -15,8 +15,8 @@ function Arrow({
 }: ArrowProps & { invertedColor: boolean }) {
     if (to === from) return null;
 
-    const [x, y] = positionToCoords(from, invertedColor, true);
-    const [toX, toY] = positionToCoords(to, invertedColor, true);
+    const [x, y] = squareToBoardCoords(from, invertedColor);
+    const [toX, toY] = squareToBoardCoords(to, invertedColor);
     const dx = toX - x;
     const dy = toY - y;
 

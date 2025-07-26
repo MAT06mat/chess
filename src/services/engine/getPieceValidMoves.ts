@@ -1,7 +1,7 @@
 import { CompleteMove, Piece } from "../../types";
+import { isCoordsInBoard } from "../../utils/helpers";
 import getPieceMoves from "./getPieceMoves";
 import isCheck from "./isCheck";
-import isPosInBoard from "./isPosInBoard";
 
 function getPieceValidMoves(
     selectedPiece: Piece,
@@ -24,13 +24,15 @@ function getPieceValidMoves(
             return false;
         }
 
-        const targetX = move.x + selectedPiece.x;
-        const targetY = move.y + selectedPiece.y;
+        const target = {
+            x: move.x + selectedPiece.x,
+            y: move.y + selectedPiece.y,
+        };
 
-        if (!isPosInBoard(targetX, targetY)) return false;
+        if (!isCoordsInBoard(target)) return false;
 
         const targetPiece = pieces.find(
-            (p) => p.x === targetX && p.y === targetY
+            (p) => p.x === target.x && p.y === target.y
         );
         const isSameColor = targetPiece?.color === selectedPiece.color;
         const isEnemy = targetPiece
@@ -56,7 +58,7 @@ function getPieceValidMoves(
                     lastMove.piece.type === "p" &&
                     lastMove.piece.color !== selectedPiece.color &&
                     Math.abs(lastMove.fromY - lastMove.toY) === 2 &&
-                    lastMove.toX === targetX &&
+                    lastMove.toX === target.x &&
                     lastMove.toY === selectedPiece.y
                 ) {
                     move.special = "enPassant";
@@ -69,7 +71,7 @@ function getPieceValidMoves(
             if (Math.abs(move.y) === 2 && selectedPiece.hasMoved) return false;
 
             // Promotion
-            if ((isWhite && targetY === 7) || (!isWhite && targetY === 0)) {
+            if ((isWhite && target.y === 7) || (!isWhite && target.y === 0)) {
                 move.special = "promotion";
             }
         }

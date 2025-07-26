@@ -6,13 +6,13 @@ import ArrowSpinReset from "../../../assets/svg/ArrowSpinReset";
 import ArrowTriangleSwooshLeft from "../../../assets/svg/ArrowTriangleSwooshLeft";
 import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
-import { useBoardStore } from "../../../stores/useBoardStore";
-import { useGameStateStore } from "../../../stores/useGameStateStore";
-import { usePopupStore } from "../../../stores/usePopupStore";
-import { useSettingsStore } from "../../../stores/useSettingsStore";
 import playSound from "../../../utils/playSound";
-import GreyButton from "../../Components/GreyButton";
+import GreyButton from "../../Components/ui/GreyButton";
 import ResignPopup from "../../Components/ResignPopup";
+import { useGameStateStore } from "../../../services/stores/useGameStateStore";
+import { usePopupStore } from "../../../services/stores/usePopupStore";
+import { useBoardStore } from "../../../services/stores/useBoardStore";
+import { useSettingsStore } from "../../../services/stores/useSettingsStore";
 
 interface Props {
     resign?: boolean;

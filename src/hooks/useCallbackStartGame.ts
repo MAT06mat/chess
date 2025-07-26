@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import playSound from "../utils/playSound";
 import useCallbackResetChessBoard from "./useCallbackResetChessBoard";
-import { useSettingsStore } from "../stores/useSettingsStore";
-import { useGameStateStore } from "../stores/useGameStateStore";
+import { useSettingsStore } from "../services/stores/useSettingsStore";
+import { useGameStateStore } from "../services/stores/useGameStateStore";
 
 function useCallbackStartGame() {
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);

@@ -1,6 +1,6 @@
 import useIsMobile from "../../hooks/useIsMobile";
-import { usePiecesScores } from "../../stores/useBoardSelectors";
-import { useGameStateStore } from "../../stores/useGameStateStore";
+import { usePiecesScores } from "../../services/stores/useBoardSelectors";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
 import "../../styles/CapturedPieces.scss";
 
 function classNameFormat(key: string, value: number) {

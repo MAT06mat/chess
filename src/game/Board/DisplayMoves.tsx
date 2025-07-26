@@ -1,4 +1,4 @@
-import { useSettingsStore } from "../../stores/useSettingsStore";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
 import { Piece } from "../../types";
 import BoardInfo from "./BoardInfo";
 

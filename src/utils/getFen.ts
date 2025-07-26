@@ -102,9 +102,9 @@ function getFen(
         const targetX = lastMove.toX;
         const targetY = (lastMove.toY + lastMove.fromY) / 2;
         if (invertedColor) {
-            fen += ` ${String.fromCharCode(97 + (7 - targetX))}${8 - targetY}`;
+            fen += ` ${numToCol(7 - targetX)}${8 - targetY}`;
         } else {
-            fen += ` ${String.fromCharCode(97 + targetX)}${targetY + 1}`;
+            fen += ` ${coordToPos(targetX, targetY)}`;
         }
     } else {
         fen += " -";

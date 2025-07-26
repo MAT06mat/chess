@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import "../../../styles/PanelMovesList.scss";
 import BoardActions from "./BaordActions";
-import { useBoardStore } from "../../../stores/useBoardStore";
-import { useGameStateStore } from "../../../stores/useGameStateStore";
+import { useBoardStore } from "../../../services/stores/useBoardStore";
+import { useGameStateStore } from "../../../services/stores/useGameStateStore";
 
 type refObj = React.RefObject<HTMLDivElement>;
 

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import usePositionReview from "../../hooks/usePositionReview";
 import "../../styles/EvaluationBar.scss";
 import { BoardPosition } from "../../types";
-import { useBoardStore } from "../../stores/useBoardStore";
-import { useSettingsStore } from "../../stores/useSettingsStore";
-import { useGameStateStore } from "../../stores/useGameStateStore";
+import { useBoardStore } from "../../services/stores/useBoardStore";
+import { useSettingsStore } from "../../services/stores/useSettingsStore";
+import { useGameStateStore } from "../../services/stores/useGameStateStore";
 
 function evaluationToPercentage(score: number): number {
     if (score >= 100) return 100;
