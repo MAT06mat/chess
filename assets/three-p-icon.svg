@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="3 players icon with 3D 3 P">
+  <defs>
+    <!-- Gloss gradient -->
+    <linearGradient id="glossGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+    <!-- Stroke gradient for subtle highlight contour -->
+    <linearGradient id="strokeGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#5a5a5aff" stop-opacity="0.4"/>
+    </linearGradient>
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000ff" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Main text with shadow -->
+  <text x="50%" y="54%" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="300" text-anchor="middle" dominant-baseline="middle" fill="#8b8987" filter="url(#shadow)" stroke="url(#strokeGrad)" stroke-width="2" paint-order="stroke">
+    3P
+  </text>
+
+  <!-- Gloss overlay clipped to text -->
+  <text x="50%" y="54%" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="300" text-anchor="middle" dominant-baseline="middle" fill="url(#glossGrad)">3P</text>
+</svg>
