@@ -26,9 +26,14 @@
         gap: 1rem;
         display: flex;
 
+        &:has(.players-number) {
+            height: 3rem;
+        }
+
         .color-icon {
             box-sizing: border-box;
             width: 2rem;
+            height: 2rem;
             aspect-ratio: 1 / 1;
             background: url("https://www.chess.com/bundles/web/images/play-side/white.svg");
             background-size: cover;
@@ -55,6 +60,15 @@
                 right: -0.4rem;
                 border-radius: 0.5rem;
                 border: 0.2rem solid #81b64c;
+            }
+
+            span.players-number {
+                user-select: none;
+                position: absolute;
+                bottom: -1.6rem;
+                left: 0;
+                width: 2rem;
+                color: #ffffff30;
             }
         }
     }

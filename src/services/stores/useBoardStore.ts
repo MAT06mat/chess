@@ -11,6 +11,7 @@ import doMove from "../engine/doMove";
 import isCheck from "../engine/isCheck";
 import getFen from "../../utils/getFen";
 import { moveToSan } from "../../utils/formatting";
+import { CustomGame } from "./useCustomGameStore";
 
 export const useBoardStore = create(
     persist(
@@ -40,6 +41,7 @@ export const useBoardStore = create(
                     registerMove: (
                         completeMove: CompleteMove,
                         pieces: Piece[],
+                        customGame: CustomGame,
                         chessApiData?: PostChessApiResponse
                     ) => {
                         set((state) => {
@@ -57,7 +59,11 @@ export const useBoardStore = create(
                             const lastColor = lastMove?.piece.color ?? "b";
 
                             // Add the move to the history
-                            completeMove.check = isCheck(lastColor, newPieces);
+                            completeMove.check = isCheck(
+                                lastColor,
+                                newPieces,
+                                customGame
+                            );
                             completeMove.san = moveToSan(completeMove);
                             const fen = getFen(
                                 newPieces,
@@ -76,6 +82,22 @@ export const useBoardStore = create(
                             };
 
                             history.push(newBoard);
+
+                            if (customGame === "3Players") {
+                                const params = new URLSearchParams();
+                                params.append(
+                                    "history",
+                                    JSON.stringify(history)
+                                );
+                                fetch(
+                                    "https://chantemuse.fr/api/chess/3players/registerMove.php",
+                                    {
+                                        method: "POST",
+                                        body: params,
+                                    }
+                                );
+                            }
+
                             return {
                                 history: history,
                                 currentMove: state.currentMove + 1,

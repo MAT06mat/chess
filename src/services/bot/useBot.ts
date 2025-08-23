@@ -8,6 +8,7 @@ import { useBoardStore } from "../stores/useBoardStore";
 import { useColorToPlay, usePieces } from "../stores/useBoardSelectors";
 import { useSettingsStore } from "../stores/useSettingsStore";
 import { useGameStateStore } from "../stores/useGameStateStore";
+import { useCustomGameStore } from "../stores/useCustomGameStore";
 
 function useBot(validMoves: Map<number, RelativeMove[]>) {
     const gameStatus = useGameStateStore((state) => state.gameStatus);
@@ -18,6 +19,7 @@ function useBot(validMoves: Map<number, RelativeMove[]>) {
     const colorToPlay = useColorToPlay();
     const registerMove = useBoardStore((state) => state.registerMove);
     const opponentColor = useSettingsStore((state) => state.opponentColor);
+    const customGame = useCustomGameStore((state) => state.customGame);
 
     const requestIdRef = useRef(0);
 
@@ -30,12 +32,12 @@ function useBot(validMoves: Map<number, RelativeMove[]>) {
 
                 if (gameStatus !== "playingVsBot") return;
 
-                registerMove(move, pieces, data);
+                registerMove(move, pieces, customGame, data);
             }, random.int(500, 1000));
 
             return () => clearTimeout(timeoutId);
         },
-        [pieces, registerMove, gameStatus]
+        [pieces, registerMove, gameStatus, customGame]
     );
 
     const playRandomMove = useCallback(() => {

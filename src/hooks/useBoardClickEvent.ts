@@ -17,6 +17,7 @@ import {
     getValidMoveTo,
     isPieceSelectable,
 } from "../utils/helpers";
+import { useCustomGameStore } from "../services/stores/useCustomGameStore";
 
 const useBoardClickEvent = (
     boardRef: React.RefObject<HTMLDivElement>,
@@ -46,6 +47,9 @@ const useBoardClickEvent = (
 
     const isPopupOpen = usePopupStore((state) => state.isPopupOpen);
 
+    const customGame = useCustomGameStore((state) => state.customGame);
+    const customGameData = useCustomGameStore((state) => state.customGameData);
+
     type ClickEvent = {
         x: number;
         y: number;
@@ -55,6 +59,30 @@ const useBoardClickEvent = (
 
     const lastClickRef = useRef<ClickEvent>(null);
     const pieceIdRef = useRef<number | null>(null);
+
+    const canPlay = useCallback(
+        (pieceX: number) => {
+            if (customGame === "3Players") {
+                if (!customGameData)
+                    throw new Error("customGameData is undefined");
+
+                const isWhite1ToPlay = history.length % 4 < 2;
+                const isBlackToPlay = colorToPlay === "b";
+
+                if (isBlackToPlay) {
+                    if (customGameData.playSide === "black") return true;
+                } else {
+                    if (isWhite1ToPlay && customGameData.playSide === "white1")
+                        return pieceX < 4;
+                    if (!isWhite1ToPlay && customGameData.playSide === "white2")
+                        return pieceX >= 4;
+                }
+                return false;
+            }
+            return true;
+        },
+        [customGame, customGameData, history, colorToPlay]
+    );
 
     const clearSelection = useCallback(() => {
         setSelectedPiece(null);
@@ -113,7 +141,8 @@ const useBoardClickEvent = (
                         colorToPlay,
                         playerColor
                     ) &&
-                    !move
+                    !move &&
+                    canPlay(piece.x)
                 ) {
                     setSelectedPiece(piece);
                     setDisplayMoves(validMoves.get(piece.id) ?? []);
@@ -149,6 +178,7 @@ const useBoardClickEvent = (
             playerColor,
             displayMoves,
             isSandBox,
+            canPlay,
         ]
     );
 
@@ -180,7 +210,7 @@ const useBoardClickEvent = (
                         setPromotionBoxVisible(true);
                         nextMoveRef.current = completeMove;
                     } else {
-                        registerMove(completeMove, pieces);
+                        registerMove(completeMove, pieces, customGame);
                     }
                     clearSelection();
                 } else {
@@ -225,6 +255,7 @@ const useBoardClickEvent = (
             setHistory,
             displayMoves,
             isSandBox,
+            customGame,
         ]
     );
 

@@ -3,11 +3,11 @@ import PromotionBox from "./PromotionBox";
 import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
 import getValidMoves from "../../services/engine/getValidMoves";
-import WinnerPopup from "../Components/WinnerPopup";
+import WinnerPopup from "../../Components/WinnerPopup";
 import { invertColor } from "../../utils/helpers";
 import useBot from "../../services/bot/useBot";
 import BoardHighLight from "./BoardHighLight";
-import { CapturedPieces } from "../Components/CapturedPieces";
+import { CapturedPieces } from "../../Components/CapturedPieces";
 import EvaluationBar from "./EvaluationBar";
 import Arrows from "./Arrows";
 import useBoardClickEvent from "../../hooks/useBoardClickEvent";
@@ -23,19 +23,27 @@ import { useSettingsStore } from "../../services/stores/useSettingsStore";
 import { useGameStateStore } from "../../services/stores/useGameStateStore";
 import "../../styles/Board.scss";
 import { moveToSan } from "../../utils/formatting";
+import { useCustomGameStore } from "../../services/stores/useCustomGameStore";
+import playSound from "../../utils/playSound";
 
 function Board() {
+    const gameStatus = useGameStateStore((state) => state.gameStatus);
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
     const setColorWinner = useGameStateStore((state) => state.setColorWinner);
     const isSandBox = useGameStateStore((state) => state.isSandBox);
 
     const registerMove = useBoardStore((state) => state.registerMove);
+    const goToLastMove = useBoardStore((state) => state.goToLastMove);
+    const history = useBoardStore((state) => state.history);
+    const setHistory = useBoardStore((state) => state.setHistory);
     const colorToPlay = useColorToPlay();
     const pieces = usePieces();
     const lastMove = useLastMove();
 
     const playerColor = useSettingsStore((state) => state.playerColor);
     const opponentColor = useSettingsStore((state) => state.opponentColor);
+
+    const customGame = useCustomGameStore((state) => state.customGame);
 
     const boardRef = useRef<HTMLDivElement>(null);
     const nextMoveRef = useRef<CompleteMove | null>(null);
@@ -53,8 +61,59 @@ function Board() {
     const [validMoves, numberOfMove] = useMemo(() => {
         let color: "w" | "b" | "wb" = colorToPlay;
         if (isSandBox) color = "wb";
-        return getValidMoves(color, pieces, lastMove);
-    }, [colorToPlay, isSandBox, pieces, lastMove]);
+        return getValidMoves(color, pieces, lastMove, customGame);
+    }, [colorToPlay, isSandBox, pieces, lastMove, customGame]);
+
+    // 3 Players game fetch
+    useEffect(() => {
+        if (customGame !== "3Players") return;
+
+        const interval = setInterval(() => {
+            fetch(
+                `https://chantemuse.fr/api/chess/3players/getConnection.php?t=${Date.now()}`,
+                {
+                    method: "POST",
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (data: {
+                        userName: string | undefined;
+                        blackPlayer1: string[];
+                        whitePlayer1: string[];
+                        whitePlayer2: string[];
+                        gameStarted: boolean;
+                        history: string;
+                    }) => {
+                        const serverHistory = JSON.parse(data.history);
+                        if (
+                            JSON.stringify(serverHistory) !==
+                            JSON.stringify(history)
+                        ) {
+                            setHistory(serverHistory);
+                            goToLastMove();
+                        }
+                        if (
+                            !data.gameStarted &&
+                            gameStatus === "playingVsFriend"
+                        ) {
+                            setGameStatus("modeSelection");
+                            playSound("game-end");
+                        }
+                    }
+                )
+                .catch((err) => console.error("Fetch error:", err));
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [
+        setHistory,
+        goToLastMove,
+        history,
+        customGame,
+        gameStatus,
+        setGameStatus,
+    ]);
 
     useEffect(() => {
         if (numberOfMove !== 0) return;
@@ -81,10 +140,10 @@ function Board() {
     // Pieces promotion
     useEffect(() => {
         if (!promotionBoxVisible && nextMoveRef.current) {
-            registerMove(nextMoveRef.current, pieces);
+            registerMove(nextMoveRef.current, pieces, customGame);
             nextMoveRef.current = null;
         }
-    }, [promotionBoxVisible, pieces, registerMove]);
+    }, [promotionBoxVisible, pieces, registerMove, customGame]);
 
     // Display validMoves for the selectedPiece
     useEffect(() => {

@@ -1,4 +1,4 @@
-import CapturedPiecesContainer from "../../Components/CapturedPieces";
+import CapturedPiecesContainer from "../../../Components/CapturedPieces";
 import BoardActions from "../Components/BaordActions";
 import PanelMovesList from "../Components/PanelMovesList";
 

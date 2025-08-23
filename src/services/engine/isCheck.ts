@@ -1,9 +1,11 @@
 import { Piece } from "../../types";
+import { CustomGame } from "../stores/useCustomGameStore";
 import getPieceValidMoves from "./getPieceValidMoves";
 
 function isCheck(
     color: string,
     pieces: Piece[],
+    customGame: CustomGame,
     relativeX?: number[]
 ): boolean {
     const king = pieces.find(
@@ -28,6 +30,7 @@ function isCheck(
                 piece,
                 pieces,
                 null,
+                customGame,
                 true
             ).filter((move) => move.capture);
 

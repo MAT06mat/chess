@@ -1,5 +1,6 @@
 import { CompleteMove, Piece } from "../../types";
 import { isCoordsInBoard } from "../../utils/helpers";
+import { CustomGame } from "../stores/useCustomGameStore";
 import getPieceMoves from "./getPieceMoves";
 import isCheck from "./isCheck";
 
@@ -7,6 +8,7 @@ function getPieceValidMoves(
     selectedPiece: Piece,
     pieces: Piece[],
     lastMove: CompleteMove | null,
+    customGame: CustomGame,
     noCheck?: boolean
 ) {
     const isWhite = selectedPiece.color === "w";
@@ -30,6 +32,18 @@ function getPieceValidMoves(
         };
 
         if (!isCoordsInBoard(target)) return false;
+
+        if (customGame === "3Players" && isWhite) {
+            if (
+                (target.x >= 4 && selectedPiece.x < 4) ||
+                (target.x < 4 && selectedPiece.x >= 4)
+            ) {
+                if (move.group !== undefined) {
+                    groupBlocked.add(move.group);
+                }
+                return false;
+            }
+        }
 
         const targetPiece = pieces.find(
             (p) => p.x === target.x && p.y === target.y
@@ -102,7 +116,10 @@ function getPieceValidMoves(
 
             if (
                 !noCheck &&
-                isCheck(selectedPiece.color, pieces, [0, isKingside ? 1 : -1])
+                isCheck(selectedPiece.color, pieces, customGame, [
+                    0,
+                    isKingside ? 1 : -1,
+                ])
             ) {
                 return false;
             }

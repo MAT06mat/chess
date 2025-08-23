@@ -26,6 +26,32 @@
         scrollbar-color: #00000050 #00000000;
         scrollbar-width: thin;
 
+        .user-name-input {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+
+            input {
+                width: 8rem;
+                background-color: #ffffff1a;
+                border: none;
+                border-radius: 0.2rem;
+                border-bottom: 0.05rem solid #ffffff1a;
+                color: #ffffffd9;
+                padding: 0.2rem 0.5rem;
+
+                &:disabled {
+                    opacity: 0.5;
+                }
+
+                &:focus {
+                    outline: none;
+                    border-bottom-color: #ffffff80;
+                }
+            }
+        }
+
         & > * {
             border-bottom: 0.05rem solid #ffffff1a;
         }

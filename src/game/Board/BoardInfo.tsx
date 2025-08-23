@@ -1,4 +1,5 @@
 import { CSSProperties, memo } from "react";
+import { useCustomGameStore } from "../../services/stores/useCustomGameStore";
 import { invertCoords } from "../../utils/helpers";
 
 interface BoardInfoProps {
@@ -16,6 +17,18 @@ function BoardInfo({
     className,
     borderWidth,
 }: BoardInfoProps) {
+    const customGame = useCustomGameStore((state) => state.customGame);
+    const customGameData = useCustomGameStore((state) => state.customGameData);
+
+    if (customGame === "3Players" && customGameData) {
+        if (
+            (customGameData.playSide === "white1" && x >= 4) ||
+            (customGameData.playSide === "white2" && x < 4)
+        ) {
+            return null;
+        }
+    }
+
     const coords = invertedColor ? invertCoords({ x, y }) : { x, y };
 
     let borderRadius = "";

@@ -3,6 +3,7 @@ import { invertColor } from "../../utils/helpers";
 import getPiecesScores from "../../utils/getPiecesScores";
 
 export function useCurrentBoard() {
+    //useBoardStore((state) => state.resetHistory)();
     return useBoardStore((state) => state.history[state.currentMove]);
 }
 

@@ -7,12 +7,13 @@ import ArrowTriangleSwooshLeft from "../../../assets/svg/ArrowTriangleSwooshLeft
 import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import playSound from "../../../utils/playSound";
-import GreyButton from "../../Components/ui/GreyButton";
-import ResignPopup from "../../Components/ResignPopup";
+import GreyButton from "../../../Components/ui/GreyButton";
+import ResignPopup from "../../../Components/ResignPopup";
 import { useGameStateStore } from "../../../services/stores/useGameStateStore";
 import { usePopupStore } from "../../../services/stores/usePopupStore";
 import { useBoardStore } from "../../../services/stores/useBoardStore";
 import { useSettingsStore } from "../../../services/stores/useSettingsStore";
+import { useCustomGameStore } from "../../../services/stores/useCustomGameStore";
 
 interface Props {
     resign?: boolean;
@@ -45,6 +46,7 @@ function BoardActions({
     const currentMoveRedo = useBoardStore((state) => state.currentMoveRedo);
     const undoMove = useBoardStore((state) => state.undoMove);
     const opponentColor = useSettingsStore((state) => state.opponentColor);
+    const customGame = useCustomGameStore((state) => state.customGame);
 
     const resetChessBoard = useCallbackResetChessBoard();
 
@@ -75,10 +77,11 @@ function BoardActions({
         <>
             {resign ? (
                 <GreyButton onClick={resignGame}>
+                    {!customGame ? "" : <span>Resign</span>}
                     <GameFlagStraight />
                 </GreyButton>
             ) : null}
-            {cancel ? (
+            {cancel && !customGame ? (
                 <GreyButton onClick={completeUndoChessBoard}>
                     <ArrowTriangleSwooshLeft />
                 </GreyButton>

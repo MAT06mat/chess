@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import playSound from "../../utils/playSound";
-import { useLastMove } from "../../services/stores/useBoardSelectors";
+import playSound from "../utils/playSound";
+import { useLastMove } from "../services/stores/useBoardSelectors";
 
 function PlaySound() {
     const lastMove = useLastMove();

@@ -5,8 +5,8 @@ import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoar
 import "../../../styles/ModeSelectionPanel.scss";
 import { PlaySide } from "../../../types";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
-import GreenButton from "../../Components/ui/GreenButton";
-import GreyButton from "../../Components/ui/GreyButton";
+import GreenButton from "../../../Components/ui/GreenButton";
+import GreyButton from "../../../Components/ui/GreyButton";
 import { useSettingsStore } from "../../../services/stores/useSettingsStore";
 
 function ModeSelectionPanel() {

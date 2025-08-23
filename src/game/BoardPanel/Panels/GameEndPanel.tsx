@@ -1,9 +1,9 @@
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
-import CapturedPiecesContainer from "../../Components/CapturedPieces";
+import CapturedPiecesContainer from "../../../Components/CapturedPieces";
 import PanelMovesList from "../Components/PanelMovesList";
-import GreyButton from "../../Components/ui/GreyButton";
-import GreenButton from "../../Components/ui/GreenButton";
+import GreyButton from "../../../Components/ui/GreyButton";
+import GreenButton from "../../../Components/ui/GreenButton";
 import { useBoardStore } from "../../../services/stores/useBoardStore";
 import { useGameStateStore } from "../../../services/stores/useGameStateStore";
 

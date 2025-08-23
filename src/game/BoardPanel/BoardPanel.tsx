@@ -1,4 +1,4 @@
-import Title from "../Components/Title";
+import Title from "../../Components/Title";
 import "../../styles/BoardPanel.scss";
 import ModeSelectionPanel from "./Panels/ModeSelectionPanel";
 import GameEndPanel from "./Panels/GameEndPanel";
@@ -6,13 +6,20 @@ import PlaySandBoxPanel from "./Panels/PlaySandBoxPanel";
 import PlayVsFriendPanel from "./Panels/PlayVsFriendPanel";
 import PlayVsBotPanel from "./Panels/PlayVsBotPanel";
 import { useGameStateStore } from "../../services/stores/useGameStateStore";
+import { useCustomGameStore } from "../../services/stores/useCustomGameStore";
+import ThreePlayersPanel from "./Panels/3PlayersPanel";
 
 function BoardPanel() {
     const gameStatus = useGameStateStore((state) => state.gameStatus);
+    const customGame = useCustomGameStore((state) => state.customGame);
 
     let panelContent = null;
     if (gameStatus === "modeSelection") {
-        panelContent = <ModeSelectionPanel />;
+        if (customGame === "3Players") {
+            panelContent = <ThreePlayersPanel />;
+        } else {
+            panelContent = <ModeSelectionPanel />;
+        }
     } else if (gameStatus === "playingVsFriend") {
         panelContent = <PlayVsFriendPanel />;
     } else if (gameStatus === "playingVsBot") {

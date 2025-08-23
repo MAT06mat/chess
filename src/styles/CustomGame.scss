@@ -1,0 +1,12 @@
+.custom-game {
+    height: 100%;
+    padding: 0 1rem 1rem 1rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+
+    .game-list {
+        gap: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}

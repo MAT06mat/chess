@@ -42,6 +42,7 @@
     font-weight: 600;
     user-select: none;
     transition: all 0.2s ease;
+    gap: 0.4rem;
 
     &:disabled {
         cursor: not-allowed;
@@ -54,7 +55,7 @@
     background-color: #81b64c;
     text-shadow: 0 0.1rem 0 #00000033;
 
-    &:hover {
+    &:hover:enabled {
         background-color: #a3d160;
     }
 }
@@ -68,7 +69,7 @@
     padding: 0 2.4rem 0.4rem;
     transition: all 0.1s ease-out;
 
-    &:hover {
+    &:hover:enabled {
         box-shadow: 0 0 0.8rem rgba(93, 153, 72, 0.1),
             0 0 1.6rem rgba(93, 153, 72, 0.1),
             inset 0 -0.8rem 2.4rem rgba(69, 117, 60, 0.4),
@@ -85,15 +86,45 @@
         background-color: #ffffff15;
     }
 
-    &:hover {
+    &:hover:enabled {
         background-color: #ffffff24;
     }
+}
 
-    &:disabled:hover {
-        background-color: #ffffff1a;
+.card {
+    background-color: #00000033;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 0 0 #00000066;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    min-height: 19rem;
+    cursor: pointer;
 
-        &.light-grey {
-            background-color: #ffffff15;
+    &:hover:enabled {
+        background-color: #00000066;
+    }
+
+    .card-icon {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        height: 11rem;
+        user-select: none;
+    }
+
+    .card-body {
+        color: #ffffffb8;
+        padding: 2.4rem;
+        text-align: left;
+
+        h2.card-name {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            padding: 0;
         }
     }
 }

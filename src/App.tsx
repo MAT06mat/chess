@@ -1,24 +1,18 @@
 import "./styles/App.scss";
 import Game from "./game/Game";
-import { usePersistedState } from "./hooks/usePersistedSate";
+import { Navigate, Route, Routes } from "react-router";
+import PageLayout from "./routes/PageLayout";
+import CustomGame from "./routes/CustomGame";
 
 function App() {
-    const [footer, setFooter] = usePersistedState("footer", true);
-
     return (
-        <>
-            <Game />
-            <div
-                className={"footer" + (footer ? " computer-screen " : "")}
-                onClick={() => setFooter(!footer)}
-            >
-                This is not the official site of Chess.com, we are not
-                affiliated with Chess.com in any way.{" "}
-                <a href="https://github.com/MAT06mat/chess" target="_blanck">
-                    See more
-                </a>
-            </div>
-        </>
+        <Routes>
+            <Route path="/" element={<PageLayout />}>
+                <Route index element={<Game />} />
+                <Route path="custom-game" element={<CustomGame />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+        </Routes>
     );
 }
 

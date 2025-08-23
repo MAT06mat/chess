@@ -1,5 +1,5 @@
-import { useGameStateStore } from "../../services/stores/useGameStateStore";
-import "../../styles/Title.scss";
+import { useGameStateStore } from "../services/stores/useGameStateStore";
+import "../styles/Title.scss";
 
 interface Props {
     onlyComputerScreen?: boolean;
