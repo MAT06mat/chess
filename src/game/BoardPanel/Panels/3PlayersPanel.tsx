@@ -80,9 +80,12 @@ function ThreePlayersPanel() {
                 serverConnection: data,
             });
 
-            setPlaySide(playSide === "black" ? playSide : "white");
-            updateInvertedColor();
-            resetChessBoard();
+            const newPlaySide = playSide === "black" ? playSide : "white";
+            if (playSide !== newPlaySide) {
+                setPlaySide(newPlaySide);
+                updateInvertedColor();
+                resetChessBoard();
+            }
 
             if (
                 data.gameStarted &&
