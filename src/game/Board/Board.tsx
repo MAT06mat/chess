@@ -70,9 +70,10 @@ function Board() {
 
         const interval = setInterval(() => {
             fetch(
-                `https://chantemuse.fr/api/chess/3players/getConnection.php?t=${Date.now()}`,
+                `https://chantemuse.fr/api/chess/3players/getConnection.php`,
                 {
                     method: "POST",
+                    body: new URLSearchParams("GET"),
                 }
             )
                 .then((res) => res.json())

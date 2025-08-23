@@ -27,6 +27,7 @@ function ResignPopup() {
         if (customGame === "3Players") {
             fetch(`https://chantemuse.fr/api/chess/3players/stopGame.php`, {
                 method: "POST",
+                body: new URLSearchParams("GET"),
             }).then(() => {
                 setGameStatus("modeSelection");
                 playSound("game-end");

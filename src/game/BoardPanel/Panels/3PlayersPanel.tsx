@@ -254,6 +254,7 @@ function ThreePlayersPanel() {
                             "https://chantemuse.fr/api/chess/3players/launchGame.php",
                             {
                                 method: "POST",
+                                body: new URLSearchParams("GET"),
                             }
                         )
                             .then((res) => res.json())
