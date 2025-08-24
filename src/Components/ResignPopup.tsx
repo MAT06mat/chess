@@ -9,6 +9,7 @@ import { useGameStateStore } from "../services/stores/useGameStateStore";
 import { useColorToPlay } from "../services/stores/useBoardSelectors";
 import { useSettingsStore } from "../services/stores/useSettingsStore";
 import { useCustomGameStore } from "../services/stores/useCustomGameStore";
+import useFetchCallback from "../services/custom-game/3players/useFetch";
 
 function ResignPopup() {
     const removePopup = usePopupStore((state) => state.removePopup);
@@ -21,14 +22,12 @@ function ResignPopup() {
     const opponentColor = useSettingsStore((state) => state.opponentColor);
 
     const customGame = useCustomGameStore((state) => state.customGame);
+    const fetchCallback = useFetchCallback();
 
     function resign() {
         removePopup();
         if (customGame === "3Players") {
-            fetch(`https://chantemuse.fr/api/chess/3players/stopGame.php`, {
-                method: "POST",
-                body: new URLSearchParams("GET"),
-            }).then(() => {
+            fetchCallback({ stopGame: true })?.then(() => {
                 setGameStatus("modeSelection");
                 playSound("game-end");
             });

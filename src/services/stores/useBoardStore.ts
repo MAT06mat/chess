@@ -12,6 +12,7 @@ import isCheck from "../engine/isCheck";
 import getFen from "../../utils/getFen";
 import { moveToSan } from "../../utils/formatting";
 import { CustomGame } from "./useCustomGameStore";
+import { postData } from "../custom-game/3players/useFetch";
 
 export const useBoardStore = create(
     persist(
@@ -89,13 +90,7 @@ export const useBoardStore = create(
                                     "history",
                                     JSON.stringify(history)
                                 );
-                                fetch(
-                                    "https://chantemuse.fr/api/chess/3players/registerMove.php",
-                                    {
-                                        method: "POST",
-                                        body: params,
-                                    }
-                                );
+                                postData(params);
                             }
 
                             return {

@@ -13,7 +13,7 @@ export type CustomGameData =
               whitePlayer1: string[];
               whitePlayer2: string[];
               gameStarted: boolean;
-              history: string;
+              history: string | null;
           };
       };
 

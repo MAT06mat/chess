@@ -24,18 +24,15 @@ import { useGameStateStore } from "../../services/stores/useGameStateStore";
 import "../../styles/Board.scss";
 import { moveToSan } from "../../utils/formatting";
 import { useCustomGameStore } from "../../services/stores/useCustomGameStore";
-import playSound from "../../utils/playSound";
+import useFetchCallback from "../../services/custom-game/3players/useFetch";
 
 function Board() {
-    const gameStatus = useGameStateStore((state) => state.gameStatus);
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
     const setColorWinner = useGameStateStore((state) => state.setColorWinner);
     const isSandBox = useGameStateStore((state) => state.isSandBox);
 
-    const registerMove = useBoardStore((state) => state.registerMove);
-    const goToLastMove = useBoardStore((state) => state.goToLastMove);
     const history = useBoardStore((state) => state.history);
-    const setHistory = useBoardStore((state) => state.setHistory);
+    const registerMove = useBoardStore((state) => state.registerMove);
     const colorToPlay = useColorToPlay();
     const pieces = usePieces();
     const lastMove = useLastMove();
@@ -44,6 +41,7 @@ function Board() {
     const opponentColor = useSettingsStore((state) => state.opponentColor);
 
     const customGame = useCustomGameStore((state) => state.customGame);
+    const fetchCallback = useFetchCallback();
 
     const boardRef = useRef<HTMLDivElement>(null);
     const nextMoveRef = useRef<CompleteMove | null>(null);
@@ -67,54 +65,12 @@ function Board() {
     // 3 Players game fetch
     useEffect(() => {
         if (customGame !== "3Players") return;
-
-        const interval = setInterval(() => {
-            fetch(
-                `https://chantemuse.fr/api/chess/3players/getConnection.php`,
-                {
-                    method: "POST",
-                    body: new URLSearchParams("GET"),
-                }
-            )
-                .then((res) => res.json())
-                .then(
-                    (data: {
-                        userName: string | undefined;
-                        blackPlayer1: string[];
-                        whitePlayer1: string[];
-                        whitePlayer2: string[];
-                        gameStarted: boolean;
-                        history: string;
-                    }) => {
-                        const serverHistory = JSON.parse(data.history);
-                        if (
-                            JSON.stringify(serverHistory) !==
-                            JSON.stringify(history)
-                        ) {
-                            setHistory(serverHistory);
-                            goToLastMove();
-                        }
-                        if (
-                            !data.gameStarted &&
-                            gameStatus === "playingVsFriend"
-                        ) {
-                            setGameStatus("modeSelection");
-                            playSound("game-end");
-                        }
-                    }
-                )
-                .catch((err) => console.error("Fetch error:", err));
-        }, 1000);
-
+        const interval = setInterval(
+            () => fetchCallback({ getHistory: history.length }),
+            1000
+        );
         return () => clearInterval(interval);
-    }, [
-        setHistory,
-        goToLastMove,
-        history,
-        customGame,
-        gameStatus,
-        setGameStatus,
-    ]);
+    }, [customGame, fetchCallback, history]);
 
     useEffect(() => {
         if (numberOfMove !== 0) return;

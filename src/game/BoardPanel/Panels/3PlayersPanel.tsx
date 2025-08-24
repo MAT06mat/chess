@@ -1,13 +1,12 @@
-import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
-import "../../../styles/ModeSelectionPanel.scss";
-import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import GreenButton from "../../../Components/ui/GreenButton";
-import { useSettingsStore } from "../../../services/stores/useSettingsStore";
 import { useCustomGameStore } from "../../../services/stores/useCustomGameStore";
-import { useCallback, useEffect, useState } from "react";
-import { useGameStateStore } from "../../../services/stores/useGameStateStore";
+import { useState } from "react";
 import GreyButton from "../../../Components/ui/GreyButton";
 import ArrowSpinReset from "../../../assets/svg/ArrowSpinReset";
+import useFetchCallback, {
+    FetchCallbackProps,
+} from "../../../services/custom-game/3players/useFetch";
+import "../../../styles/ModeSelectionPanel.scss";
 
 type ColorIconProps = {
     color: "white1" | "white2" | "black";
@@ -34,127 +33,31 @@ const ColorIcon = ({ color, count = 0, onClick }: ColorIconProps) => {
 };
 
 function ThreePlayersPanel() {
-    const gameStatus = useGameStateStore((state) => state.gameStatus);
-    const setPlayVs = useSettingsStore((state) => state.setPlayVs);
-    const setPlaySide = useSettingsStore((state) => state.setPlaySide);
-    const updateInvertedColor = useSettingsStore(
-        (state) => state.updateInvertedColor
-    );
     const customGameData = useCustomGameStore((state) => state.customGameData);
     const setCustomGameData = useCustomGameStore(
         (state) => state.setCustomGameData
     );
 
-    const resetChessBoard = useCallbackResetChessBoard();
-
-    const startGame = useCallbackStartGame();
-
-    const processServerConnection = useCallback(
-        (data: {
-            userName: string | undefined;
-            blackPlayer1: string[];
-            whitePlayer1: string[];
-            whitePlayer2: string[];
-            gameStarted: boolean;
-            history: string;
-        }) => {
-            if (data.userName === undefined) {
-                console.error(
-                    "User name is undefined in server connection data.",
-                    data
-                );
-                return;
-            }
-
-            const playSide = data.blackPlayer1.includes(data.userName)
-                ? "black"
-                : data.whitePlayer1.includes(data.userName)
-                ? "white1"
-                : data.whitePlayer2.includes(data.userName)
-                ? "white2"
-                : "";
-
-            setCustomGameData({
-                userName: data.userName,
-                playSide,
-                serverConnection: data,
-            });
-
-            const newPlaySide = playSide === "black" ? playSide : "white";
-            if (playSide !== newPlaySide) {
-                setPlaySide(newPlaySide);
-                updateInvertedColor();
-                resetChessBoard();
-            }
-
-            if (
-                data.gameStarted &&
-                gameStatus === "modeSelection" &&
-                playSide
-            ) {
-                startGame();
-            }
-        },
-        [
-            resetChessBoard,
-            setCustomGameData,
-            setPlaySide,
-            updateInvertedColor,
-            gameStatus,
-            startGame,
-        ]
-    );
+    const fetchCallback = useFetchCallback();
 
     function colorIconClick(color: "white1" | "white2" | "black" | "") {
-        if (!customGameData?.userName) return;
-
-        const params = new URLSearchParams();
-        params.append("userName", customGameData.userName);
+        if (!customGameData) return;
 
         const selected = customGameData.playSide === color ? "" : color;
-        const colorMap: Record<"white1" | "white2" | "black", string> = {
+        const colorMap: Record<
+            string,
+            "whitePlayer1" | "whitePlayer2" | "blackPlayer1"
+        > = {
             white1: "whitePlayer1",
             white2: "whitePlayer2",
             black: "blackPlayer1",
         };
 
-        if (selected) {
-            params.append(colorMap[selected], "on");
-        }
+        const props: FetchCallbackProps = {};
+        props[colorMap[selected]] = true;
 
-        fetch("https://chantemuse.fr/api/chess/3players/userConnection.php", {
-            method: "POST",
-            body: params,
-        })
-            .then((res) => res.json())
-            .then(processServerConnection)
-            .catch((err) => console.error("Fetch error:", err));
+        fetchCallback(props);
     }
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (!customGameData?.userName) return;
-
-            setPlayVs("friend");
-
-            fetch(
-                `https://chantemuse.fr/api/chess/3players/getConnection.php`,
-                {
-                    method: "POST",
-                    body: new URLSearchParams("GET"),
-                }
-            )
-                .then((res) => res.json())
-                .then((res) => ({
-                    ...res,
-                    userName: customGameData.userName,
-                }))
-                .then(processServerConnection)
-                .catch((err) => console.error("Fetch error:", err));
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [processServerConnection, customGameData, setPlayVs]);
 
     const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -210,24 +113,7 @@ function ThreePlayersPanel() {
                         light
                         disabled={customGameData?.serverConnection?.gameStarted}
                         onClick={() => {
-                            if (!customGameData?.userName) return;
-
-                            const params = new URLSearchParams();
-                            params.append("userName", customGameData.userName);
-                            params.append("resetPlayers", "on");
-
-                            fetch(
-                                "https://chantemuse.fr/api/chess/3players/userConnection.php",
-                                {
-                                    method: "POST",
-                                    body: params,
-                                }
-                            )
-                                .then((res) => res.json())
-                                .then(processServerConnection)
-                                .catch((err) =>
-                                    console.error("Fetch error:", err)
-                                );
+                            fetchCallback({ resetPlayers: true });
                         }}
                     >
                         <ArrowSpinReset />
@@ -253,19 +139,9 @@ function ThreePlayersPanel() {
                     large
                     onClick={() => {
                         setButtonLoading(true);
-                        fetch(
-                            "https://chantemuse.fr/api/chess/3players/launchGame.php",
-                            {
-                                method: "POST",
-                                body: new URLSearchParams("GET"),
-                            }
-                        )
-                            .then((res) => res.json())
-                            .then(() => setButtonLoading(false))
-                            .catch((err) => {
-                                setButtonLoading(false);
-                                console.error("Fetch error:", err);
-                            });
+                        fetchCallback({ launchGame: true })
+                            ?.then(() => setButtonLoading(false))
+                            .catch(() => setButtonLoading(false));
                     }}
                 />
             </div>

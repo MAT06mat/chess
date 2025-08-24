@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router";
 import Card from "../Components/Card";
 import { useCustomGameStore } from "../services/stores/useCustomGameStore";
-import "../styles/CustomGame.scss";
 import { useGameStateStore } from "../services/stores/useGameStateStore";
+import { useSettingsStore } from "../services/stores/useSettingsStore";
 import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
+import "../styles/CustomGame.scss";
 
 function CustomGame() {
     const setCustomGame = useCustomGameStore((state) => state.setCustomGame);
     const setCustomGameData = useCustomGameStore(
         (state) => state.setCustomGameData
     );
+    const setPlayVs = useSettingsStore((state) => state.setPlayVs);
     const navigate = useNavigate();
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
     const resetChessBoard = useCallbackResetChessBoard();
@@ -39,6 +41,7 @@ function CustomGame() {
                         setGameStatus("modeSelection");
                         resetChessBoard();
                         setCustomGame("3Players");
+                        setPlayVs("friend");
                         setCustomGameData({
                             userName: "",
                             playSide: "",
