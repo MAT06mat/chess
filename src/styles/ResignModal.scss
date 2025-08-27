@@ -1,15 +1,11 @@
-.close-popup-button:has(.resign-popup) {
-    background-color: #000000bb;
-}
-
-.resign-popup {
+.resign-modal {
     width: 20.5rem;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
-    .resign-popup-buttons .rows-split {
+    .resign-modal-buttons .rows-split {
         display: flex;
         justify-content: center;
         gap: 2rem;

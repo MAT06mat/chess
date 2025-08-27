@@ -1,4 +1,4 @@
-import { ArrowProps } from "../game/Board/Arrow";
+import { ArrowProps } from "../game/Board/Components/Arrow";
 import { CompleteMove } from "./Move";
 import { Piece } from "./Piece";
 import { PostChessApiResponse } from "./PostChessApi";

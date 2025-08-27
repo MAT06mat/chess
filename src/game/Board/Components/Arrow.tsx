@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { squareToBoardCoords } from "../../utils/formatting";
+import { squareToBoardCoords } from "../../../utils/formatting";
 
 interface ArrowProps {
     from: string;

@@ -1,3 +1,8 @@
+.close-modal-button:has(.winner-popup) {
+    background-color: #00000040;
+    z-index: 100;
+}
+
 .winner-popup {
     max-width: 375px;
     background-color: #312e2b;

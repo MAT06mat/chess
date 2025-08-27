@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
 import Arrow, { ArrowProps } from "./Arrow";
-import { useBoardStore } from "../../services/stores/useBoardStore";
-import { useShapes } from "../../services/stores/useBoardSelectors";
-import { useSettingsStore } from "../../services/stores/useSettingsStore";
-import { useGameStateStore } from "../../services/stores/useGameStateStore";
+import { useBoardStore } from "../../../services/stores/useBoardStore";
+import { useShapes } from "../../../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../../../services/stores/useSettingsStore";
+import { useGameStateStore } from "../../../services/stores/useGameStateStore";
 
 function Arrows() {
     const clearShapes = useBoardStore((state) => state.clearShapes);

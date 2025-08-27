@@ -1,5 +1,5 @@
 import { ReactNode, useRef } from "react";
-import "../../styles/Popup.scss";
+import "../../styles/Components.scss";
 
 interface Props {
     children?: ReactNode;
@@ -8,7 +8,7 @@ interface Props {
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-function Popup({ children, visible = true, className, onClick }: Props) {
+function Modal({ children, visible = true, className, onClick }: Props) {
     const closeButtonRef = useRef<HTMLDivElement | null>(null);
 
     if (!visible) return null;
@@ -21,13 +21,13 @@ function Popup({ children, visible = true, className, onClick }: Props) {
 
     return (
         <div
-            className="close-popup-button"
+            className="close-modal-button"
             onClick={handleClick}
             ref={closeButtonRef}
         >
-            <div className={"popup " + className}>{children}</div>
+            <div className={"modal " + className}>{children}</div>
         </div>
     );
 }
 
-export default Popup;
+export default Modal;

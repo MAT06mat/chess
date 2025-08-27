@@ -1,5 +1,5 @@
-import { useSettingsStore } from "../../services/stores/useSettingsStore";
-import { CompleteMove, Piece, PieceSymbol } from "../../types";
+import { useSettingsStore } from "../../../services/stores/useSettingsStore";
+import { CompleteMove, Piece, PieceSymbol } from "../../../types";
 
 interface PromotionProps {
     setPromotionBoxVisible: React.Dispatch<React.SetStateAction<boolean>>;

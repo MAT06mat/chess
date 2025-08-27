@@ -1,6 +1,6 @@
 import { CSSProperties, memo } from "react";
-import { useCustomGameStore } from "../../services/stores/useCustomGameStore";
-import { invertCoords } from "../../utils/helpers";
+import { useCustomGameStore } from "../../../services/stores/useCustomGameStore";
+import { invertCoords } from "../../../utils/helpers";
 
 interface BoardInfoProps {
     x: number;

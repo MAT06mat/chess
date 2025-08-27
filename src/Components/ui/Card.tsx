@@ -1,3 +1,5 @@
+import "../../styles/Components.scss";
+
 interface Props {
     icon?: string;
     name?: string;

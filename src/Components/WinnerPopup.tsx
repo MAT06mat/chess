@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Popup from "./ui/Popup";
-import "../styles/WinnerPopup.scss";
+import Modal from "./ui/Modal";
 import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../hooks/useCallbackStartGame";
 import GreenButton from "./ui/GreenButton";
@@ -8,6 +7,7 @@ import GreyButton from "./ui/GreyButton";
 import { useGameStateStore } from "../services/stores/useGameStateStore";
 import { useBoardStore } from "../services/stores/useBoardStore";
 import { useSettingsStore } from "../services/stores/useSettingsStore";
+import "../styles/WinnerPopup.scss";
 
 function WinnerPopup() {
     const gameReview = useGameStateStore((state) => state.gameReview);
@@ -65,7 +65,7 @@ function WinnerPopup() {
     }
 
     return (
-        <Popup
+        <Modal
             className="winner-popup"
             visible={colorWinner !== null && visible && !gameReview}
             onClick={handleClick}
@@ -78,7 +78,7 @@ function WinnerPopup() {
                     <GreyButton text="Rematch" light onClick={rematch} />
                 </div>
             </div>
-        </Popup>
+        </Modal>
     );
 }
 

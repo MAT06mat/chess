@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
-import Card from "../Components/Card";
 import { useCustomGameStore } from "../services/stores/useCustomGameStore";
 import { useGameStateStore } from "../services/stores/useGameStateStore";
 import { useSettingsStore } from "../services/stores/useSettingsStore";
 import useCallbackResetChessBoard from "../hooks/useCallbackResetChessBoard";
+import Card from "../Components/ui/Card";
 import "../styles/CustomGame.scss";
 
 function CustomGame() {

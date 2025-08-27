@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
+import "../../styles/Components.scss";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     text?: string;

@@ -8,9 +8,9 @@ import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import playSound from "../../../utils/playSound";
 import GreyButton from "../../../Components/ui/GreyButton";
-import ResignPopup from "../../../Components/ResignPopup";
+import ResignModal from "../../../Components/ResignModal";
 import { useGameStateStore } from "../../../services/stores/useGameStateStore";
-import { usePopupStore } from "../../../services/stores/usePopupStore";
+import { useModalStore } from "../../../services/stores/useModalStore";
 import { useBoardStore } from "../../../services/stores/useBoardStore";
 import { useSettingsStore } from "../../../services/stores/useSettingsStore";
 import { useCustomGameStore } from "../../../services/stores/useCustomGameStore";
@@ -34,7 +34,7 @@ function BoardActions({
     redo,
     end,
 }: Props) {
-    const addPopup = usePopupStore((state) => state.addPopup);
+    const addModal = useModalStore((state) => state.addModal);
     const gameStatus = useGameStateStore((state) => state.gameStatus);
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
 
@@ -51,7 +51,7 @@ function BoardActions({
     const resetChessBoard = useCallbackResetChessBoard();
 
     function resignGame() {
-        addPopup(<ResignPopup />);
+        addModal(<ResignModal />);
     }
 
     function resetGame() {

@@ -10,7 +10,7 @@ import {
 } from "../services/stores/useBoardSelectors";
 import { useSettingsStore } from "../services/stores/useSettingsStore";
 import { useGameStateStore } from "../services/stores/useGameStateStore";
-import { usePopupStore } from "../services/stores/usePopupStore";
+import { useModalStore } from "../services/stores/useModalStore";
 import { coordsToSquare } from "../utils/formatting";
 import {
     findPieceAt,
@@ -45,7 +45,7 @@ const useBoardClickEvent = (
     const invertedColor = useSettingsStore((state) => state.invertedColor);
     const playerColor = useSettingsStore((state) => state.playerColor);
 
-    const isPopupOpen = usePopupStore((state) => state.isPopupOpen);
+    const isModalOpen = useModalStore((state) => state.isModalOpen);
 
     const customGame = useCustomGameStore((state) => state.customGame);
     const customGameData = useCustomGameStore((state) => state.customGameData);
@@ -111,7 +111,7 @@ const useBoardClickEvent = (
             }
 
             const pos = getSquarePos(event, boardRef.current, invertedColor);
-            if (!pos || isPopupOpen) return;
+            if (!pos || isModalOpen) return;
 
             lastClickRef.current = { ...pos, button: event.button, identifier };
 
@@ -164,7 +164,7 @@ const useBoardClickEvent = (
             shapes,
             history,
             currentMove,
-            isPopupOpen,
+            isModalOpen,
             setHistory,
             setSelectedPiece,
             setDisplayMoves,

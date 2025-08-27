@@ -1,13 +1,13 @@
 import { ReactNode, useMemo } from "react";
-import { Piece } from "../../types";
+import { Piece } from "../../../types";
 import BoardInfo from "./BoardInfo";
 import {
     useLastMove,
     useShapes,
-} from "../../services/stores/useBoardSelectors";
-import { useSettingsStore } from "../../services/stores/useSettingsStore";
-import { useGameStateStore } from "../../services/stores/useGameStateStore";
-import { squareToCoords } from "../../utils/formatting";
+} from "../../../services/stores/useBoardSelectors";
+import { useSettingsStore } from "../../../services/stores/useSettingsStore";
+import { useGameStateStore } from "../../../services/stores/useGameStateStore";
+import { squareToCoords } from "../../../utils/formatting";
 
 interface Props {
     selectedPiece: Piece | null;

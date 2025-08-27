@@ -1,12 +1,12 @@
 import { useGameStateStore } from "../services/stores/useGameStateStore";
-import "../styles/Title.scss";
+import "../styles/GameStateTitle.scss";
 
 interface Props {
     onlyComputerScreen?: boolean;
     onlyMobileScreen?: boolean;
 }
 
-function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
+function GameStateTitle({ onlyComputerScreen, onlyMobileScreen }: Props) {
     const title = useGameStateStore((state) => state.title);
 
     const className = onlyComputerScreen
@@ -18,4 +18,4 @@ function Title({ onlyComputerScreen, onlyMobileScreen }: Props) {
     return <div className={"game-title" + className}>{title}</div>;
 }
 
-export default Title;
+export default GameStateTitle;

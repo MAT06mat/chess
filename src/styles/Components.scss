@@ -1,0 +1,122 @@
+.large-green-button,
+.green-button,
+.grey-button {
+    border: 0;
+    border-radius: 0.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    user-select: none;
+    transition: all 0.2s ease;
+    gap: 0.4rem;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+}
+
+.green-button,
+.large-green-button {
+    background-color: #81b64c;
+    text-shadow: 0 0.1rem 0 #00000033;
+
+    &:hover:enabled {
+        background-color: #a3d160;
+    }
+}
+
+.large-green-button {
+    box-shadow: 0 0 0.8rem transparent, 0 0 1.6rem transparent,
+        inset 0 -0.8rem 2.4rem transparent,
+        inset 0 calc(0.3rem * -1) 0 0 #45753c;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 0 2.4rem 0.4rem;
+    transition: all 0.1s ease-out;
+
+    &:hover:enabled {
+        box-shadow: 0 0 0.8rem rgba(93, 153, 72, 0.1),
+            0 0 1.6rem rgba(93, 153, 72, 0.1),
+            inset 0 -0.8rem 2.4rem rgba(69, 117, 60, 0.4),
+            inset 0 calc(0.3rem * -1) 0 0 #5d9948;
+    }
+}
+
+.grey-button {
+    background-color: #ffffff1a;
+    fill: #ffffffb8;
+    color: #ffffffb0;
+
+    &.light-grey {
+        background-color: #ffffff15;
+    }
+
+    &:hover:enabled {
+        background-color: #ffffff24;
+    }
+}
+
+.close-modal-button {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #000000bb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    position: relative;
+    box-shadow: 3px 3px 10px #000000a6;
+    background-color: #272522;
+    border-radius: 0.6rem;
+    border: 0.05rem solid #ffffff1a;
+    font-size: 14px;
+    margin: 2rem;
+    width: 100%;
+}
+
+.card {
+    background-color: #00000033;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 0 0 #00000066;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    min-height: 19rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #00000066;
+    }
+
+    .card-icon {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        height: 11rem;
+        user-select: none;
+    }
+
+    .card-body {
+        color: #ffffffb8;
+        padding: 2.4rem;
+        text-align: left;
+
+        h2.card-name {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}

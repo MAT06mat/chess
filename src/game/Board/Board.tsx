@@ -1,18 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import PromotionBox from "./PromotionBox";
 import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
 import getValidMoves from "../../services/engine/getValidMoves";
 import WinnerPopup from "../../Components/WinnerPopup";
 import { invertColor } from "../../utils/helpers";
 import useBot from "../../services/bot/useBot";
-import BoardHighLight from "./BoardHighLight";
 import { CapturedPieces } from "../../Components/CapturedPieces";
-import EvaluationBar from "./EvaluationBar";
-import Arrows from "./Arrows";
 import useBoardClickEvent from "../../hooks/useBoardClickEvent";
-import DisplayMoves from "./DisplayMoves";
-import Pieces from "./Pieces";
 import { useBoardStore } from "../../services/stores/useBoardStore";
 import {
     useColorToPlay,
@@ -25,6 +19,14 @@ import "../../styles/Board.scss";
 import { moveToSan } from "../../utils/formatting";
 import { useCustomGameStore } from "../../services/stores/useCustomGameStore";
 import useFetchCallback from "../../services/custom-game/3players/useFetch";
+import {
+    EvaluationBar,
+    BoardHighLight,
+    DisplayMoves,
+    Pieces,
+    PromotionBox,
+    Arrows,
+} from "./Components";
 
 function Board() {
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
