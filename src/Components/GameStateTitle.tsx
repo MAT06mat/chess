@@ -1,5 +1,8 @@
+import SettingsCog from "../assets/svg/SettingsCog";
 import { useGameStateStore } from "../services/stores/useGameStateStore";
+import { useModalStore } from "../services/stores/useModalStore";
 import "../styles/GameStateTitle.scss";
+import SettingsModal from "./SettingsModal";
 
 interface Props {
     onlyComputerScreen?: boolean;
@@ -8,6 +11,7 @@ interface Props {
 
 function GameStateTitle({ onlyComputerScreen, onlyMobileScreen }: Props) {
     const title = useGameStateStore((state) => state.title);
+    const addModal = useModalStore((state) => state.addModal);
 
     const className = onlyComputerScreen
         ? " computer-screen"
@@ -15,7 +19,17 @@ function GameStateTitle({ onlyComputerScreen, onlyMobileScreen }: Props) {
         ? " mobile-screen"
         : "";
 
-    return <div className={"game-title" + className}>{title}</div>;
+    return (
+        <div className={"game-title" + className}>
+            {title}
+            <button
+                className="open-settings"
+                onClick={() => addModal(<SettingsModal />)}
+            >
+                <SettingsCog />
+            </button>
+        </div>
+    );
 }
 
 export default GameStateTitle;

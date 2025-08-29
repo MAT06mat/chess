@@ -2,7 +2,7 @@ function Copy() {
     return (
         <svg
             aria-hidden="true"
-            data-glyph="square-fill-stack-blank"
+            data-glyph="copy"
             viewBox="0 0 24 24"
             height="20"
             width="20"

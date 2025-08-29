@@ -14,36 +14,6 @@
         border-radius: 4px 4px 0 0;
         width: 100%;
         display: flex;
-
-        .open-settings {
-            position: absolute;
-            right: 0.5rem;
-            top: 50%;
-            height: 20px;
-            width: 20px;
-            transform: translateY(-50%);
-            background-color: transparent;
-            border: transparent;
-            padding: 0;
-
-            svg {
-                width: 16px;
-                height: 16px;
-
-                path {
-                    fill: #ffffffa1;
-                }
-            }
-        }
-    }
-
-    .settings-div {
-        border-top: 0.05rem solid #ffffff1a;
-        padding: 0.8rem;
-
-        button {
-            padding: 0.2rem 0.6rem;
-        }
     }
 
     .board-panel-content {

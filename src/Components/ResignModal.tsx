@@ -1,6 +1,5 @@
 import Modal from "./ui/Modal";
 import GreyButton from "./ui/GreyButton";
-import "../styles/ResignModal.scss";
 import playSound from "../utils/playSound";
 import { invertColor } from "../utils/helpers";
 import GreenButton from "./ui/GreenButton";
@@ -10,6 +9,7 @@ import { useColorToPlay } from "../services/stores/useBoardSelectors";
 import { useSettingsStore } from "../services/stores/useSettingsStore";
 import { useCustomGameStore } from "../services/stores/useCustomGameStore";
 import useFetchCallback from "../services/custom-game/3players/useFetch";
+import "../styles/ResignModal.scss";
 
 function ResignModal() {
     const removeModal = useModalStore((state) => state.removeModal);

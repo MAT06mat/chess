@@ -120,3 +120,40 @@
         }
     }
 }
+
+.text-box {
+    border-radius: 0.4rem;
+    border: 0.05rem solid #ffffff1a;
+    padding: 0.5rem 1rem;
+    background-color: #ffffff14;
+    color: #ffffffb0;
+
+    display: flex;
+    gap: 1.2rem;
+
+    &:has(.text-copy) {
+        padding: 0.5rem 0.6rem 0.5rem 1rem;
+    }
+
+    .text-copy {
+        padding: 0;
+        fill: #ffffffcc;
+        background-color: transparent;
+        border: none;
+        height: 20px;
+        width: 20px;
+        transition-property: fill;
+        transition-timing-function: ease-out;
+        transition-duration: 0.5s;
+
+        &:hover:has([data-glyph="copy"]) {
+            fill: #ffffffff;
+            transition-duration: 0.1s;
+        }
+
+        &:active {
+            fill: #ffffff55 !important;
+            transition-duration: 0s !important;
+        }
+    }
+}
