@@ -16,6 +16,8 @@ type ColorIconProps = {
 
 const ColorIcon = ({ color, count = 0, onClick }: ColorIconProps) => {
     const customGameData = useCustomGameStore((state) => state.customGameData);
+    const state = customGameData?.userName ? true : false;
+
     const baseClass = color.startsWith("white") ? "white" : "black";
 
     function isSelectedSide(color: string) {
@@ -25,7 +27,8 @@ const ColorIcon = ({ color, count = 0, onClick }: ColorIconProps) => {
     return (
         <div
             className={`color-icon ${baseClass}${isSelectedSide(color)}`}
-            onClick={onClick}
+            onClick={state ? onClick : () => {}}
+            style={state ? {} : { opacity: 0.5, cursor: "not-allowed" }}
         >
             <span className="players-number">{count || ""}</span>
         </div>
@@ -40,10 +43,9 @@ function ThreePlayersPanel() {
 
     const fetchCallback = useFetchCallback();
 
-    function colorIconClick(color: "white1" | "white2" | "black" | "") {
+    function colorIconClick(color: "white1" | "white2" | "black") {
         if (!customGameData) return;
 
-        const selected = customGameData.playSide === color ? "" : color;
         const colorMap: Record<
             string,
             "whitePlayer1" | "whitePlayer2" | "blackPlayer1"
@@ -54,7 +56,7 @@ function ThreePlayersPanel() {
         };
 
         const props: FetchCallbackProps = {};
-        props[colorMap[selected]] = true;
+        props[colorMap[color]] = true;
 
         fetchCallback(props);
     }
@@ -77,7 +79,7 @@ function ThreePlayersPanel() {
                                 ...(customGameData
                                     ? customGameData
                                     : { playSide: "" }),
-                                userName: e.target.value.toString() ?? "",
+                                userName: e.target.value,
                             })
                         }
                     />

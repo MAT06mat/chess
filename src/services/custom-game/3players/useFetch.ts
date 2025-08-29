@@ -59,12 +59,12 @@ function useFetchCallback() {
 
     const processServerConnection = useCallback(
         (data: ServerData) => {
-            const userName = customGameData?.userName;
-            if (!userName) {
+            if (customGameData === undefined) {
                 console.error("CustomGameData is undefined");
                 return;
             }
 
+            const userName = customGameData.userName;
             const playSide = data.blackPlayer1.includes(userName)
                 ? "black"
                 : data.whitePlayer1.includes(userName)
