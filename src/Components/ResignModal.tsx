@@ -1,6 +1,5 @@
 import Modal from "./ui/Modal";
 import GreyButton from "./ui/GreyButton";
-import playSound from "../utils/playSound";
 import { invertColor } from "../utils/helpers";
 import GreenButton from "./ui/GreenButton";
 import { useModalStore } from "../services/stores/useModalStore";
@@ -29,17 +28,15 @@ function ResignModal() {
         if (customGame === "3Players") {
             fetchCallback({ stopGame: true })?.then(() => {
                 setGameStatus("modeSelection");
-                playSound("game-end");
             });
             return;
         }
         if (gameStatus === "playingVsBot") {
-            setColorWinner(opponentColor);
+            setColorWinner(opponentColor, "by Resign");
         } else {
-            setColorWinner(invertColor(colorToPlay));
+            setColorWinner(invertColor(colorToPlay), "by Resign");
         }
         setGameStatus("gameEnd");
-        playSound("game-end");
     }
 
     return (

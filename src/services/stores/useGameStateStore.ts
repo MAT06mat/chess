@@ -1,11 +1,14 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
 import { ColorWinner, GameStatus } from "../../types";
+import playSound from "../../utils/playSound";
+import { isPlayingStatus } from "../../utils/helpers";
 
 type GameState = {
     gameStatus: GameStatus;
     gameReview: boolean;
     colorWinner: ColorWinner;
+    reason: string;
     title: string;
     isSandBox: boolean;
 };
@@ -13,7 +16,7 @@ type GameState = {
 type GameActions = {
     setGameStatus: (gameStatus: GameStatus) => void;
     setGameReview: (gameReview: boolean) => void;
-    setColorWinner: (colorWinner: ColorWinner) => void;
+    setColorWinner: (colorWinner: ColorWinner, reason?: string) => void;
 };
 
 export const useGameStateStore = create(
@@ -23,15 +26,28 @@ export const useGameStateStore = create(
                 gameStatus: "modeSelection",
                 gameReview: false,
                 colorWinner: null,
+                reason: "",
                 title: "Chess modeSelection",
                 isSandBox: false,
             },
             (set) => {
                 return {
                     setGameStatus: (gameStatus: GameStatus) => {
-                        set(() => {
+                        set((state) => {
                             const title = "Chess " + gameStatus;
                             const isSandBox = gameStatus === "playingSandBox";
+
+                            if (
+                                !isPlayingStatus(gameStatus) &&
+                                isPlayingStatus(state.gameStatus)
+                            ) {
+                                playSound("game-end");
+                            } else if (
+                                isPlayingStatus(gameStatus) &&
+                                !isPlayingStatus(state.gameStatus)
+                            ) {
+                                playSound("game-start");
+                            }
 
                             return {
                                 gameStatus,
@@ -45,9 +61,10 @@ export const useGameStateStore = create(
                             gameReview,
                         }));
                     },
-                    setColorWinner: (colorWinner: ColorWinner) => {
+                    setColorWinner: (colorWinner: ColorWinner, reason = "") => {
                         set(() => ({
                             colorWinner,
+                            reason: reason,
                         }));
                     },
                 };

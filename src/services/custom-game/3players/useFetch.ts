@@ -5,7 +5,6 @@ import { useSettingsStore } from "../../stores/useSettingsStore";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
 import useCallbackStartGame from "../../../hooks/useCallbackStartGame";
 import { useBoardStore } from "../../stores/useBoardStore";
-import playSound from "../../../utils/playSound";
 
 const BASE_URL = "https://chantemuse.fr/api/chess/3players";
 
@@ -108,7 +107,6 @@ function useFetchCallback() {
                 startGame();
             } else if (!data.gameStarted && gameStatus === "playingVsFriend") {
                 setGameStatus("modeSelection");
-                playSound("game-end");
                 resetChessBoard();
             }
         },

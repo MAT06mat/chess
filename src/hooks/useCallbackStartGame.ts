@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import playSound from "../utils/playSound";
 import useCallbackResetChessBoard from "./useCallbackResetChessBoard";
 import { useSettingsStore } from "../services/stores/useSettingsStore";
 import { useGameStateStore } from "../services/stores/useGameStateStore";
@@ -23,7 +22,6 @@ function useCallbackStartGame() {
         } else {
             setGameStatus("playingSandBox");
         }
-        playSound("game-start");
     }, [playVs, updateInvertedColor, resetChessBoard, setGameStatus]);
 }
 

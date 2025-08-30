@@ -6,7 +6,6 @@ import ArrowSpinReset from "../../../assets/svg/ArrowSpinReset";
 import ArrowTriangleSwooshLeft from "../../../assets/svg/ArrowTriangleSwooshLeft";
 import GameFlagStraight from "../../../assets/svg/GameFlagStraight";
 import useCallbackResetChessBoard from "../../../hooks/useCallbackResetChessBoard";
-import playSound from "../../../utils/playSound";
 import GreyButton from "../../../Components/ui/GreyButton";
 import ResignModal from "../../../Components/ResignModal";
 import { useGameStateStore } from "../../../services/stores/useGameStateStore";
@@ -56,7 +55,6 @@ function BoardActions({
 
     function resetGame() {
         resetChessBoard();
-        playSound("game-end");
         setGameStatus("modeSelection");
     }
 

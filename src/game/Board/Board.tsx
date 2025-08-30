@@ -3,7 +3,7 @@ import { CompleteMove, RelativeMove, Piece as PieceType } from "../../types";
 import BoardCoordinates from "../../assets/svg/BoardCoordinates";
 import getValidMoves from "../../services/engine/getValidMoves";
 import WinnerPopup from "../../Components/WinnerPopup";
-import { invertColor } from "../../utils/helpers";
+import { invertColor, isDraw } from "../../utils/helpers";
 import useBot from "../../services/bot/useBot";
 import { CapturedPieces } from "../../Components/CapturedPieces";
 import useBoardClickEvent from "../../hooks/useBoardClickEvent";
@@ -75,14 +75,15 @@ function Board() {
     }, [customGame, fetchCallback, history]);
 
     useEffect(() => {
-        if (numberOfMove !== 0) return;
+        const draw = isDraw(history);
+        if (numberOfMove !== 0 && !draw) return;
 
         if (lastMove?.check) {
             setColorWinner(invertColor(colorToPlay));
             lastMove.checkMate = true;
             lastMove.san = moveToSan(lastMove);
         } else {
-            setColorWinner("s");
+            setColorWinner("d", draw || "by Stalemate");
         }
         setGameStatus("gameEnd");
     }, [
@@ -92,6 +93,7 @@ function Board() {
         lastMove,
         setColorWinner,
         setGameStatus,
+        history,
     ]);
 
     useBot(validMoves);

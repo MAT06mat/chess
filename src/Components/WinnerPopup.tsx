@@ -12,6 +12,7 @@ import "../styles/WinnerPopup.scss";
 function WinnerPopup() {
     const gameReview = useGameStateStore((state) => state.gameReview);
     const colorWinner = useGameStateStore((state) => state.colorWinner);
+    const reason = useGameStateStore((state) => state.reason);
     const setGameReview = useGameStateStore((state) => state.setGameReview);
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
     const [visible, setVisible] = useState(true);
@@ -52,8 +53,6 @@ function WinnerPopup() {
         title = "White won !";
     } else if (colorWinner === "b") {
         title = "Black won !";
-    } else if (colorWinner === "s") {
-        title = "Stalemate";
     }
 
     if (playVs === "bot") {
@@ -71,6 +70,7 @@ function WinnerPopup() {
             onClick={handleClick}
         >
             <div className="winner-popup-title">{title}</div>
+            <div className="winner-popup-subtitle">{reason}</div>
             <div className="winner-popup-buttons">
                 <GreenButton text="Game Review" large onClick={runGameReview} />
                 <div className="rows-split">

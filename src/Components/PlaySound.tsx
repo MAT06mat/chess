@@ -6,9 +6,7 @@ function PlaySound() {
     const lastMove = useLastMove();
 
     useEffect(() => {
-        if (lastMove?.checkMate) {
-            playSound("game-end");
-        } else if (lastMove?.check) {
+        if (lastMove?.check) {
             playSound("move-check");
         } else if (lastMove?.capture) {
             playSound("capture");

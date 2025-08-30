@@ -8,9 +8,17 @@
     background-color: #312e2b;
 
     .winner-popup-title {
-        padding: 1rem;
+        padding: 0.6rem 0 0;
         font-size: x-large;
+        font-weight: 700;
+        background-color: #ffffff0b;
+        border-radius: 0.6rem 0.6rem 0 0;
+    }
+
+    .winner-popup-subtitle {
+        padding: 0 0 0.8rem;
         font-weight: 600;
+        color: #ffffffa1;
         background-color: #ffffff0b;
         border-radius: 0.6rem 0.6rem 0 0;
     }
