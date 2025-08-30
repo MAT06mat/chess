@@ -14,9 +14,6 @@ function ModeSelectionPanel() {
     const playVs = useSettingsStore((state) => state.playVs);
     const setPlaySide = useSettingsStore((state) => state.setPlaySide);
     const setPlayVs = useSettingsStore((state) => state.setPlayVs);
-    const updateInvertedColor = useSettingsStore(
-        (state) => state.updateInvertedColor
-    );
 
     const resetChessBoard = useCallbackResetChessBoard();
 
@@ -24,7 +21,6 @@ function ModeSelectionPanel() {
 
     function colorIconClick(color: PlaySide) {
         setPlaySide(color);
-        updateInvertedColor();
         resetChessBoard();
     }
 

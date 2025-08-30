@@ -44,9 +44,6 @@ function useFetchCallback() {
     const setHistory = useBoardStore((state) => state.setHistory);
 
     const setPlaySide = useSettingsStore((state) => state.setPlaySide);
-    const updateInvertedColor = useSettingsStore(
-        (state) => state.updateInvertedColor
-    );
 
     const setCustomGameData = useCustomGameStore(
         (state) => state.setCustomGameData
@@ -87,7 +84,6 @@ function useFetchCallback() {
             const newPlaySide = playSide === "black" ? playSide : "white";
             if (customGameData.playSide !== newPlaySide) {
                 setPlaySide(newPlaySide);
-                updateInvertedColor();
                 resetChessBoard();
             }
 
@@ -117,7 +113,6 @@ function useFetchCallback() {
             setCustomGameData,
             setPlaySide,
             startGame,
-            updateInvertedColor,
             goToLastMove,
             history,
             setGameStatus,

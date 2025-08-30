@@ -17,6 +17,21 @@ type SettingsActions = {
     setPlayVs: (playVs: PlayVs) => void;
 };
 
+function updateInvertedColor(playSide: PlaySide, noRandom = false) {
+    let invertedColor = playSide === "black";
+    if (playSide === "random" && !noRandom) {
+        invertedColor = random.boolean();
+    }
+    const playerColor: "w" | "b" = invertedColor ? "b" : "w";
+    const opponentColor: "w" | "b" = invertedColor ? "w" : "b";
+    return {
+        playSide,
+        invertedColor,
+        playerColor,
+        opponentColor,
+    };
+}
+
 export const useSettingsStore = create(
     persist(
         combine<SettingsState, SettingsActions>(
@@ -30,9 +45,7 @@ export const useSettingsStore = create(
             (set) => {
                 return {
                     setPlaySide: (playSide: PlaySide) => {
-                        set(() => ({
-                            playSide,
-                        }));
+                        set(() => updateInvertedColor(playSide, true));
                     },
                     setPlayVs: (playVs: PlayVs) => {
                         set(() => ({
@@ -40,19 +53,7 @@ export const useSettingsStore = create(
                         }));
                     },
                     updateInvertedColor: () => {
-                        set((state) => {
-                            let invertedColor = state.playSide === "black";
-                            if (state.playSide === "random") {
-                                invertedColor = random.boolean();
-                            }
-                            const playerColor = invertedColor ? "b" : "w";
-                            const opponentColor = invertedColor ? "w" : "b";
-                            return {
-                                invertedColor,
-                                playerColor,
-                                opponentColor,
-                            };
-                        });
+                        set((state) => updateInvertedColor(state.playSide));
                     },
                 };
             }
