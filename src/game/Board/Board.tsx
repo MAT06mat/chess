@@ -27,6 +27,7 @@ import {
     PromotionBox,
     Arrows,
 } from "./Components";
+import { BoardRefContext } from "../../services/contexts/BoardRefContext";
 
 function Board() {
     const setGameStatus = useGameStateStore((state) => state.setGameStatus);
@@ -76,7 +77,8 @@ function Board() {
 
     useEffect(() => {
         const draw = isDraw(history);
-        if (numberOfMove !== 0 && !draw) return;
+
+        if ((numberOfMove !== 0 && !draw) || isSandBox) return;
 
         if (lastMove?.check) {
             setColorWinner(invertColor(colorToPlay));
@@ -94,6 +96,7 @@ function Board() {
         setColorWinner,
         setGameStatus,
         history,
+        isSandBox,
     ]);
 
     useBot(validMoves);
@@ -130,41 +133,44 @@ function Board() {
     );
 
     return (
-        <div className="board-layout">
-            <CapturedPieces color={playerColor} onlyComputerScreen />
-            <div className="chessboard-layout">
-                <EvaluationBar />
-                <div
-                    className="board"
-                    onContextMenu={(event) => event.preventDefault()}
-                    ref={boardRef}
-                >
-                    <BoardCoordinates />
-                    <BoardHighLight selectedPiece={selectedPiece} />
-                    <DisplayMoves
-                        selectedPiece={selectedPiece}
-                        displayMoves={displayMoves}
-                        boardRef={boardRef}
-                    />
-                    <Pieces />
-                    {promotionBoxVisible ? (
-                        <>
-                            <div
-                                ref={promotionCloseRef}
-                                className="promotion-box-close"
-                            />
-                            <PromotionBox
-                                setPromotionBoxVisible={setPromotionBoxVisible}
-                                nextMoveRef={nextMoveRef}
-                            />
-                        </>
-                    ) : null}
-                    <Arrows />
-                    <WinnerPopup />
+        <BoardRefContext.Provider value={{ ref: boardRef }}>
+            <div className="board-layout">
+                <CapturedPieces color={playerColor} onlyComputerScreen />
+                <div className="chessboard-layout">
+                    <EvaluationBar />
+                    <div
+                        className="board"
+                        onContextMenu={(event) => event.preventDefault()}
+                        ref={boardRef}
+                    >
+                        <BoardCoordinates />
+                        <BoardHighLight selectedPiece={selectedPiece} />
+                        <DisplayMoves
+                            selectedPiece={selectedPiece}
+                            displayMoves={displayMoves}
+                        />
+                        <Pieces />
+                        {promotionBoxVisible ? (
+                            <>
+                                <div
+                                    ref={promotionCloseRef}
+                                    className="promotion-box-close"
+                                />
+                                <PromotionBox
+                                    setPromotionBoxVisible={
+                                        setPromotionBoxVisible
+                                    }
+                                    nextMoveRef={nextMoveRef}
+                                />
+                            </>
+                        ) : null}
+                        <Arrows />
+                        <WinnerPopup />
+                    </div>
                 </div>
+                <CapturedPieces color={opponentColor} onlyComputerScreen />
             </div>
-            <CapturedPieces color={opponentColor} onlyComputerScreen />
-        </div>
+        </BoardRefContext.Provider>
     );
 }
 

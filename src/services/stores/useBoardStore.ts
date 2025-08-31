@@ -20,9 +20,16 @@ export const useBoardStore = create(
             {
                 history: [getDefaultBoard()],
                 currentMove: 0,
+                pieceGrab: { id: -1, pos: [0, 0] },
             },
             (set) => {
                 return {
+                    grabPiece: (piece: Piece, pos: number[]) => {
+                        set(() => ({ pieceGrab: { id: piece.id, pos } }));
+                    },
+                    ungrabPiece: () => {
+                        set(() => ({ pieceGrab: { id: -1, pos: [0, 0] } }));
+                    },
                     setHistory: (nextHistory: BoardPosition[]) => {
                         set(() => ({
                             history: [...nextHistory],

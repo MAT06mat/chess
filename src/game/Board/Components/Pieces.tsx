@@ -1,10 +1,12 @@
 import { usePieces } from "../../../services/stores/useBoardSelectors";
+import { useBoardStore } from "../../../services/stores/useBoardStore";
 import { useSettingsStore } from "../../../services/stores/useSettingsStore";
 import BoardInfo from "./BoardInfo";
 
 function Pieces() {
     const pieces = usePieces();
     const invertedColor = useSettingsStore((state) => state.invertedColor);
+    const pieceGrab = useBoardStore((state) => state.pieceGrab);
 
     return pieces.map((piece) => (
         <BoardInfo
@@ -13,6 +15,7 @@ function Pieces() {
             x={piece.x}
             y={piece.y}
             key={invertedColor ? piece.id + 64 : piece.id}
+            grabPos={pieceGrab.id === piece.id ? pieceGrab.pos : undefined}
         />
     ));
 }

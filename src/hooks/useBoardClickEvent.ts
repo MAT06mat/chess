@@ -37,6 +37,8 @@ const useBoardClickEvent = (
     const history = useBoardStore((state) => state.history);
     const setHistory = useBoardStore((state) => state.setHistory);
     const currentMove = useBoardStore((state) => state.currentMove);
+    const grabPiece = useBoardStore((state) => state.grabPiece);
+    const ungrabPiece = useBoardStore((state) => state.ungrabPiece);
     const pieces = usePieces();
     const shapes = useShapes();
     const colorToPlay = useColorToPlay();
@@ -88,16 +90,18 @@ const useBoardClickEvent = (
         setSelectedPiece(null);
         lastClickRef.current = null;
         pieceIdRef.current = null;
-    }, [setSelectedPiece]);
+        ungrabPiece();
+    }, [setSelectedPiece, ungrabPiece]);
 
     const toggleLastPieceSelected = useCallback(() => {
         if (pieceIdRef.current === null && !isSandBox) {
             lastClickRef.current = null;
+            ungrabPiece();
             pieceIdRef.current = selectedPiece?.id ?? null;
         } else {
             clearSelection();
         }
-    }, [isSandBox, selectedPiece, clearSelection]);
+    }, [isSandBox, selectedPiece, clearSelection, ungrabPiece]);
 
     const handleBoardMouseDown = useCallback(
         (event: MouseEvent, identifier?: number) => {
@@ -144,6 +148,7 @@ const useBoardClickEvent = (
                     !move &&
                     canPlay(piece.x)
                 ) {
+                    grabPiece(piece, [event.clientX, event.clientY]);
                     setSelectedPiece(piece);
                     setDisplayMoves(validMoves.get(piece.id) ?? []);
                     if (pieceIdRef.current !== piece.id)
@@ -179,6 +184,7 @@ const useBoardClickEvent = (
             displayMoves,
             isSandBox,
             canPlay,
+            grabPiece,
         ]
     );
 
