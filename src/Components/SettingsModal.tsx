@@ -13,7 +13,7 @@ function SettingsModal() {
     return (
         <Modal className="settings-modal" onClick={removeModal}>
             <h2>FEN</h2>
-            <TextBox text={fen} allowCopy />
+            <TextBox text={fen} nowrap allowCopy />
         </Modal>
     );
 }

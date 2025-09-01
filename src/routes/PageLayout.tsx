@@ -1,11 +1,12 @@
 import { Outlet } from "react-router";
 import { usePersistedState } from "../hooks/usePersistedSate";
+import { ErrorBoundary, ErrorFallback } from "../ErrorBoundary.tsx";
 
 function PageLayout() {
     const [footer, setFooter] = usePersistedState("footer", true);
 
     return (
-        <>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Outlet />
             <div
                 className={"footer" + (footer ? " computer-screen " : "")}
@@ -17,7 +18,7 @@ function PageLayout() {
                     See more
                 </a>
             </div>
-        </>
+        </ErrorBoundary>
     );
 }
 

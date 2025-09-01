@@ -127,9 +127,19 @@
     padding: 0.5rem 1rem;
     background-color: #ffffff14;
     color: #ffffffb0;
+    width: fit-content;
 
     display: flex;
     gap: 1.2rem;
+
+    .text.nowrap {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
     &:has(.text-copy) {
         padding: 0.5rem 0.6rem 0.5rem 1rem;

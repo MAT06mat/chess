@@ -30,15 +30,20 @@ export const useBoardStore = create(
                     ungrabPiece: () => {
                         set(() => ({ pieceGrab: { id: -1, pos: [0, 0] } }));
                     },
-                    setHistory: (nextHistory: BoardPosition[]) => {
+                    setHistory: (newHistory: BoardPosition[]) => {
+                        if (newHistory.length === 0) return;
                         set(() => ({
-                            history: [...nextHistory],
+                            history: [...newHistory],
                         }));
                     },
-                    setCurrentMove: (nextCurrentMove: number) => {
-                        set(() => ({
-                            currentMove: nextCurrentMove,
-                        }));
+                    setCurrentMove: (number: number) => {
+                        set((state) => {
+                            if (number >= state.history.length || number < 0)
+                                return {};
+                            return {
+                                currentMove: number,
+                            };
+                        });
                     },
                     resetHistory: () => {
                         set(() => ({
