@@ -127,17 +127,23 @@
     padding: 0.5rem 1rem;
     background-color: #ffffff14;
     color: #ffffffb0;
-    width: fit-content;
+    max-width: 100%;
 
     display: flex;
     gap: 1.2rem;
 
-    .text.nowrap {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-        &::-webkit-scrollbar {
-            display: none;
+    .text {
+        min-width: 0;
+        overflow-wrap: break-word;
+
+        &.nowrap {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+            word-wrap: normal;
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
     }
 

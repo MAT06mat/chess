@@ -39,12 +39,15 @@
     box-sizing: border-box;
 
     .error-boundary {
-        max-width: 100%;
+        max-width: min(100%, 50rem);
+        max-height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        box-sizing: border-box;
 
         div {
+            max-width: 100%;
             text-align: left;
 
             p {
