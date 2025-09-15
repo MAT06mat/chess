@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import { usePersistedState } from "../hooks/usePersistedSate";
+import { usePersistedState } from "../hooks/usePersistedState.ts";
 import { ErrorBoundary, ErrorFallback } from "../ErrorBoundary.tsx";
 
 function PageLayout() {
