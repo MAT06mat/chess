@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { combine, persist } from "zustand/middleware";
+import { combine } from "zustand/middleware";
 import { ReactNode } from "react";
 
 type ModalState = { currentModal: ReactNode; isModalOpen: boolean };
@@ -10,36 +10,31 @@ type ModalActions = {
 };
 
 export const useModalStore = create(
-    persist(
-        combine<ModalState, ModalActions>(
-            {
-                currentModal: null,
-                isModalOpen: false,
-            },
-            (set) => {
-                return {
-                    addModal: (modal: ReactNode) => {
-                        set((state) => {
-                            if (state.currentModal) return {};
-                            return {
-                                currentModal: modal,
-                                isModalOpen: true,
-                            };
-                        });
-                    },
-                    removeModal: () => {
-                        set(() => {
-                            return {
-                                currentModal: null,
-                                isModalOpen: false,
-                            };
-                        });
-                    },
-                };
-            }
-        ),
+    combine<ModalState, ModalActions>(
         {
-            name: "modal-storage",
+            currentModal: null,
+            isModalOpen: false,
+        },
+        (set) => {
+            return {
+                addModal: (modal: ReactNode) => {
+                    set((state) => {
+                        if (state.currentModal) return {};
+                        return {
+                            currentModal: modal,
+                            isModalOpen: true,
+                        };
+                    });
+                },
+                removeModal: () => {
+                    set(() => {
+                        return {
+                            currentModal: null,
+                            isModalOpen: false,
+                        };
+                    });
+                },
+            };
         }
     )
 );
