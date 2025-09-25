@@ -13,11 +13,10 @@ It is built using React and TypeScript, with a focus on creating a clean UI, smo
 -   Move validation
 -   Playing bot
 -   Game review
+-   Drag pieces
 
 ## Planned Features
 
--   Drag pieces
--   All game draws
 -   SandBox fully fonctionnal
 -   Timers
 
