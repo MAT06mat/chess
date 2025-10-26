@@ -63,7 +63,7 @@
     position: absolute;
     z-index: 1000;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     top: 0;
     left: 0;
     background-color: #000000bb;
@@ -170,6 +170,32 @@
         &:active {
             fill: #ffffff55 !important;
             transition-duration: 0s !important;
+        }
+    }
+}
+
+.switch-button {
+    display: inline-block;
+    width: 3rem;
+    height: 1.5rem;
+    background-color: #75757566;
+    border-radius: 0.75rem;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+
+    .slider {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-color: #e8e7e6;
+        border-radius: 0.75rem;
+        transition: margin-left 0.2s ease;
+    }
+
+    &.active {
+        background-color: #5d9948;
+
+        .slider {
+            margin-left: 1.5rem;
         }
     }
 }

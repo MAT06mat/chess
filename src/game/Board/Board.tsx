@@ -40,6 +40,7 @@ function Board() {
     const pieces = usePieces();
     const lastMove = useLastMove();
 
+    const theme = useSettingsStore((state) => state.theme);
     const playerColor = useSettingsStore((state) => state.playerColor);
     const opponentColor = useSettingsStore((state) => state.opponentColor);
 
@@ -134,7 +135,7 @@ function Board() {
 
     return (
         <BoardRefContext.Provider value={{ ref: boardRef }}>
-            <div className="board-layout">
+            <div className={`board-layout theme-${theme}`}>
                 <CapturedPieces color={playerColor} onlyComputerScreen />
                 <div className="chessboard-layout">
                     <EvaluationBar />

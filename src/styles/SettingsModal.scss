@@ -12,4 +12,19 @@
         margin: 0;
         color: #ffffffd0;
     }
+
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    span {
+        color: #dad8d6;
+    }
 }

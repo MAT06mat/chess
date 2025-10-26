@@ -7,3 +7,4 @@ export * from "./PlayVs";
 export * from "./PlaySide";
 export * from "./PiecesScore";
 export * from "./PostChessApi";
+export * from "./Theme";
