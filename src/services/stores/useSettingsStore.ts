@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
-import { PlaySide, PlayVs, Theme } from "../../types";
+import { PlaySide, PlayVs, PiecesTheme, BoardTheme } from "../../types";
 import random from "random";
 
 type SettingsState = {
@@ -9,14 +9,16 @@ type SettingsState = {
     playVs: PlayVs;
     playerColor: "w" | "b";
     opponentColor: "w" | "b";
-    theme: Theme;
+    piecesTheme: PiecesTheme;
+    boardTheme: BoardTheme;
 };
 
 type SettingsActions = {
     updateInvertedColor: () => void;
     setPlaySide: (playSide: PlaySide) => void;
     setPlayVs: (playVs: PlayVs) => void;
-    setTheme: (theme: Theme) => void;
+    setPiecesTheme: (piecesTheme: PiecesTheme) => void;
+    setBoardTheme: (boardTheme: BoardTheme) => void;
 };
 
 function updateInvertedColor(playSide: PlaySide, noRandom = false) {
@@ -43,7 +45,8 @@ export const useSettingsStore = create(
                 playVs: "friend",
                 playerColor: "w",
                 opponentColor: "b",
-                theme: "neo",
+                piecesTheme: "neo",
+                boardTheme: "green",
             },
             (set) => {
                 return {
@@ -58,9 +61,14 @@ export const useSettingsStore = create(
                     updateInvertedColor: () => {
                         set((state) => updateInvertedColor(state.playSide));
                     },
-                    setTheme: (theme: Theme) => {
+                    setPiecesTheme: (piecesTheme: PiecesTheme) => {
                         set(() => ({
-                            theme,
+                            piecesTheme,
+                        }));
+                    },
+                    setBoardTheme: (boardTheme: BoardTheme) => {
+                        set(() => ({
+                            boardTheme,
                         }));
                     },
                 };

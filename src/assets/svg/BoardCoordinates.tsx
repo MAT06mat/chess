@@ -2,12 +2,13 @@ import { useSettingsStore } from "../../services/stores/useSettingsStore";
 
 function BoardCoordinates() {
     const invertedColor = useSettingsStore((state) => state.invertedColor);
+    const boardTheme = useSettingsStore((state) => state.boardTheme);
 
     if (!invertedColor) {
         return (
             <svg
                 viewBox="0 0 100 100"
-                className="coordinates"
+                className={`coordinates ${boardTheme}-theme`}
                 aria-hidden="true"
             >
                 <text x="0.75" y="3.5" className="coordinate-light">
@@ -63,7 +64,11 @@ function BoardCoordinates() {
     }
 
     return (
-        <svg viewBox="0 0 100 100" className="coordinates" aria-hidden="true">
+        <svg
+            viewBox="0 0 100 100"
+            className={`coordinates ${boardTheme}-theme`}
+            aria-hidden="true"
+        >
             <text x="0.75" y="3.5" className="coordinate-light">
                 1
             </text>

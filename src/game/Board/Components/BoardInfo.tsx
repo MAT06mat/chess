@@ -35,6 +35,7 @@ interface BoardInfoProps {
     className?: string;
     borderWidth?: string;
     grabPos?: number[];
+    propStyle?: React.CSSProperties;
 }
 
 function BoardInfo({
@@ -44,6 +45,7 @@ function BoardInfo({
     className,
     borderWidth,
     grabPos,
+    propStyle,
 }: BoardInfoProps) {
     const customGame = useCustomGameStore((state) => state.customGame);
     const customGameData = useCustomGameStore((state) => state.customGameData);
@@ -111,6 +113,7 @@ function BoardInfo({
         left: `${grabPercent ? grabPercent[0] : coords.x * 12.5}%`,
         bottom: `${grabPercent ? grabPercent[1] : coords.y * 12.5}%`,
         borderWidth: borderWidth,
+        ...propStyle,
     };
 
     className = `in-board${borderRadius} ${className}${

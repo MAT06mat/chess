@@ -8,14 +8,20 @@ import SwicthButton from "./ui/SwicthButton";
 
 function SettingsModal() {
     const removeModal = useModalStore((state) => state.removeModal);
-    const theme = useSettingsStore((state) => state.theme);
-    const setTheme = useSettingsStore((state) => state.setTheme);
+    const piecesTheme = useSettingsStore((state) => state.piecesTheme);
+    const setPiecesTheme = useSettingsStore((state) => state.setPiecesTheme);
+    const boardTheme = useSettingsStore((state) => state.boardTheme);
+    const setBoardTheme = useSettingsStore((state) => state.setBoardTheme);
 
     const currentBoard = useCurrentBoard();
     const fen = currentBoard.fen;
 
-    function handleSwitchTheme() {
-        setTheme(theme == "light" ? "neo" : "light");
+    function handleSwitchPiecesTheme() {
+        setPiecesTheme(piecesTheme == "light" ? "neo" : "light");
+    }
+
+    function handleSwitchBoardTheme() {
+        setBoardTheme(boardTheme == "green" ? "brown" : "green");
     }
 
     return (
@@ -25,12 +31,18 @@ function SettingsModal() {
                 <li>
                     <span>Custom Pieces Style</span>
                     <SwicthButton
-                        active={theme == "light"}
-                        onClick={handleSwitchTheme}
+                        active={piecesTheme == "light"}
+                        onClick={handleSwitchPiecesTheme}
+                    />
+                </li>
+                <li>
+                    <span>Brown Board Style</span>
+                    <SwicthButton
+                        active={boardTheme == "brown"}
+                        onClick={handleSwitchBoardTheme}
                     />
                 </li>
             </ul>
-            <div className="separator"></div>
             <h2>FEN</h2>
             <TextBox text={fen} nowrap allowCopy />
         </Modal>
